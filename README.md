@@ -2,9 +2,10 @@
 A horror game by Team ACube, final year project of the course.
 
 ## Repository Settings
-**[GitLab (Active)](https://gitlab.com/TeamACube/Exilium)**
+**GitLab** is the active repository; **GitHub** is mirrored from GitLab.
 
-**[GitHub (Mirrored)](https://github.com/TeamSuperSmash/Exilium)**
+[<img src="https://drive.google.com/uc?export=download&id=1iHP-Mri5FMRWEY3OYEb_NG60TKcbB_V2" width="100" height="100" />](https://gitlab.com/TeamACube/Exilium)
+[<img src="https://drive.google.com/uc?export=download&id=1Qjvn1wirQhzU-hQbYoD6x8cJMEvqcwRS" width="100" height="100" />](https://github.com/TeamSuperSmash/Exilium)
 
 ## How to properly use this repository?
 *NOTE: This guide is for programmers for now. I will update this document for artists later on.*
