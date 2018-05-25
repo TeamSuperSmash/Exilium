@@ -1,6 +1,12 @@
 # Exilium
 A horror game by Team ACube, final year project of the course.
 
+## Table of Content
+* [Repository Settings](https://gitlab.com/TeamACube/Exilium/blob/master/README.md#repository-settings)
+* [How to properly use this repository?](https://gitlab.com/TeamACube/Exilium/blob/master/README.md#how-to-properly-use-this-repository)
+* [LFS File Locking](https://gitlab.com/TeamACube/Exilium/blob/master/README.md#lfs-file-locking)
+* [Writing Issues](https://gitlab.com/TeamACube/Exilium/blob/master/README.md#writing-issues)
+
 ## Repository Settings
 **GitLab** is the active repository; **GitHub** is mirrored from GitLab.
 
@@ -17,3 +23,44 @@ A horror game by Team ACube, final year project of the course.
 
 ## LFS File Locking
 Please follow this **[link](https://docs.gitlab.com/ee/workflow/lfs/manage_large_binaries_with_git_lfs.html#file-locking)** to understand how to handle **binary files with LFS**.
+
+## Writing Issues
+This is a template for writing **[Issues](https://gitlab.com/TeamACube/Exilium/issues)**
+```
+## Summary
+
+(Summarize the bug encountered concisely)
+
+
+## Steps to reproduce
+
+(How one can reproduce the issue - this is very important)
+
+
+## Example Project
+
+(If possible, please create an example project here on GitLab.com that exhibits the problematic behaviour, and link to it here in the bug report)
+
+(If you are using an older version of GitLab, this will also determine whether the bug has been fixed in a more recent version)
+
+
+## What is the current bug behavior?
+
+(What actually happens)
+
+
+## What is the expected correct behavior?
+
+(What you should see instead)
+
+
+## Relevant logs and/or screenshots
+
+(Paste any relevant logs - please use code blocks (```) to format console output,
+logs, and code as it's very hard to read otherwise.)
+
+
+## Possible fixes
+
+(If you can, link to the line of code that might be responsible for the problem)
+```
