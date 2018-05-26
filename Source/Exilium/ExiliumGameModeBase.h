@@ -14,7 +14,5 @@ class EXILIUM_API AExiliumGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-	
-	
-	
+    virtual void StartPlay() override;	
 };
