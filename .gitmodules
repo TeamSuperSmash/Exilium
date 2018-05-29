@@ -1,3 +1,6 @@
 [submodule "Plugins/UE4GitPlugin"]
 	path = Plugins/UE4GitPlugin
 	url = https://github.com/SRombauts/UE4GitPlugin.git
+[submodule "LFS-GUI"]
+	path = LFS-GUI
+	url = https://github.com/FattyMieo/LFS-GUI.git
