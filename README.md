@@ -14,16 +14,20 @@ A horror game by Team ACube, final year project of the course.
 [<img src="https://drive.google.com/uc?export=download&id=1Qjvn1wirQhzU-hQbYoD6x8cJMEvqcwRS" width="100" height="100" />](https://github.com/TeamSuperSmash/Exilium)
 
 ## How to properly use this repository?
-*NOTE: This guide is for programmers for now. I will update this document for artists later on.*
 1. Download **[Git](https://git-scm.com/)** and install. Follow this **[LINK](https://support.codebasehq.com/articles/getting-started/git-on-windows#installing-git)** for the installation settings. *(SSH setup is not necessary)*
-2. Download **[GitKraken](https://www.gitkraken.com/)** and install.
+2. Download **[GitKraken](https://www.gitkraken.com/)** / **[GitHub Desktop](https://desktop.github.com/)** and install.
 3. Download **[Git LFS](https://git-lfs.github.com/)** and install.
-4. Use GitKraken to clone the repository using **HTTPS URL** above.
+4. Use the desired client to clone the repository using **HTTPS URL** above.
 5. After cloning, **pull** from `origin` remote to get all the LFS files.
 6. Make sure to **checkout** a new `feature-branch` before you work on a feature to avoid direct conflict.
 
 ## LFS File Locking
 Please follow this **[link](https://docs.gitlab.com/ee/workflow/lfs/manage_large_binaries_with_git_lfs.html#file-locking)** to understand how to handle **binary files with LFS**.
+
+### \***NEW**\* LFS-GUI
+A submodule called **[LFS-GUI](https://github.com/FattyMieo/LFS-GUI)** has been installed in this repository.
+
+This will help visualizing the workflow, feel free to go to the link for quick tutorial.
 
 ## Writing Issues
 This is a template for writing **[Issues](https://gitlab.com/TeamACube/Exilium/issues)**
