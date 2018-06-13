@@ -29,5 +29,9 @@ public:
     void MoveForward(float _value);
 
     void MoveRight(float _value);
+
+    void StartJump();
+
+    void StopJump();
 	
 };

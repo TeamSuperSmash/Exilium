@@ -13,7 +13,7 @@ void AExiliumGameModeBase::StartPlay()
         // The -1 key value (first argument) indicates that we will never need
         // to update or refresh this message.
 
-        GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Hello World!"));
+        //GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Hello World!"));
     }
 }
 

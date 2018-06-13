@@ -18,8 +18,10 @@ void APlayerCharacter::BeginPlay()
 	
     if (GEngine)
     {
-        GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Using PlayerCharacter!"));
+        //GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Using PlayerCharacter!"));
     }
+
+    UE_LOG(LogTemp, Warning, TEXT("Starting PlayerCharacter"));
 }
 
 // Called every frame
@@ -34,12 +36,17 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+    // Set up "move" bindings.
     PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
     // Set up "look" bindings.
     PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
     PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
+
+    // Set up "action" bindings.
+    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::StartJump);
+    PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::StopJump);
 }
 
 void APlayerCharacter::MoveForward(float _value)
@@ -52,5 +59,20 @@ void APlayerCharacter::MoveRight(float _value)
 {
     FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
     AddMovementInput(Direction, _value);
+}
+
+void APlayerCharacter::StartJump()
+{
+    //bPressedJump = true;
+
+    FVector jumpVelocity = GetVelocity();
+
+    jumpVelocity += FVector(0.0f, 0.0f, 100.0f);
+
+}
+
+void APlayerCharacter::StopJump()
+{
+    //bPressedJump = false;
 }
 
