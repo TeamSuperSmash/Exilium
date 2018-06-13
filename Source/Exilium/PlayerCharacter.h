@@ -33,5 +33,23 @@ public:
     void StartJump();
 
     void StopJump();
+
+    void StartCrouch();
+
+    void StopCrouch();
+
+    void StartSprint();
+
+    void StopSprint();
+
+    void StartForward();
+
+    void StopForward();
+
+    bool bForward;
+    bool bCrouching;
+    bool bSprinting;
+    float currentSpeed;
+    float sprintMultiplier = 2.0f;
 	
 };
