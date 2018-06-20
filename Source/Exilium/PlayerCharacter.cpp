@@ -1,20 +1,29 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PlayerCharacter.h"
 #include "Exilium.h"
 
-// Sets default values
 APlayerCharacter::APlayerCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+ 	PrimaryActorTick.bCanEverTick = true;
 
     currentSpeed = GetCharacterMovement()->MaxWalkSpeed;
 
     GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+
+    FPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+    FPSCameraComponent->SetupAttachment(GetCapsuleComponent());
+    FPSCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f + BaseEyeHeight));
+    FPSCameraComponent->bUsePawnControlRotation = true;
+
+    FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
+    FPSMesh->SetOnlyOwnerSee(true);
+    FPSMesh->SetupAttachment(FPSCameraComponent);
+    FPSMesh->bCastDynamicShadow = false;
+    FPSMesh->CastShadow = false;
+
+    GetMesh()->SetOwnerNoSee(true);
 }
 
-// Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -27,7 +36,6 @@ void APlayerCharacter::BeginPlay()
     UE_LOG(LogTemp, Warning, TEXT("Starting PlayerCharacter"));
 }
 
-// Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -43,26 +51,25 @@ void APlayerCharacter::Tick(float DeltaTime)
     }
 }
 
-// Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-    // Set up "move" bindings.
     PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
-    // Set up "look" bindings.
     PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
     PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
 
-    // Set up "action" bindings.
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::StartJump);
     PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::StopJump);
+
     PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &APlayerCharacter::StartCrouch);
     PlayerInputComponent->BindAction("Crouch", IE_Released, this, &APlayerCharacter::StopCrouch);
+
     PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &APlayerCharacter::StartSprint);
     PlayerInputComponent->BindAction("Sprint", IE_Released, this, &APlayerCharacter::StopSprint);
+
     PlayerInputComponent->BindAction("ForwardKey", IE_Pressed, this, &APlayerCharacter::StartForward);
     PlayerInputComponent->BindAction("ForwardKey", IE_Released, this, &APlayerCharacter::StopForward);
 }
@@ -120,4 +127,26 @@ void APlayerCharacter::StopForward()
 {
     bForward = false;
 }
+
+AActor * APlayerCharacter::FindActorInLOS()
+{
+    if (!Controller)
+    {
+        return nullptr;
+    }
+
+    FVector Loc;
+    FRotator Rot;
+    FHitResult Hit(ForceInit);
+    GetController()->GetPlayerViewPoint(Loc, Rot);
+
+    FVector Start = Loc;
+    FVector End = Start + (Rot.Vector() * interactionDistance);
+
+    GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, TraceParams);
+
+    return Hit.GetActor();
+}
+
+
 
