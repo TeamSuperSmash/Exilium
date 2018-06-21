@@ -1,5 +1,6 @@
 
 #include "PlayerCharacter.h"
+#include "Interact_Interface.h"
 #include "Exilium.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -22,6 +23,8 @@ APlayerCharacter::APlayerCharacter()
     FPSMesh->CastShadow = false;
 
     GetMesh()->SetOwnerNoSee(true);
+
+    TraceParams = FCollisionQueryParams(FName(TEXT("Trace")), true, this);
 }
 
 void APlayerCharacter::BeginPlay()
@@ -49,6 +52,8 @@ void APlayerCharacter::Tick(float DeltaTime)
     {
         GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
     }
+
+    CheckFocusActor();
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -72,6 +77,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
     PlayerInputComponent->BindAction("ForwardKey", IE_Pressed, this, &APlayerCharacter::StartForward);
     PlayerInputComponent->BindAction("ForwardKey", IE_Released, this, &APlayerCharacter::StopForward);
+
+    PlayerInputComponent->BindAction("InteractKey", IE_Pressed, this, &APlayerCharacter::Interact);
 }
 
 void APlayerCharacter::MoveForward(float _value)
@@ -86,6 +93,7 @@ void APlayerCharacter::MoveRight(float _value)
     AddMovementInput(Direction, _value);
 }
 
+#pragma region MoveBooleans
 void APlayerCharacter::StartJump()
 {
     bPressedJump = true;
@@ -126,6 +134,59 @@ void APlayerCharacter::StartForward()
 void APlayerCharacter::StopForward()
 {
     bForward = false;
+}
+#pragma endregion
+
+void APlayerCharacter::Interact()
+{
+    AActor* Interactable = FindActorInLOS();
+
+    if (Interactable)
+    {
+        IInteract_Interface* Interface = Cast<IInteract_Interface>(Interactable);
+        if (Interface)
+        {
+            Interface->Execute_OnInteract(Interactable, this);
+        }
+    }
+}
+
+void APlayerCharacter::CheckFocusActor()
+{
+    AActor* Interactable = FindActorInLOS();
+
+    if (Interactable)
+    {
+        if (Interactable != FocusedActor)
+        {
+            if (FocusedActor)
+            {
+                IInteract_Interface* Interface = Cast<IInteract_Interface>(FocusedActor);
+                if (Interface)
+                {
+                    Interface->Execute_EndFocus(FocusedActor);
+                }
+            }
+            IInteract_Interface* Interface = Cast<IInteract_Interface>(Interactable);
+            if (Interface)
+            {
+                Interface->Execute_StartFocus(Interactable);
+            }
+            FocusedActor = Interactable;
+        }
+    }
+    else
+    {
+        if (FocusedActor)
+        {
+            IInteract_Interface* Interface = Cast<IInteract_Interface>(FocusedActor);
+            if (Interface)
+            {
+                Interface->Execute_EndFocus(FocusedActor);
+            }
+        }
+        FocusedActor = nullptr;
+    }
 }
 
 AActor * APlayerCharacter::FindActorInLOS()

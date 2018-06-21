@@ -43,6 +43,8 @@ public:
 
     void StopForward();
 
+    void Interact();
+
     bool bForward;
     bool bCrouching;
     bool bSprinting;
@@ -52,6 +54,7 @@ public:
 
     AActor* FocusedActor = nullptr;
     AActor* FindActorInLOS();
+    void CheckFocusActor();
     FCollisionQueryParams TraceParams;
 
     UPROPERTY(VisibleAnywhere)
