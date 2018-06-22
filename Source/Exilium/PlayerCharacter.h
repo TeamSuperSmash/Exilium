@@ -1,8 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
@@ -12,18 +13,14 @@ class EXILIUM_API APlayerCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	APlayerCharacter();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
     void MoveForward(float _value);
@@ -46,10 +43,28 @@ public:
 
     void StopForward();
 
+    void Interact();
+
     bool bForward;
     bool bCrouching;
     bool bSprinting;
-    float currentSpeed;
+
+    UPROPERTY(EditAnywhere)
+    float currentSpeed = 600.0f;
+    UPROPERTY(EditAnywhere)
     float sprintMultiplier = 2.0f;
-	
+    UPROPERTY(EditAnywhere)
+    float interactionDistance = 200.0f;
+    float cameraHeight = 114.0f;
+
+    AActor* FocusedActor = nullptr;
+    AActor* FindActorInLOS();
+    void CheckFocusActor();
+    FCollisionQueryParams TraceParams;
+
+    UPROPERTY(VisibleAnywhere)
+        UCameraComponent* FPSCameraComponent;
+
+    UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+        USkeletalMeshComponent* FPSMesh;
 };
