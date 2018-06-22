@@ -7,13 +7,13 @@ APlayerCharacter::APlayerCharacter()
 {
  	PrimaryActorTick.bCanEverTick = true;
 
-    currentSpeed = GetCharacterMovement()->MaxWalkSpeed;
+    GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
 
     GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
     FPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
     FPSCameraComponent->SetupAttachment(GetCapsuleComponent());
-    FPSCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50.0f + BaseEyeHeight));
+    FPSCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, cameraHeight));
     FPSCameraComponent->bUsePawnControlRotation = true;
 
     FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
@@ -83,8 +83,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::MoveForward(float _value)
 {
-    FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-    AddMovementInput(Direction, _value);
+    //FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+    //AddMovementInput(Direction, _value);
+
+    const FRotator YawOnlyRotation = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
+    AddMovementInput(FRotationMatrix(YawOnlyRotation).GetUnitAxis(EAxis::X), _value);
 }
 
 void APlayerCharacter::MoveRight(float _value)

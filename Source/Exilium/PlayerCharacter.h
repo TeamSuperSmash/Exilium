@@ -48,9 +48,14 @@ public:
     bool bForward;
     bool bCrouching;
     bool bSprinting;
-    float currentSpeed;
+
+    UPROPERTY(EditAnywhere)
+    float currentSpeed = 600.0f;
+    UPROPERTY(EditAnywhere)
     float sprintMultiplier = 2.0f;
+    UPROPERTY(EditAnywhere)
     float interactionDistance = 200.0f;
+    float cameraHeight = 114.0f;
 
     AActor* FocusedActor = nullptr;
     AActor* FindActorInLOS();

@@ -33,6 +33,14 @@ public:
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
     void EndFocus();
     virtual void EndFocus_Implementation() override;
+
+    void OpenDoorCheck();
+
+    bool bActivated = false;
+    bool bOpened = false;
+
+    float turnCounter = 0.0f;
+    float turnAmount = 100.0f;
 	
 private: 
     TArray<UMeshComponent*> Meshes;

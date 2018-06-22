@@ -22,16 +22,17 @@ void ADoor_Usable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+    if (bActivated)
+    {
+        OpenDoorCheck();
+        bActivated = false;
+    }
 }
 
 void ADoor_Usable::OnInteract_Implementation(AActor* Caller)
 {
     //Destroy();
-    FVector CurrentLoc = GetActorLocation();
-    FVector TargetLoc = FVector(CurrentLoc.X, CurrentLoc.Y, CurrentLoc.Z + 10.0f);
-    FVector NewLoc = FMath::Lerp(CurrentLoc, TargetLoc, 10.0f);
-    
-    SetActorLocation(NewLoc);
+    bActivated = true;
 
     UE_LOG(LogTemp, Warning, TEXT("Interact Item"));
 }
@@ -53,6 +54,30 @@ void ADoor_Usable::EndFocus_Implementation()
         Mesh->SetRenderCustomDepth(false);
         GEngine->AddOnScreenDebugMessage(0, 5, FColor::Red, FString::Printf(TEXT("Focus OFF")));
         UE_LOG(LogTemp, Warning, TEXT("Focus OFF"));
+    }
+}
+
+void ADoor_Usable::OpenDoorCheck()
+{
+    if (!bOpened)
+    {
+        FVector CurrentLoc = GetActorLocation();
+        FVector TargetLoc = FVector(CurrentLoc.X, CurrentLoc.Y, CurrentLoc.Z + 10.0f);
+        FVector NewLoc = FMath::Lerp(CurrentLoc, TargetLoc, 10.0f);
+
+        SetActorLocation(NewLoc);
+
+        bOpened = true;
+    }
+    else
+    {
+        FVector CurrentLoc = GetActorLocation();
+        FVector TargetLoc = FVector(CurrentLoc.X, CurrentLoc.Y, CurrentLoc.Z - 10.0f);
+        FVector NewLoc = FMath::Lerp(CurrentLoc, TargetLoc, 10.0f);
+
+        SetActorLocation(NewLoc);
+
+        bOpened = false;
     }
 }
 
