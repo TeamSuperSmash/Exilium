@@ -5,16 +5,38 @@ ADoor_Usable::ADoor_Usable()
 {
  	PrimaryActorTick.bCanEverTick = true;
     bReplicates = true;
+
+    bActivated = false;
+    bOpened = false;
+
+    DoorFrame = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorFrame"));
+
+    Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
+    Door->SetupAttachment(DoorFrame);
 }
 
 void ADoor_Usable::BeginPlay()
 {
 	Super::BeginPlay();
+
+    rotateValue = 1.0f;
 	
     for (UActorComponent* Comp : GetComponentsByClass(UMeshComponent::StaticClass()))
     {
         UMeshComponent* Mesh = Cast<UMeshComponent>(Comp);
         Meshes.Push(Mesh);
+    }
+
+    if (DoorCurve)
+    {
+        FOnTimelineFloat TimelineCallback;
+        FOnTimelineEventStatic TimelineFinishedCallback;
+
+        TimelineCallback.BindUFunction(this, FName("ControlDoor"));
+        TimelineFinishedCallback.BindUFunction(this, FName("SetState"));
+
+        doorTimeline.AddInterpFloat(DoorCurve, TimelineCallback);
+        doorTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
     }
 }
 
@@ -22,17 +44,14 @@ void ADoor_Usable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    if (bActivated)
-    {
-        OpenDoorCheck();
-        bActivated = false;
-    }
+    doorTimeline.TickTimeline(DeltaTime);
 }
 
 void ADoor_Usable::OnInteract_Implementation(AActor* Caller)
 {
     //Destroy();
-    bActivated = true;
+
+    ToggleDoor();
 
     UE_LOG(LogTemp, Warning, TEXT("Interact Item"));
 }
@@ -79,5 +98,54 @@ void ADoor_Usable::OpenDoorCheck()
 
         bOpened = false;
     }
+}
+
+void ADoor_Usable::ControlDoor()
+{
+    timeLineValue = doorTimeline.GetPlaybackPosition();
+    curveFloatValue = rotateValue * DoorCurve->GetFloatValue(timeLineValue);
+
+    FQuat newRotation = FQuat(FRotator(0.0f, curveFloatValue, 0.0f));
+    Door->SetRelativeRotation(newRotation);
+}
+
+void ADoor_Usable::ToggleDoor()
+{
+    if (!bActivated)
+    {
+        bOpened = !bOpened;
+
+        APawn* playerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
+        FVector pawnLocation = playerPawn->GetActorLocation();
+        FVector direction = GetActorLocation() - pawnLocation;
+        direction = UKismetMathLibrary::LessLess_VectorRotator(direction, GetActorRotation());
+
+        doorRotation = Door->RelativeRotation;
+
+        if (bOpened)
+        {
+            if (direction.X > 0.0f)
+            {
+                rotateValue = 1.0f;
+            }
+            else
+            {
+                rotateValue = -1.0f;
+            }
+
+            bActivated = true;
+            doorTimeline.PlayFromStart();
+        }
+        else
+        {
+            bActivated = true;
+            doorTimeline.Reverse();
+        }
+    }
+}
+
+void ADoor_Usable::SetState()
+{
+    bActivated = false;
 }
 
