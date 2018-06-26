@@ -39,7 +39,7 @@ public:
     virtual void EndFocus_Implementation() override;
 #pragma endregion
 
-#pragma region IndividualObjectVariables
+#pragma region LocalObjectVariables
     void OpenDoorCheck();
 
     bool bActivated = false;
