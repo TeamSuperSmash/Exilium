@@ -1,7 +1,7 @@
 
-#include "HeadBob_Walk.h"
+#include "HeadBob_Run.h"
 
-UHeadBob_Walk::UHeadBob_Walk()
+UHeadBob_Run::UHeadBob_Run()
 {
     bSingleInstance = true;
 

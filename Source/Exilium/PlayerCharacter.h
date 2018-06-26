@@ -5,6 +5,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
+#include "Blueprint/UserWidget.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -67,4 +68,10 @@ public:
 
     UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
         USkeletalMeshComponent* FPSMesh;
+
+    UPROPERTY(EditAnywhere)
+        TSubclassOf<UCameraShake> WalkShake;
+
+    UPROPERTY(EditAnywhere)
+        TSubclassOf<UCameraShake> RunShake;
 };

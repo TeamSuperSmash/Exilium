@@ -3,16 +3,16 @@
 
 #include "CoreMinimal.h"
 #include "Camera/CameraShake.h"
-#include "HeadBob_Walk.generated.h"
+#include "HeadBob_Run.generated.h"
 
 UCLASS()
-class EXILIUM_API UHeadBob_Walk : public UCameraShake
+class EXILIUM_API UHeadBob_Run : public UCameraShake
 {
     GENERATED_BODY()
 
 public:
-    UHeadBob_Walk();
-	
+    UHeadBob_Run();
+
     UPROPERTY(EditAnywhere)
         float _OscillationDuration = 0.2f;
 
@@ -23,26 +23,26 @@ public:
         float _OscillationBlendOutTime = 0.2f;
 
     UPROPERTY(EditAnywhere)
-        float _RotOscillationPitchAmplitude = 0.3f;
+        float _RotOscillationPitchAmplitude = 0.5f;
 
     UPROPERTY(EditAnywhere)
-        float _RotOscillationPitchFrequency = 12.0f;
+        float _RotOscillationPitchFrequency = 17.0f;
 
     UPROPERTY(EditAnywhere)
-        float _RotOscillationYawAmplitude = 0.3f;
+        float _RotOscillationYawAmplitude = 0.5f;
 
     UPROPERTY(EditAnywhere)
-        float _RotOscillationYawFrequency = 6.0f;
+        float _RotOscillationYawFrequency = 8.5f;
 
     UPROPERTY(EditAnywhere)
         float _RotOscillationRollAmplitude = 0.2f;
 
     UPROPERTY(EditAnywhere)
-        float _RotOscillationRollFrequency = 3.0f;
+        float _RotOscillationRollFrequency = 4.75f;
 
     UPROPERTY(EditAnywhere)
-        float _LocOscillationZAmplitude = 0.6f;
+        float _LocOscillationZAmplitude = 2.0f;
 
     UPROPERTY(EditAnywhere)
-        float _LocOscillationZFrequency = 12.0f;
-};
+        float _LocOscillationZFrequency = 17.0f;
+};      
