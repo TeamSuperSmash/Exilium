@@ -150,7 +150,6 @@ void APlayerCharacter::StopForward()
 {
     bForward = false;
 }
-#pragma endregion
 
 void APlayerCharacter::Interact()
 {
