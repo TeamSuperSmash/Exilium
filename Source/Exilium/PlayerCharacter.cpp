@@ -53,13 +53,16 @@ void APlayerCharacter::Tick(float DeltaTime)
         GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
     }
 
-    if (GetVelocity().X != 0.0f || GetVelocity().Y != 0.0f)
+    if (!GetVelocity().IsZero())
     {
-        GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(WalkShake, 1.0f);
-    }
-    else if (GetVelocity().X != 0.0f || GetVelocity().Y != 0.0f && bSprinting)
-    {
-        GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(RunShake, 1.0f);
+        if (bSprinting)
+        {
+            GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(RunShake, 1.0f);
+        }
+        else
+        {
+            GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(WalkShake, 1.0f);
+        }
     }
 
     CheckFocusActor();
