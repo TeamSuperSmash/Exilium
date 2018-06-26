@@ -68,4 +68,10 @@ public:
 
     UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
         USkeletalMeshComponent* FPSMesh;
+
+    UPROPERTY(EditAnywhere)
+        TSubclassOf<UCameraShake> WalkShake;
+
+    UPROPERTY(EditAnywhere)
+        TSubclassOf<UCameraShake> RunShake;
 };
