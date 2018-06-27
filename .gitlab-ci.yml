@@ -1,0 +1,113 @@
+variables:
+  GIT_STRATEGY: none        # we disable fetch, clone or checkout for every job
+  GIT_CHECKOUT: "false"     # as we only want to checkout and fetch in the preperation stage
+#  CI_PROJECT_DIR: C:/Users/acub3team/Documents/GitLab-Runner/builds/$CI_COMMIT_REF_SLUG/$CI_PROJECT_NAME
+
+stages:
+  - preperations
+  - build-lightmap
+  - compile
+  - build
+  - cook
+  - package
+  - publish
+
+preparations:
+  stage: preperations
+  variables:
+    GIT_STRATEGY: fetch
+    GIT_CHECKOUT: "true"
+  script:
+    - echo "Preparing %CI_PROJECT_NAME% ..."
+    - call "%SCRIPTS_DIR%\PrepareProject.bat"
+    - echo "Preparing editor files ..."
+    - call "%SCRIPTS_DIR%\PrepareEditor.bat"
+
+.build-lightmap:
+  stage: build-lightmap
+  only:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /build-lightmap/
+  script:
+    - echo "Rebuilding Lightmaps ..."
+    - call "%SCRIPTS_DIR%\PrebuildLightmaps.bat"
+
+.scheduled-build-lightmap:
+  stage: build-lightmap
+  only:
+    - schedules
+  script:
+    - echo "Rebuilding Lightmaps (Scheduled)..."
+    - call "%SCRIPTS_DIR%\PrebuildLightmaps.bat"
+
+compile:
+  stage: compile
+  script:
+    - echo "Compiling Scripts for %CI_PROJECT_NAME% ..."
+    - call "%SCRIPTS_DIR%\CompileScripts.bat"
+
+build:
+  stage: build
+  script:
+    - echo "Building %CI_PROJECT_NAME% ..."
+    - call "%SCRIPTS_DIR%\BuildProject.bat"
+
+cook:
+  stage: cook
+  script:
+    - echo "Cooking %CI_PROJECT_NAME% ..."
+    - call "%SCRIPTS_DIR%\CookProject.bat"
+
+.lightmaps:
+  stage: package
+  only:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /build-lightmap/
+  script:
+    - echo "Adding lightmaps to the artifacts ..."
+    - call "%SCRIPTS_DIR%\ArchiveLightmaps.bat"
+  artifacts:
+    name: "%CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Lightmaps"
+    paths:
+      - Artifacts/*-Lightmaps.zip
+    expire_in: 7d
+
+.scheduled-lightmaps:
+  stage: package
+  only:
+    - schedules
+  script:
+    - echo "Adding lightmaps to the artifacts (Scheduled)..."
+    - call "%SCRIPTS_DIR%\ArchiveLightmaps.bat"
+  artifacts:
+    name: "%CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Lightmaps"
+    paths:
+      - Artifacts/*-Lightmaps.zip
+    expire_in: 7d
+
+package:
+  stage: package
+  only:
+    - web                 # only archive when started through the web interface
+    - schedules           # only archive when started at a specific schedule
+  script:
+    - echo "Adding build to the artifacts ..."
+    - call "%SCRIPTS_DIR%\ArchiveBuild.bat"
+  artifacts:
+    name: "%CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Build"
+    paths:
+      - Artifacts/*-Build.zip
+    expire_in: 7d
+
+release:
+  stage: publish
+  only:
+    - tags                # only archive when a tag is provided
+  script:
+    - echo "Adding release to the artifacts ..."
+    - call "%SCRIPTS_DIR%\ArchiveBuild.bat"
+  artifacts:
+    name: "%CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Build"
+    paths:
+      - Artifacts/*-Build.zip
+    expire_in: 30d
