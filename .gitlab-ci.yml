@@ -15,7 +15,7 @@ stages:
 preparations:
   stage: preperations
   variables:
-    GIT_STRATEGY: fetch
+    GIT_STRATEGY: clone
     GIT_CHECKOUT: "true"
   script:
     - echo "Preparing %CI_PROJECT_NAME% ..."
