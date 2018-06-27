@@ -17,6 +17,8 @@ preparations:
   variables:
     GIT_STRATEGY: clone
     GIT_CHECKOUT: "true"
+  before_script:
+    - git lfs pull
   script:
     - echo "Preparing %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\PrepareProject.bat"
