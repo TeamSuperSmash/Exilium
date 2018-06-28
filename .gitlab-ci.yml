@@ -19,6 +19,7 @@ preparations:
     GIT_CHECKOUT: "true"
   before_script:
     - git lfs pull
+    - rm .git/hooks/post-checkout || true
   script:
     - echo "Preparing %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\PrepareProject.bat"
