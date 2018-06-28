@@ -1,4 +1,4 @@
-# Exilium
+# Exilium [![pipeline status](https://gitlab.com/TeamACube/Exilium/badges/master/pipeline.svg)](https://gitlab.com/TeamACube/Exilium/commits/master)
 A horror game by Team ACube, final year project of the course.
 
 ## Table of Content
