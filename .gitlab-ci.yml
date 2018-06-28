@@ -69,7 +69,7 @@ cook:
   artifacts:
     name: "%CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Lightmaps"
     paths:
-      - Artifacts/*-Lightmaps.zip
+      - %CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Lightmaps.zip
     expire_in: 7d
 
 .scheduled-lightmaps:
@@ -96,7 +96,7 @@ package:
   artifacts:
     name: "%CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Build"
     paths:
-      - Artifacts/*-Build.zip
+      - %CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Build.zip
     expire_in: 7d
 
 release:
@@ -109,5 +109,5 @@ release:
   artifacts:
     name: "%CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Build"
     paths:
-      - Artifacts/*-Build.zip
+      - %CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Build.zip
     expire_in: 30d
