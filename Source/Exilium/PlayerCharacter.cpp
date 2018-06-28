@@ -7,13 +7,16 @@ APlayerCharacter::APlayerCharacter()
 {
  	PrimaryActorTick.bCanEverTick = true;
 
+    _baseEyeHeight = BaseEyeHeight;
+    _capsuleHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+
     GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
 
     GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
     FPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
     FPSCameraComponent->SetupAttachment(GetCapsuleComponent());
-    FPSCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, cameraHeight));
+    FPSCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50 + BaseEyeHeight));
     FPSCameraComponent->bUsePawnControlRotation = true;
 
     FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
@@ -21,6 +24,12 @@ APlayerCharacter::APlayerCharacter()
     FPSMesh->SetupAttachment(FPSCameraComponent);
     FPSMesh->bCastDynamicShadow = false;
     FPSMesh->CastShadow = false;
+
+    CharacterHands = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CharacterHands"));
+    CharacterHands->SetOnlyOwnerSee(true);
+    CharacterHands->SetupAttachment(FPSCameraComponent);
+    CharacterHands->bCastDynamicShadow = false;
+    CharacterHands->CastShadow = false;
 
     GetMesh()->SetOwnerNoSee(true);
 
@@ -43,19 +52,26 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+    CrouchImplement(DeltaTime);
+
     if (bSprinting && bForward && !bCrouching)
     {
         UE_LOG(LogTemp, Warning, TEXT("Player is sprinting!"));
         GetCharacterMovement()->MaxWalkSpeed = currentSpeed * sprintMultiplier;
+    }
+    else if (bCrouching)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Player is crouching!"));
+        GetCharacterMovement()->MaxWalkSpeed = currentSpeed * crouchMultiplier;
     }
     else
     {
         GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
     }
 
-    if (!GetVelocity().IsZero())
+    if (!GetVelocity().IsZero() && !GetCharacterMovement()->IsFalling())
     {
-        if (bSprinting)
+        if (bSprinting && bForward && !bCrouching)
         {
             GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(RunShake, 1.0f);
         }
@@ -122,13 +138,11 @@ void APlayerCharacter::StopJump()
 void APlayerCharacter::StartCrouch()
 {
     bCrouching = true;
-    Crouch();
 }
 
 void APlayerCharacter::StopCrouch()
 {
     bCrouching = false;
-    UnCrouch();
 }
 
 void APlayerCharacter::StartSprint()
@@ -221,6 +235,40 @@ AActor * APlayerCharacter::FindActorInLOS()
     GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, TraceParams);
 
     return Hit.GetActor();
+}
+
+void APlayerCharacter::CrouchImplement(float DeltaTime)
+{
+    float TargetBaseEyeHeight = NULL;
+    float TargetCapsuleSize = NULL;
+
+    if (bCrouching)
+    {
+        TargetBaseEyeHeight = CrouchedEyeHeight;
+        TargetCapsuleSize = GetCharacterMovement()->CrouchedHalfHeight;
+    }
+    else
+    {
+        TargetBaseEyeHeight = _baseEyeHeight;
+        TargetCapsuleSize = _capsuleHeight;
+    }
+
+    if (Controller != NULL)
+    {
+        BaseEyeHeight = FMath::FInterpTo(BaseEyeHeight, TargetBaseEyeHeight, DeltaTime, 10.0f);
+
+        GetCapsuleComponent()->SetCapsuleHalfHeight(FMath::FInterpTo
+        (GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight(), TargetCapsuleSize, DeltaTime, 10.0f), true);
+
+        // Dist and DeltaMovCaps are used for the interpolation value added to RelativeLocation.Z
+
+        const float Dist = TargetCapsuleSize - GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+        const float DeltaMovCaps = Dist * FMath::Clamp<float>(DeltaTime * 10.0f, 0.0f, 1.0f);
+
+        GetCapsuleComponent()->SetRelativeLocation(FVector(GetCapsuleComponent()->RelativeLocation.X,
+            GetCapsuleComponent()->RelativeLocation.Y, (GetCapsuleComponent()->RelativeLocation.Z +
+                DeltaMovCaps)), true);
+    }
 }
 
 

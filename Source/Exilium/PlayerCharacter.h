@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/StaticMeshComponent.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -36,6 +37,8 @@ public:
 
     void StopCrouch();
 
+    void CrouchImplement(float DeltaTime);
+
     void StartSprint();
 
     void StopSprint();
@@ -55,8 +58,13 @@ public:
     UPROPERTY(EditAnywhere)
     float sprintMultiplier = 2.0f;
     UPROPERTY(EditAnywhere)
+    float crouchMultiplier = 0.5f;
+    UPROPERTY(EditAnywhere)
     float interactionDistance = 200.0f;
-    float cameraHeight = 114.0f;
+    UPROPERTY(EditAnywhere)
+    float _baseEyeHeight = 64.0f;
+    UPROPERTY(EditAnywhere)
+    float _capsuleHeight = 88.0f;
 
     AActor* FocusedActor = nullptr;
     AActor* FindActorInLOS();
@@ -68,6 +76,9 @@ public:
 
     UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
         USkeletalMeshComponent* FPSMesh;
+
+    UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+        UStaticMeshComponent* CharacterHands;
 
     UPROPERTY(EditAnywhere)
         TSubclassOf<UCameraShake> WalkShake;
