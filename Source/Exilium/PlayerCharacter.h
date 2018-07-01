@@ -74,4 +74,8 @@ public:
 
     UPROPERTY(EditAnywhere)
         TSubclassOf<UCameraShake> RunShake;
+
+	//Audio for openDoorSound -- connected with blueprint
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+		USoundBase* openDoorSound;
 };
