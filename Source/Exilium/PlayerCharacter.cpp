@@ -2,6 +2,7 @@
 #include "PlayerCharacter.h"
 #include "Interact_Interface.h"
 #include "Exilium.h"
+#include "Kismet/GameplayStatics.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -161,6 +162,8 @@ void APlayerCharacter::Interact()
         if (Interface)
         {
             Interface->Execute_OnInteract(Interactable, this);
+			//Where sound is played after a certain action is done.
+			UGameplayStatics::PlaySoundAtLocation(this, openDoorSound, GetActorLocation());
         }
     }
 }
