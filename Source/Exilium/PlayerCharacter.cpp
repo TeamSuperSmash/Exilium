@@ -52,7 +52,7 @@ void APlayerCharacter::BeginPlay()
         //GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Using PlayerCharacter!"));
     }
 
-    UE_LOG(LogTemp, Warning, TEXT("Starting PlayerCharacter"));
+    //UE_LOG(LogTemp, Warning, TEXT("Starting PlayerCharacter"));
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -61,32 +61,9 @@ void APlayerCharacter::Tick(float DeltaTime)
 
     CrouchImplement(DeltaTime);
 
-    if (bSprinting && bForward && !bCrouching)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Player is sprinting!"));
-        GetCharacterMovement()->MaxWalkSpeed = currentSpeed * sprintMultiplier;
-    }
-    else if (bCrouching)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Player is crouching!"));
-        GetCharacterMovement()->MaxWalkSpeed = currentSpeed * crouchMultiplier;
-    }
-    else
-    {
-        GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
-    }
+    CheckSprint();
 
-    if (!GetVelocity().IsZero() && !GetCharacterMovement()->IsFalling())
-    {
-        if (bSprinting && bForward && !bCrouching)
-        {
-            GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(RunShake, 1.0f);
-        }
-        else
-        {
-            GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(WalkShake, 1.0f);
-        }
-    }
+    CheckHeadBob();
 
     CheckFocusActor();
 }
@@ -198,7 +175,7 @@ void APlayerCharacter::HoldLighter()
     {
         UE_LOG(LogTemp, Warning, TEXT("Currently holding lighter!"));
 
-        DeActivateItem();
+        DeActivateItem(); 
         itemType = 1;
 
         PlayerLight->SetIntensity(lighterIntensity);
@@ -361,6 +338,39 @@ void APlayerCharacter::CrouchImplement(float DeltaTime)
         GetCapsuleComponent()->SetRelativeLocation(FVector(GetCapsuleComponent()->RelativeLocation.X,
             GetCapsuleComponent()->RelativeLocation.Y, (GetCapsuleComponent()->RelativeLocation.Z +
                 DeltaMovCaps)), true);
+    }
+}
+
+void APlayerCharacter::CheckSprint()
+{
+    if (bSprinting && bForward && !bCrouching)
+    {
+        //UE_LOG(LogTemp, Warning, TEXT("Player is sprinting!"));
+        GetCharacterMovement()->MaxWalkSpeed = currentSpeed * sprintMultiplier;
+    }
+    else if (bCrouching)
+    {
+        //UE_LOG(LogTemp, Warning, TEXT("Player is crouching!"));
+        GetCharacterMovement()->MaxWalkSpeed = currentSpeed * crouchMultiplier;
+    }
+    else
+    {
+        GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
+    }
+}
+
+void APlayerCharacter::CheckHeadBob()
+{
+    if (!GetVelocity().IsZero() && !GetCharacterMovement()->IsFalling())
+    {
+        if (bSprinting && bForward && !bCrouching)
+        {
+            GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(RunShake, 1.0f);
+        }
+        else
+        {
+            GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(WalkShake, 1.0f);
+        }
     }
 }
 

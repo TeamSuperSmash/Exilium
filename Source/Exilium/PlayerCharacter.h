@@ -63,6 +63,10 @@ public:
 
     void DeActivateItem();
 
+    void CheckSprint();
+
+    void CheckHeadBob();
+
     bool bForward;
     bool bCrouching;
     bool bSprinting;
