@@ -89,6 +89,8 @@ public:
         float candleIntensity = 3000.0f;
     UPROPERTY(EditAnywhere)
         int itemType = 0;
+    UPROPERTY(EditAnywhere)
+    TArray<FString> Inventory;
 
     AActor* FocusedActor = nullptr;
     AActor* FindActorInLOS();

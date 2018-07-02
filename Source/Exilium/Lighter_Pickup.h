@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/MeshComponent.h"
+#include "Interact_Interface.h"
 #include "Lighter_Pickup.generated.h"
 
 UCLASS()
-class EXILIUM_API ALighter_Pickup : public AActor
+class EXILIUM_API ALighter_Pickup : public AActor, public IInteract_Interface
 {
 	GENERATED_BODY()
 	
@@ -23,6 +25,25 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
-	
+#pragma region GlobalObjectVariables
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+        void OnInteract(AActor* Caller);
+    virtual void OnInteract_Implementation(AActor* Caller) override;
+
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+        void StartFocus();
+    virtual void StartFocus_Implementation() override;
+
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+        void EndFocus();
+    virtual void EndFocus_Implementation() override;
+#pragma endregion
+
+#pragma region LocalObjectVariables
+    UPROPERTY(EditAnywhere)
+        FString Name;
+#pragma endregion
+
+private:
+    TArray<UMeshComponent*> Meshes;
 };
