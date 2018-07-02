@@ -8,13 +8,15 @@ APlayerCharacter::APlayerCharacter()
 {
  	PrimaryActorTick.bCanEverTick = true;
 
-    GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
+    _baseEyeHeight = BaseEyeHeight;
+    _capsuleHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
 
+    GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
     GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
     FPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
     FPSCameraComponent->SetupAttachment(GetCapsuleComponent());
-    FPSCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, cameraHeight));
+    FPSCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50 + BaseEyeHeight));
     FPSCameraComponent->bUsePawnControlRotation = true;
 
     FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
@@ -23,7 +25,21 @@ APlayerCharacter::APlayerCharacter()
     FPSMesh->bCastDynamicShadow = false;
     FPSMesh->CastShadow = false;
 
+    CharacterHands = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CharacterHands"));
+    CharacterHands->SetOnlyOwnerSee(true);
+    CharacterHands->SetupAttachment(FPSCameraComponent);
+    CharacterHands->bCastDynamicShadow = false;
+    CharacterHands->CastShadow = false;
+
     GetMesh()->SetOwnerNoSee(true);
+
+    PlayerLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight"));
+    PlayerLight->SetupAttachment(CharacterHands);
+    PlayerLight->bVisible = false;
+
+    PlayerSound = CreateDefaultSubobject<UAudioComponent>(TEXT("Sound"));
+    PlayerSound->SetupAttachment(GetCapsuleComponent());
+    PlayerSound->bAutoActivate = false;
 
     TraceParams = FCollisionQueryParams(FName(TEXT("Trace")), true, this);
 }
@@ -37,34 +53,18 @@ void APlayerCharacter::BeginPlay()
         //GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Using PlayerCharacter!"));
     }
 
-    UE_LOG(LogTemp, Warning, TEXT("Starting PlayerCharacter"));
+    //UE_LOG(LogTemp, Warning, TEXT("Starting PlayerCharacter"));
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    if (bSprinting && bForward && !bCrouching)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Player is sprinting!"));
-        GetCharacterMovement()->MaxWalkSpeed = currentSpeed * sprintMultiplier;
-    }
-    else
-    {
-        GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
-    }
+    CrouchImplement(DeltaTime);
 
-    if (!GetVelocity().IsZero())
-    {
-        if (bSprinting)
-        {
-            GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(RunShake, 1.0f);
-        }
-        else
-        {
-            GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(WalkShake, 1.0f);
-        }
-    }
+    CheckSprint();
+
+    CheckHeadBob();
 
     CheckFocusActor();
 }
@@ -92,6 +92,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("ForwardKey", IE_Released, this, &APlayerCharacter::StopForward);
 
     PlayerInputComponent->BindAction("InteractKey", IE_Pressed, this, &APlayerCharacter::Interact);
+
+    PlayerInputComponent->BindAction("FirstSlot", IE_Pressed, this, &APlayerCharacter::HoldLighter);
+    PlayerInputComponent->BindAction("SecondSlot", IE_Pressed, this, &APlayerCharacter::HoldCandle);
+    PlayerInputComponent->BindAction("ThirdSlot", IE_Pressed, this, &APlayerCharacter::HoldMusicBox);
+    PlayerInputComponent->BindAction("LeftMouse", IE_Pressed, this, &APlayerCharacter::ActivateItem);
 }
 
 void APlayerCharacter::MoveForward(float _value)
@@ -123,13 +128,11 @@ void APlayerCharacter::StopJump()
 void APlayerCharacter::StartCrouch()
 {
     bCrouching = true;
-    Crouch();
 }
 
 void APlayerCharacter::StopCrouch()
 {
     bCrouching = false;
-    UnCrouch();
 }
 
 void APlayerCharacter::StartSprint()
@@ -166,6 +169,86 @@ void APlayerCharacter::Interact()
 			UGameplayStatics::PlaySoundAtLocation(this, openDoorSound, GetActorLocation());
         }
     }
+}
+
+void APlayerCharacter::HoldLighter()
+{
+    if (itemType != 1)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Currently holding lighter!"));
+
+        DeActivateItem(); 
+        itemType = 1;
+
+        PlayerLight->SetIntensity(lighterIntensity);
+    }
+}
+
+void APlayerCharacter::HoldCandle()
+{
+    if (itemType != 2)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Currently holding candle!"));
+
+        DeActivateItem();
+        itemType = 2;
+
+        PlayerLight->SetIntensity(candleIntensity);
+    }
+}
+
+void APlayerCharacter::HoldMusicBox()
+{
+    if (itemType != 3)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Currently holding music box!"));
+
+        DeActivateItem();
+        itemType = 3;
+    }
+}
+
+void APlayerCharacter::HoldBareHand()
+{
+    if (itemType != 0)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Currently holding bare hands!"));
+
+        DeActivateItem();
+        itemType = 0;
+    }
+}
+
+void APlayerCharacter::ActivateItem()
+{
+    if (itemType == 1 || itemType == 2)
+    {
+        if (PlayerLight->bVisible)
+        {
+            PlayerLight->SetVisibility(false);
+        }
+        else
+        {
+            PlayerLight->SetVisibility(true);
+        }
+    }
+    else if (itemType == 3)
+    {
+        if (PlayerSound->bIsActive)
+        {
+            PlayerSound->SetActive(false);
+        }
+        else
+        {
+            PlayerSound->SetActive(true);
+        }
+    }
+}
+
+void APlayerCharacter::DeActivateItem()
+{
+    PlayerLight->SetVisibility(false);
+    PlayerSound->SetActive(false);
 }
 
 void APlayerCharacter::CheckFocusActor()
@@ -224,6 +307,73 @@ AActor * APlayerCharacter::FindActorInLOS()
     GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, TraceParams);
 
     return Hit.GetActor();
+}
+
+void APlayerCharacter::CrouchImplement(float DeltaTime)
+{
+    float TargetBaseEyeHeight = NULL;
+    float TargetCapsuleSize = NULL;
+
+    if (bCrouching)
+    {
+        TargetBaseEyeHeight = CrouchedEyeHeight;
+        TargetCapsuleSize = GetCharacterMovement()->CrouchedHalfHeight;
+    }
+    else
+    {
+        TargetBaseEyeHeight = _baseEyeHeight;
+        TargetCapsuleSize = _capsuleHeight;
+    }
+
+    if (Controller != NULL)
+    {
+        BaseEyeHeight = FMath::FInterpTo(BaseEyeHeight, TargetBaseEyeHeight, DeltaTime, 10.0f);
+
+        GetCapsuleComponent()->SetCapsuleHalfHeight(FMath::FInterpTo
+        (GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight(), TargetCapsuleSize, DeltaTime, 10.0f), true);
+
+        // Dist and DeltaMovCaps are used for the interpolation value added to RelativeLocation.Z
+
+        const float Dist = TargetCapsuleSize - GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+        const float DeltaMovCaps = Dist * FMath::Clamp<float>(DeltaTime * 10.0f, 0.0f, 1.0f);
+
+        GetCapsuleComponent()->SetRelativeLocation(FVector(GetCapsuleComponent()->RelativeLocation.X,
+            GetCapsuleComponent()->RelativeLocation.Y, (GetCapsuleComponent()->RelativeLocation.Z +
+                DeltaMovCaps)), true);
+    }
+}
+
+void APlayerCharacter::CheckSprint()
+{
+    if (bSprinting && bForward && !bCrouching)
+    {
+        //UE_LOG(LogTemp, Warning, TEXT("Player is sprinting!"));
+        GetCharacterMovement()->MaxWalkSpeed = currentSpeed * sprintMultiplier;
+    }
+    else if (bCrouching)
+    {
+        //UE_LOG(LogTemp, Warning, TEXT("Player is crouching!"));
+        GetCharacterMovement()->MaxWalkSpeed = currentSpeed * crouchMultiplier;
+    }
+    else
+    {
+        GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
+    }
+}
+
+void APlayerCharacter::CheckHeadBob()
+{
+    if (!GetVelocity().IsZero() && !GetCharacterMovement()->IsFalling())
+    {
+        if (bSprinting && bForward && !bCrouching)
+        {
+            GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(RunShake, 1.0f);
+        }
+        else
+        {
+            GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(WalkShake, 1.0f);
+        }
+    }
 }
 
 

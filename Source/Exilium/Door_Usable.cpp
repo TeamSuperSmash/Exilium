@@ -61,8 +61,7 @@ void ADoor_Usable::StartFocus_Implementation()
     for (UMeshComponent* Mesh : Meshes)
     {
         Mesh->SetRenderCustomDepth(true);
-        GEngine->AddOnScreenDebugMessage(0, 5, FColor::Red, FString::Printf(TEXT("Focus ON")));
-        UE_LOG(LogTemp, Warning, TEXT("Focus ON"));
+        UE_LOG(LogTemp, Warning, TEXT("Door ON"));
     }
 }
 
@@ -71,8 +70,7 @@ void ADoor_Usable::EndFocus_Implementation()
     for (UMeshComponent* Mesh : Meshes)
     {
         Mesh->SetRenderCustomDepth(false);
-        GEngine->AddOnScreenDebugMessage(0, 5, FColor::Red, FString::Printf(TEXT("Focus OFF")));
-        UE_LOG(LogTemp, Warning, TEXT("Focus OFF"));
+        UE_LOG(LogTemp, Warning, TEXT("Door OFF"));
     }
 }
 

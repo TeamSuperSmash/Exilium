@@ -11,7 +11,12 @@ ACube_Usable::ACube_Usable()
 void ACube_Usable::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    
+    for (UActorComponent* Comp : GetComponentsByClass(UMeshComponent::StaticClass()))
+    {
+        UMeshComponent* Mesh = Cast<UMeshComponent>(Comp);
+        Meshes.Push(Mesh);
+    }
 }
 
 void ACube_Usable::Tick(float DeltaTime)
@@ -34,8 +39,7 @@ void ACube_Usable::StartFocus_Implementation()
     for (UMeshComponent* Mesh : Meshes)
     {
         Mesh->SetRenderCustomDepth(true);
-        GEngine->AddOnScreenDebugMessage(0, 5, FColor::Red, FString::Printf(TEXT("Focus ON")));
-        UE_LOG(LogTemp, Warning, TEXT("Focus ON"));
+        UE_LOG(LogTemp, Warning, TEXT("Cube ON"));
     }
 }
 
@@ -44,8 +48,7 @@ void ACube_Usable::EndFocus_Implementation()
     for (UMeshComponent* Mesh : Meshes)
     {
         Mesh->SetRenderCustomDepth(false);
-        GEngine->AddOnScreenDebugMessage(0, 5, FColor::Red, FString::Printf(TEXT("Focus OFF")));
-        UE_LOG(LogTemp, Warning, TEXT("Focus OFF"));
+        UE_LOG(LogTemp, Warning, TEXT("Cube OFF"));
     }
 }
 

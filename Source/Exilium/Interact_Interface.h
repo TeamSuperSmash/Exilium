@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "PlayerCharacter.h"
 #include "Interact_Interface.generated.h"
 
 UINTERFACE(MinimalAPI)
