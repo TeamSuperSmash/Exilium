@@ -70,7 +70,11 @@ cook:
     name: "%CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Lightmaps"
     paths:
 <<<<<<< HEAD
+<<<<<<< HEAD
       - Artifacts/*-Lightmaps.zip
+=======
+      - $CI_PROJECT_NAME-$CI_COMMIT_REF_NAME-Lightmaps.zip
+>>>>>>> character-branch
 =======
       - $CI_PROJECT_NAME-$CI_COMMIT_REF_NAME-Lightmaps.zip
 >>>>>>> character-branch
@@ -101,7 +105,11 @@ package:
     name: "%CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Build"
     paths:
 <<<<<<< HEAD
+<<<<<<< HEAD
       - Artifacts/*-Build.zip
+=======
+      - $CI_PROJECT_NAME-$CI_COMMIT_REF_NAME-Build.zip
+>>>>>>> character-branch
 =======
       - $CI_PROJECT_NAME-$CI_COMMIT_REF_NAME-Build.zip
 >>>>>>> character-branch
@@ -118,7 +126,11 @@ release:
     name: "%CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Build"
     paths:
 <<<<<<< HEAD
+<<<<<<< HEAD
       - Artifacts/*-Build.zip
+=======
+      - $CI_PROJECT_NAME-$CI_COMMIT_REF_NAME-Build.zip
+>>>>>>> character-branch
 =======
       - $CI_PROJECT_NAME-$CI_COMMIT_REF_NAME-Build.zip
 >>>>>>> character-branch
