@@ -154,6 +154,7 @@ void APlayerCharacter::StopForward()
 {
     bForward = false;
 }
+#pragma endregion
 
 void APlayerCharacter::Interact()
 {
@@ -333,7 +334,6 @@ void APlayerCharacter::CrouchImplement(float DeltaTime)
         (GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight(), TargetCapsuleSize, DeltaTime, 10.0f), true);
 
         // Dist and DeltaMovCaps are used for the interpolation value added to RelativeLocation.Z
-
         const float Dist = TargetCapsuleSize - GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
         const float DeltaMovCaps = Dist * FMath::Clamp<float>(DeltaTime * 10.0f, 0.0f, 1.0f);
 
