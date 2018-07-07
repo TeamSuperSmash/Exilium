@@ -47,7 +47,7 @@ public:
 		FName ItemID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSubclassOf<class AActor> ItemPickup;
+		TSubclassOf<class APickup> ItemPickup;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FText Name;
@@ -88,10 +88,8 @@ class EXILIUM_API APlayerCharacter : public ACharacter
 public:
     APlayerCharacter();
 
-protected:
     virtual void BeginPlay() override;
 
-public:
     virtual void Tick(float DeltaTime) override;
 
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -165,6 +163,8 @@ public:
     AActor* FindActorInLOS();
     void CheckFocusActor();
     FCollisionQueryParams TraceParams;
+
+	void CheckForInteractables();
 
     UPROPERTY(VisibleAnywhere)
         UCameraComponent* FPSCameraComponent;

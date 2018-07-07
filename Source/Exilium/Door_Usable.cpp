@@ -5,12 +5,10 @@ ADoor_Usable::ADoor_Usable()
 {
  	PrimaryActorTick.bCanEverTick = true;
     bReplicates = true;
-
     bActivated = false;
     bOpened = false;
 
     DoorFrame = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorFrame"));
-
     Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
     Door->SetupAttachment(DoorFrame);
 }
@@ -20,12 +18,12 @@ void ADoor_Usable::BeginPlay()
 	Super::BeginPlay();
 
     rotateValue = 1.0f;
-	
-    for (UActorComponent* Comp : GetComponentsByClass(UMeshComponent::StaticClass()))
-    {
-        UMeshComponent* Mesh = Cast<UMeshComponent>(Comp);
-        Meshes.Push(Mesh);
-    }
+
+	for (UActorComponent* Comp : GetComponentsByClass(UMeshComponent::StaticClass()))
+	{
+		UMeshComponent* Mesh = Cast<UMeshComponent>(Comp);
+		Meshes.Push(Mesh);
+	}
 
     if (DoorCurve)
     {
@@ -49,29 +47,26 @@ void ADoor_Usable::Tick(float DeltaTime)
 
 void ADoor_Usable::OnInteract_Implementation(AActor* Caller)
 {
-    //Destroy();
-
     ToggleDoor();
-
     UE_LOG(LogTemp, Warning, TEXT("Interact Item"));
 }
 
 void ADoor_Usable::StartFocus_Implementation()
 {
-    for (UMeshComponent* Mesh : Meshes)
-    {
-        Mesh->SetRenderCustomDepth(true);
-        UE_LOG(LogTemp, Warning, TEXT("Door ON"));
-    }
+	for (UMeshComponent* Mesh : Meshes)
+	{
+		Mesh->SetRenderCustomDepth(true);
+		UE_LOG(LogTemp, Warning, TEXT("Door ON"));
+	}
 }
 
 void ADoor_Usable::EndFocus_Implementation()
 {
-    for (UMeshComponent* Mesh : Meshes)
-    {
+	for (UMeshComponent* Mesh : Meshes)
+	{
         Mesh->SetRenderCustomDepth(false);
-        UE_LOG(LogTemp, Warning, TEXT("Door OFF"));
-    }
+		UE_LOG(LogTemp, Warning, TEXT("Door OFF"));
+	}
 }
 
 void ADoor_Usable::OpenDoorCheck()
