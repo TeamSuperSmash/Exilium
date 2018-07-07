@@ -25,5 +25,5 @@ public:
 
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
         void EndFocus();
-	
+
 };

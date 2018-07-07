@@ -9,7 +9,76 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/PointLightComponent.h"
 #include "Components/AudioComponent.h"
+#include "Engine/DataTable.h"
 #include "PlayerCharacter.generated.h"
+
+USTRUCT(BlueprintType)
+struct FCraftingInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FName ComponentID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FName ProductID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bDestroyItemA;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bDestroyItemB;
+};
+
+USTRUCT(BlueprintType)
+struct FInventoryItem : public FTableRowBase
+{
+	GENERATED_BODY()
+public:
+	FInventoryItem()
+	{
+		Name = FText::FromString("Item");
+		Action = FText::FromString("Use");
+		Description = FText::FromString("Please enter a description for the item");
+		Value = 10;
+	}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FName ItemID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<class APickup> ItemPickup;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FText Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FText Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Value;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UTexture2D* Thumbnail;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FText Description;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<FCraftingInfo> CraftingCombinations;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bCanBeUsed;
+
+	bool operator==(const FInventoryItem& Item) const
+	{
+		if (ItemID == Item.ItemID)
+		{
+			return true;
+		}
+		return false;
+	}
+};
 
 UCLASS()
 class EXILIUM_API APlayerCharacter : public ACharacter
@@ -19,10 +88,8 @@ class EXILIUM_API APlayerCharacter : public ACharacter
 public:
     APlayerCharacter();
 
-protected:
     virtual void BeginPlay() override;
 
-public:
     virtual void Tick(float DeltaTime) override;
 
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -96,6 +163,8 @@ public:
     AActor* FindActorInLOS();
     void CheckFocusActor();
     FCollisionQueryParams TraceParams;
+
+	void CheckForInteractables();
 
     UPROPERTY(VisibleAnywhere)
         UCameraComponent* FPSCameraComponent;

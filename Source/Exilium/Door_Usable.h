@@ -19,10 +19,8 @@ class EXILIUM_API ADoor_Usable : public AActor, public IInteract_Interface
 public:	
 	ADoor_Usable();
 
-protected:
 	virtual void BeginPlay() override;
 
-public:	
 	virtual void Tick(float DeltaTime) override;
 
 #pragma region GlobalObjectVariables
@@ -71,6 +69,6 @@ public:
         void SetState();
 #pragma endregion
 
-private: 
-    TArray<UMeshComponent*> Meshes;
+private:
+	TArray<UMeshComponent*> Meshes;
 };

@@ -2,6 +2,8 @@
 #include "PlayerCharacter.h"
 #include "Interact_Interface.h"
 #include "Exilium.h"
+#include "GameplayController.h"
+#include "Interactable.h"
 #include "Kismet/GameplayStatics.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -47,13 +49,8 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-    if (GEngine)
-    {
-        //GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Using PlayerCharacter!"));
-    }
 
-    //UE_LOG(LogTemp, Warning, TEXT("Starting PlayerCharacter"));
+    UE_LOG(LogTemp, Warning, TEXT("Starting PlayerCharacter"));
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -66,7 +63,9 @@ void APlayerCharacter::Tick(float DeltaTime)
 
     CheckHeadBob();
 
-    CheckFocusActor();
+    //CheckFocusActor();
+
+	CheckForInteractables();
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -154,6 +153,7 @@ void APlayerCharacter::StopForward()
 {
     bForward = false;
 }
+#pragma endregion
 
 void APlayerCharacter::Interact()
 {
@@ -251,6 +251,40 @@ void APlayerCharacter::DeActivateItem()
     PlayerSound->SetActive(false);
 }
 
+void APlayerCharacter::CheckForInteractables()
+{
+	FHitResult HitResult;
+
+	FVector Loc;
+	FRotator Rot;
+	GetController()->GetPlayerViewPoint(Loc, Rot);
+
+	FVector Start = Loc;
+	FVector End = Start + (Rot.Vector() * 300.0f);
+
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+
+	AGameplayController* Controller = Cast<AGameplayController>(GetController());
+
+	if (!Controller)
+	{
+		return;
+	}
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, QueryParams))
+	{
+		// Check the item we hit is an interactable item.
+		if (AInteractable* Interactable = Cast<AInteractable>(HitResult.GetActor()))
+		{
+			Controller->CurrentInteractable = Interactable;
+			return;
+		}
+	}
+	// If did not hit anything, or hit unusable. Set current interactable to nullptr.
+	Controller->CurrentInteractable = nullptr;
+}
+
 void APlayerCharacter::CheckFocusActor()
 {
     AActor* Interactable = FindActorInLOS();
@@ -333,7 +367,6 @@ void APlayerCharacter::CrouchImplement(float DeltaTime)
         (GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight(), TargetCapsuleSize, DeltaTime, 10.0f), true);
 
         // Dist and DeltaMovCaps are used for the interpolation value added to RelativeLocation.Z
-
         const float Dist = TargetCapsuleSize - GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
         const float DeltaMovCaps = Dist * FMath::Clamp<float>(DeltaTime * 10.0f, 0.0f, 1.0f);
 

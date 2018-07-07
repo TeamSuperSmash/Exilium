@@ -2,5 +2,6 @@
 
 #pragma once
 
-//#include "CoreMinimal.h"
 #include "Engine.h"
+
+#define COLLISION_INTERACTABLE ECC_GameTraceChannel1;
