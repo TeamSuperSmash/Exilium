@@ -48,6 +48,7 @@ void AWaypoint::OnPlayerEnter(UPrimitiveComponent* OverlapComponent,
 		if (Character != nullptr)
 		{
 			Character->NextWaypoint = NextWaypoint;
+			Character->QTEStart(Character);
 		}
 	}
 }

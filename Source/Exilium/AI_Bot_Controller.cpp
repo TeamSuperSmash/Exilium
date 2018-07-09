@@ -61,6 +61,7 @@ void AAI_Bot_Controller::Tick(float DeltaSeconds)
 	//Move To Waypoint
 	if (Character->NextWaypoint != nullptr && bIsPlayerDetected == false)
 	{
+
 		MoveToActor(Character->NextWaypoint, 5.0f);
 	}
 	else if (bIsPlayerDetected == true)
