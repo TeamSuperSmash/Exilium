@@ -36,7 +36,7 @@ APlayerCharacter::APlayerCharacter()
     GetMesh()->SetOwnerNoSee(true);
 
     PlayerLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight"));
-    PlayerLight->SetupAttachment(CharacterHands);
+    PlayerLight->SetupAttachment(FPSMesh);
     PlayerLight->bVisible = false;
 
     PlayerSound = CreateDefaultSubobject<UAudioComponent>(TEXT("Sound"));
@@ -180,6 +180,8 @@ void APlayerCharacter::HoldLighter()
         DeActivateItem(); 
         itemType = 1;
 
+		bLighter = true;
+
         PlayerLight->SetIntensity(lighterIntensity);
     }
 }
@@ -249,6 +251,10 @@ void APlayerCharacter::DeActivateItem()
 {
     PlayerLight->SetVisibility(false);
     PlayerSound->SetActive(false);
+
+	bLighter = false;
+	bOpenDoor = false;
+	bPickup = false;
 }
 
 void APlayerCharacter::CheckForInteractables()

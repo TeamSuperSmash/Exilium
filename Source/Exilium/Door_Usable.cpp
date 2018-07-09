@@ -8,6 +8,8 @@ ADoor_Usable::ADoor_Usable()
     bActivated = false;
     bOpened = false;
 
+	rotateValue = 1.0f;
+
     DoorFrame = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorFrame"));
     Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
     Door->SetupAttachment(DoorFrame);
@@ -16,8 +18,6 @@ ADoor_Usable::ADoor_Usable()
 void ADoor_Usable::BeginPlay()
 {
 	Super::BeginPlay();
-
-    rotateValue = 1.0f;
 
 	for (UActorComponent* Comp : GetComponentsByClass(UMeshComponent::StaticClass()))
 	{

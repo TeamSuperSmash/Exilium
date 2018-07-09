@@ -134,9 +134,18 @@ public:
 
     void CheckHeadBob();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
     bool bForward;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
     bool bCrouching;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
     bool bSprinting;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Action")
+	bool bLighter;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Action")
+	bool bOpenDoor;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Action")
+	bool bPickup;
 
     UPROPERTY(EditAnywhere)
         float currentSpeed = 600.0f;
