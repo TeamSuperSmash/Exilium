@@ -18,6 +18,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class AWaypoint* NextWaypoint;
 
+	//Function declared in c++ but defined inside blueprint
+	UFUNCTION(BlueprintImplementableEvent, Category = CustomStuff)
+		void QTEStart(AActor* Actor);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = CustomStuff)
+		void SwitchQTEType();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
