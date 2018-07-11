@@ -38,8 +38,6 @@ public:
 #pragma endregion
 
 #pragma region LocalObjectVariables
-    void OpenDoorCheck();
-
     bool bActivated = false;
     bool bOpened = false;
 
@@ -58,6 +56,9 @@ public:
 
     UPROPERTY(EditAnywhere)
         UCurveFloat* DoorCurve;
+
+	UFUNCTION()
+	void OpenDoorCheck();
 
     UFUNCTION()
         void ControlDoor();
