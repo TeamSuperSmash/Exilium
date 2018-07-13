@@ -1,6 +1,5 @@
 
 #include "PlayerCharacter.h"
-#include "Interact_Interface.h"
 #include "Exilium.h"
 #include "GameplayController.h"
 #include "Interactable.h"
@@ -23,7 +22,7 @@ APlayerCharacter::APlayerCharacter()
 
     FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
     FPSMesh->SetOnlyOwnerSee(true);
-    FPSMesh->SetupAttachment(FPSCameraComponent);
+    FPSMesh->SetupAttachment(GetCapsuleComponent());
     FPSMesh->bCastDynamicShadow = false;
     FPSMesh->CastShadow = false;
 
@@ -63,8 +62,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 
     CheckHeadBob();
 
-    //CheckFocusActor();
-
 	CheckForInteractables();
 }
 
@@ -78,8 +75,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
     PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
 
-    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::StartJump);
-    PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::StopJump);
+    //PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::StartJump);
+    //PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::StopJump);
 
     PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &APlayerCharacter::StartCrouch);
     PlayerInputComponent->BindAction("Crouch", IE_Released, this, &APlayerCharacter::StopCrouch);
@@ -89,8 +86,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
     PlayerInputComponent->BindAction("ForwardKey", IE_Pressed, this, &APlayerCharacter::StartForward);
     PlayerInputComponent->BindAction("ForwardKey", IE_Released, this, &APlayerCharacter::StopForward);
-
-    PlayerInputComponent->BindAction("InteractKey", IE_Pressed, this, &APlayerCharacter::Interact);
 
     PlayerInputComponent->BindAction("FirstSlot", IE_Pressed, this, &APlayerCharacter::HoldLighter);
     PlayerInputComponent->BindAction("SecondSlot", IE_Pressed, this, &APlayerCharacter::HoldCandle);
@@ -154,22 +149,6 @@ void APlayerCharacter::StopForward()
     bForward = false;
 }
 #pragma endregion
-
-void APlayerCharacter::Interact()
-{
-    AActor* Interactable = FindActorInLOS();
-
-    if (Interactable)
-    {
-        IInteract_Interface* Interface = Cast<IInteract_Interface>(Interactable);
-        if (Interface)
-        {
-            Interface->Execute_OnInteract(Interactable, this);
-			//Where sound is played after a certain action is done.
-			UGameplayStatics::PlaySoundAtLocation(this, openDoorSound, GetActorLocation());
-        }
-    }
-}
 
 void APlayerCharacter::HoldLighter()
 {
@@ -289,64 +268,6 @@ void APlayerCharacter::CheckForInteractables()
 	}
 	// If did not hit anything, or hit unusable. Set current interactable to nullptr.
 	Controller->CurrentInteractable = nullptr;
-}
-
-void APlayerCharacter::CheckFocusActor()
-{
-    AActor* Interactable = FindActorInLOS();
-
-    if (Interactable)
-    {
-        if (Interactable != FocusedActor)
-        {
-            if (FocusedActor)
-            {
-                IInteract_Interface* Interface = Cast<IInteract_Interface>(FocusedActor);
-                if (Interface)
-                {
-                    Interface->Execute_EndFocus(FocusedActor);
-                }
-            }
-            IInteract_Interface* Interface = Cast<IInteract_Interface>(Interactable);
-            if (Interface)
-            {
-                Interface->Execute_StartFocus(Interactable);
-            }
-            FocusedActor = Interactable;
-        }
-    }
-    else
-    {
-        if (FocusedActor)
-        {
-            IInteract_Interface* Interface = Cast<IInteract_Interface>(FocusedActor);
-            if (Interface)
-            {
-                Interface->Execute_EndFocus(FocusedActor);
-            }
-        }
-        FocusedActor = nullptr;
-    }
-}
-
-AActor * APlayerCharacter::FindActorInLOS()
-{
-    if (!Controller)
-    {
-        return nullptr;
-    }
-
-    FVector Loc;
-    FRotator Rot;
-    FHitResult Hit(ForceInit);
-    GetController()->GetPlayerViewPoint(Loc, Rot);
-
-    FVector Start = Loc;
-    FVector End = Start + (Rot.Vector() * interactionDistance);
-
-    GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, TraceParams);
-
-    return Hit.GetActor();
 }
 
 void APlayerCharacter::CrouchImplement(float DeltaTime)

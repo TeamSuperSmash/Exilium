@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Interactable.h"
+#include "PlayerCharacter.h"
 #include "Pickup.generated.h"
 
 UCLASS()
