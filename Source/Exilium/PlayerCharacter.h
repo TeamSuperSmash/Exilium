@@ -116,8 +116,6 @@ public:
 
     void StopForward();
 
-    void Interact();
-
     void HoldLighter();
 
     void HoldCandle();
@@ -166,11 +164,9 @@ public:
     UPROPERTY(EditAnywhere)
         int itemType = 0;
     UPROPERTY(EditAnywhere)
+
     TArray<FString> Inventory;
 
-    AActor* FocusedActor = nullptr;
-    AActor* FindActorInLOS();
-    void CheckFocusActor();
     FCollisionQueryParams TraceParams;
 
 	void CheckForInteractables();
@@ -178,7 +174,7 @@ public:
     UPROPERTY(VisibleAnywhere)
         UCameraComponent* FPSCameraComponent;
 
-    UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Mesh)
         USkeletalMeshComponent* FPSMesh;
 
     UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
