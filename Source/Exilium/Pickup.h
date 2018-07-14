@@ -13,6 +13,8 @@ class EXILIUM_API APickup : public AInteractable
 	GENERATED_BODY()
 public:
 	APickup();
+
+	virtual void BeginPlay() override;
 	
 protected:
 	UPROPERTY(EditAnywhere)
@@ -20,4 +22,16 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FName ItemID;
+
+	UPROPERTY(EditAnywhere)
+		bool bSimulatePhysics = true;
+
+	UPROPERTY(EditAnywhere)
+		bool bEnableGravity = true;
+
+	UPROPERTY(EditAnywhere)
+		float linearDamping = 0.01f;
+
+	UPROPERTY(EditAnywhere)
+		float angularDamping = 0.0f;
 };
