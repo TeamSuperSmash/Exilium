@@ -25,6 +25,15 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = CustomStuff)
 		void SwitchQTEType();
 
+	UFUNCTION(BlueprintCallable, Category = CustomStuff)
+		void EventFailQTE();
+
+	UFUNCTION(BlueprintCallable, Category = CustomStuff)
+		void HeartbeatSuccess();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = CustomStuff)
+		bool bIsPlayerDetected = false;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

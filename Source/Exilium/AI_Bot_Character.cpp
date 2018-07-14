@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "AI_Bot_Character.h"
+#include "AI_Bot_Controller.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 
@@ -18,6 +19,21 @@ AAI_Bot_Character::AAI_Bot_Character()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
 
+}
+
+void AAI_Bot_Character::EventFailQTE()
+{
+	bIsPlayerDetected = true;
+	AAI_Bot_Controller* Character = Cast<AAI_Bot_Controller>(GetController());
+
+	Character->bIsPlayerDetected = true;
+}
+
+void AAI_Bot_Character::HeartbeatSuccess()
+{
+	AAI_Bot_Controller* Character = Cast<AAI_Bot_Controller>(GetController());
+
+	Character->bIsPlayerDetected = false;
 }
 
 // Called when the game starts or when spawned
