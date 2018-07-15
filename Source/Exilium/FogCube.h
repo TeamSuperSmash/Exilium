@@ -25,18 +25,19 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
-	class AFogCube* Next;
+	class AFogCube* next;
 	UPROPERTY(EditAnywhere)
-	class AFogCube* Previous;
+	class AFogCube* previous;
 	UPROPERTY(EditAnywhere)
-	class AFogCube* Left;
+	class AFogCube* left;
 	UPROPERTY(EditAnywhere)
-	class AFogCube* Right;
+	class AFogCube* right;
 	UPROPERTY(EditAnywhere)
 	bool isActive;
 
-	UBoxComponent* boxTrigger;
+	UFUNCTION(BlueprintCallable, Category = "Fog")
+	void SetActive(bool value);
 
-	void RegisterDelegate();
-	
+	UFUNCTION(BlueprintCallable, Category = "Fog")
+	void Spread();
 };

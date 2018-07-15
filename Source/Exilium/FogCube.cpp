@@ -21,16 +21,31 @@ void AFogCube::BeginPlay()
 void AFogCube::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (!isActive)
+}
+
+void AFogCube::SetActive(bool value)
+{
+	SetActorHiddenInGame(!value);
+}
+
+void AFogCube::Spread()
+{
+	if (next != nullptr)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am false"));
-		SetActorEnableCollision(false);
-		SetActorHiddenInGame(true);
+		SetActive(true);
+	}
+	if (previous != nullptr)
+	{
+		SetActive(true);
+	}
+	if (left != nullptr)
+	{
+		SetActive(true);
+	}
+	if (right != nullptr)
+	{
+		SetActive(true);
 	}
 }
 
-void AFogCube::RegisterDelegate()
-{
-
-}
 
