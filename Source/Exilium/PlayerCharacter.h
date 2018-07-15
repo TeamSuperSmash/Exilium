@@ -163,15 +163,16 @@ public:
         float candleIntensity = 3000.0f;
     UPROPERTY(EditAnywhere)
         int itemType = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool isLeaning = false;
     UPROPERTY(EditAnywhere)
-
-    TArray<FString> Inventory;
+		TArray<FString> Inventory;
 
     FCollisionQueryParams TraceParams;
 
 	void CheckForInteractables();
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
         UCameraComponent* FPSCameraComponent;
 
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Mesh)

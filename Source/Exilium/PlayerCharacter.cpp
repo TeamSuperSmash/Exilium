@@ -42,6 +42,13 @@ APlayerCharacter::APlayerCharacter()
     PlayerSound->SetupAttachment(GetCapsuleComponent());
     PlayerSound->bAutoActivate = false;
 
+	/*static ConstructorHelpers::FObjectFinder<UCameraShake> IdleShake
+	(TEXT("Blueprint'/Game/Characters/Player/Blueprints/HeadBob_Idle_BP.HeadBob_Idle_BP'"));
+	static ConstructorHelpers::FObjectFinder<UCameraShake> WalkShake
+	(TEXT("Blueprint'/Game/Characters/Player/Blueprints/HeadBob_Walk_BP.HeadBob_Walk_BP'"));
+	static ConstructorHelpers::FObjectFinder<UCameraShake> RunShake
+	(TEXT("Blueprint'/Game/Characters/Player/Blueprints/HeadBob_Run_BP.HeadBob_Run_BP'"));*/
+
     TraceParams = FCollisionQueryParams(FName(TEXT("Trace")), true, this);
 }
 
@@ -72,8 +79,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
-    PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
-    PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
+	//PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
+    //PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
 
     //PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::StartJump);
     //PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::StopJump);
@@ -333,7 +340,11 @@ void APlayerCharacter::CheckHeadBob()
         {
             GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(WalkShake, 1.0f);
         }
-    }
+	}
+	else if(GetVelocity().IsZero() && !GetCharacterMovement()->IsFalling())
+	{
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(IdleShake, 1.0f);
+	}
 }
 
 
