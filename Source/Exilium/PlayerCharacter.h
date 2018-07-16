@@ -178,9 +178,6 @@ public:
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Mesh)
         USkeletalMeshComponent* FPSMesh;
 
-    UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-        UStaticMeshComponent* CharacterHands;
-
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Light)
         UPointLightComponent* PlayerLight;
 
