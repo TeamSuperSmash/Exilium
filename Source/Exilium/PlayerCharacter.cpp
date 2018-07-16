@@ -26,12 +26,6 @@ APlayerCharacter::APlayerCharacter()
     FPSMesh->bCastDynamicShadow = false;
     FPSMesh->CastShadow = false;
 
-    CharacterHands = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CharacterHands"));
-    CharacterHands->SetOnlyOwnerSee(true);
-    CharacterHands->SetupAttachment(FPSCameraComponent);
-    CharacterHands->bCastDynamicShadow = false;
-    CharacterHands->CastShadow = false;
-
     GetMesh()->SetOwnerNoSee(true);
 
     PlayerLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight"));
