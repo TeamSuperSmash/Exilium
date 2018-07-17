@@ -17,7 +17,12 @@ void AGameplayController::Interact()
 {
 	if (CurrentInteractable)
 	{
-		CurrentInteractable->Interact(this);
+		// Check the item we hit is an interactable item.
+		if (CurrentInteractable->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+		{
+			IInteractable* Interactable = Cast<IInteractable>(CurrentInteractable);
+			Interactable->Interact();
+		}
 	}
 }
 

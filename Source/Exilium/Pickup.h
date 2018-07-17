@@ -8,7 +8,7 @@
 #include "Pickup.generated.h"
 
 UCLASS()
-class EXILIUM_API APickup : public AInteractable
+class EXILIUM_API APickup : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 public:
@@ -34,4 +34,21 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		float angularDamping = 0.0f;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnInteract();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Interactable)
+	bool Interact();
+	virtual bool Interact_Implementation();
+
+	UFUNCTION(BlueprintCallable, Category = Pickup)
+	FString GetUseText() const;
+
+public:
+	UPROPERTY(EditAnywhere, Category = Pickup)
+	FString Name;
+
+	UPROPERTY(EditAnywhere, Category = Pickup)
+	FString Action;
 };

@@ -16,7 +16,7 @@
  * 
  */
 UCLASS()
-class EXILIUM_API ADoor : public AInteractable
+class EXILIUM_API ADoor : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 public:
@@ -56,4 +56,12 @@ public:
 
 	UFUNCTION()
 		void SetState();
+
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnInteract();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Interactable)
+	bool Interact();
+	virtual bool Interact_Implementation();
 };

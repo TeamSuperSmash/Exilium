@@ -2,13 +2,5 @@
 
 #include "Interactable.h"
 
-AInteractable::AInteractable()
-{
-	Name = "Undefined";
-	Action = "Interact";
-}
+// Add default functionality here for any IInteractable functions that are not pure virtual.
 
-void AInteractable::BeginPlay()
-{
-	Super::BeginPlay();	
-}
