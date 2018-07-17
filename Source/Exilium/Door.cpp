@@ -112,3 +112,9 @@ void ADoor::SetState()
 {
 	bActivated = false;
 }
+
+bool ADoor::Interact_Implementation()
+{
+	OnInteract();
+	return true;
+}

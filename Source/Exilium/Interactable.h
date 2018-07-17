@@ -3,30 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "UObject/Interface.h"
 #include "Interactable.generated.h"
 
-UCLASS()
-class EXILIUM_API AInteractable : public AActor
+// This class does not need to be modified.
+UINTERFACE(MinimalAPI)
+class UInteractable : public UInterface
 {
 	GENERATED_BODY()
-	
-public:	
-	AInteractable();
+};
 
-	virtual void BeginPlay() override;
+/**
+ * 
+ */
+class EXILIUM_API IInteractable
+{
+	GENERATED_BODY()
 
-	//Function that is called when player interacts with interactable.
-	//Marked as BlueprintImplementableEvent so designers can set custom functions.
-	UFUNCTION(BlueprintImplementableEvent)
-		void Interact(APlayerController* Controller);
-
-	UPROPERTY(EditDefaultsOnly)
-		FString Name;
-
-	UPROPERTY(EditDefaultsOnly)
-		FString Action;
-
-	UFUNCTION(BlueprintCallable, Category = "Pickup")
-		FString GetUseText() const { return FString::Printf(TEXT("%s : Press F To %s"), *Name, *Action); }
+	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
+public:
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Interactable)
+	bool Interact();
 };

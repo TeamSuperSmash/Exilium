@@ -199,4 +199,10 @@ public:
 	//Audio for openDoorSound -- connected with blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 		USoundBase* openDoorSound;
+
+// Interactable
+public:
+	/** Cast a line trace to detect IInteractable object **/
+	UFUNCTION(BlueprintCallable, Category = Interactable)
+	bool LineTraceInteractable(float range, FHitResult& outHit);
 };

@@ -17,3 +17,17 @@ void APickup::BeginPlay()
 	PickupMesh->SetLinearDamping(linearDamping);
 	PickupMesh->SetAngularDamping(angularDamping);
 }
+
+bool APickup::Interact_Implementation()
+{
+	OnInteract();
+	return true;
+}
+
+FString APickup::GetUseText() const
+{
+	//FString Name = "Item";
+	//FString Action = "Pick up";
+
+	return FString::Printf(TEXT("%s : Press F To %s"), *Name, *Action);
+}

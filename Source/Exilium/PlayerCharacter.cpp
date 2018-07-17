@@ -267,9 +267,10 @@ void APlayerCharacter::CheckForInteractables()
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, QueryParams))
 	{
 		// Check the item we hit is an interactable item.
-		if (AInteractable* Interactable = Cast<AInteractable>(HitResult.GetActor()))
+		if(HitResult.GetActor()->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
 		{
-			Controller->CurrentInteractable = Interactable;
+			//IInteractable* Interactable = Cast<IInteractable>(HitResult.GetActor());
+			Controller->CurrentInteractable = HitResult.GetActor();
 			return;
 		}
 	}
@@ -345,6 +346,28 @@ void APlayerCharacter::CheckHeadBob()
 	{
 		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(IdleShake, 1.0f);
 	}
+}
+
+bool APlayerCharacter::LineTraceInteractable(float range, FHitResult& outHit)
+{
+	FHitResult hit;
+	FVector startPoint = FPSCameraComponent->GetComponentLocation();
+	FVector endPoint = startPoint + (FPSCameraComponent->GetForwardVector() * range);
+	FCollisionQueryParams collisionParams;
+
+	if (GetWorld()->LineTraceSingleByChannel(hit, startPoint, endPoint, ECC_Visibility, collisionParams))
+	{
+		if (hit.bBlockingHit)
+		{
+			if (UKismetSystemLibrary::DoesImplementInterface(hit.GetActor(), UInteractable::StaticClass()))
+			{
+				outHit = hit;
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 
