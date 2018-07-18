@@ -25,19 +25,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
-	class AFogCube* next;
-	UPROPERTY(EditAnywhere)
-	class AFogCube* previous;
-	UPROPERTY(EditAnywhere)
-	class AFogCube* left;
-	UPROPERTY(EditAnywhere)
-	class AFogCube* right;
-	UPROPERTY(EditAnywhere)
+	TArray<AFogCube*> neighbours;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isActive;
 
-	UFUNCTION(BlueprintCallable, Category = "Fog")
-	void SetActive(bool value);
+	//UFUNCTION(BlueprintCallable, Category = "FogCube")
+	//void SetActive(bool value);
 
-	UFUNCTION(BlueprintCallable, Category = "Fog")
+	UFUNCTION(BlueprintCallable, Category = "FogCube")
 	void Spread();
+	UFUNCTION(BlueprintCallable, Category = "FogCube")
+	void Reduce(AFogCube* exclude);
 };

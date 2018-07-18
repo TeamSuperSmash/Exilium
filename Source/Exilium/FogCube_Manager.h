@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "FogCube.h"
 #include "FogCube_Manager.generated.h"
 
 UCLASS()
@@ -23,6 +24,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AFogCube* current;
+
+	UFUNCTION(BlueprintCallable, Category = "FogCube")
+	void checkCurrent(AFogCube* cube);
 	
 };

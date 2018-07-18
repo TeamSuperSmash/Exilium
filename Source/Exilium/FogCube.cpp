@@ -23,28 +23,28 @@ void AFogCube::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AFogCube::SetActive(bool value)
+/*void AFogCube::SetActive(bool value)
 {
 	SetActorHiddenInGame(!value);
-}
+}*/
 
 void AFogCube::Spread()
 {
-	if (next != nullptr)
+	isActive = true;
+	for (int i = 0; i<neighbours.Num(); i++)
 	{
-		SetActive(true);
+		neighbours[i]->isActive = true;
 	}
-	if (previous != nullptr)
+}
+
+void AFogCube::Reduce(AFogCube* exclude)
+{
+	for (int i = 0; i<neighbours.Num(); ++i)
 	{
-		SetActive(true);
-	}
-	if (left != nullptr)
-	{
-		SetActive(true);
-	}
-	if (right != nullptr)
-	{
-		SetActive(true);
+		if (neighbours[i] != exclude)
+		{
+			neighbours[i]->isActive = false;
+		}
 	}
 }
 

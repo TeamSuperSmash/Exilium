@@ -25,3 +25,13 @@ void AFogCube_Manager::Tick(float DeltaTime)
 
 }
 
+void AFogCube_Manager::checkCurrent(AFogCube* cube)
+{
+	if (cube != current)
+	{
+		current->Reduce(cube);
+		cube->Spread();
+		current = cube;
+	}
+}
+
