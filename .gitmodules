@@ -1,3 +1,6 @@
 [submodule "LFS-GUI"]
 	path = LFS-GUI
 	url = https://github.com/FattyMieo/LFS-GUI.git
+[submodule "Plugins/FMODStudio"]
+	path = Plugins/FMODStudio
+	url = https://gitlab.com/TeamACube/FMODStudio.git
