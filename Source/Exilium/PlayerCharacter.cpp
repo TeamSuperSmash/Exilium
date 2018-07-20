@@ -88,9 +88,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("ForwardKey", IE_Pressed, this, &APlayerCharacter::StartForward);
     PlayerInputComponent->BindAction("ForwardKey", IE_Released, this, &APlayerCharacter::StopForward);
 
-    PlayerInputComponent->BindAction("FirstSlot", IE_Pressed, this, &APlayerCharacter::HoldLighter);
-    PlayerInputComponent->BindAction("SecondSlot", IE_Pressed, this, &APlayerCharacter::HoldCandle);
-    PlayerInputComponent->BindAction("ThirdSlot", IE_Pressed, this, &APlayerCharacter::HoldMusicBox);
+    PlayerInputComponent->BindAction("SwitchItem1", IE_Pressed, this, &APlayerCharacter::CheckItemSlot1);
+    PlayerInputComponent->BindAction("SwitchItem2", IE_Pressed, this, &APlayerCharacter::CheckItemSlot2);
+    PlayerInputComponent->BindAction("SwitchItem3", IE_Pressed, this, &APlayerCharacter::CheckItemSlot3);
     PlayerInputComponent->BindAction("LeftMouse", IE_Pressed, this, &APlayerCharacter::ActivateItem);
 }
 
@@ -339,6 +339,35 @@ void APlayerCharacter::CheckHeadBob()
 	else if(GetVelocity().IsZero() && !GetCharacterMovement()->IsFalling())
 	{
 		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(IdleShake, 1.0f);
+	}
+}
+
+void APlayerCharacter::CheckItemSlot1()
+{
+
+}
+
+void APlayerCharacter::CheckItemSlot2()
+{
+}
+
+void APlayerCharacter::CheckItemSlot3()
+{
+}
+
+void APlayerCharacter::CheckItemType(int type)
+{
+	if (type == LIGHTER)
+	{
+
+	}
+	else if (type == CANDLE)
+	{
+
+	}
+	else if (type == MUSICBOX)
+	{
+
 	}
 }
 

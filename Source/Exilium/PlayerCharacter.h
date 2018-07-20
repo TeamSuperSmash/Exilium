@@ -80,6 +80,20 @@ public:
 	}
 };
 
+enum slotType
+{
+	SLOT1 = 1,
+	SLOT2 = 2,
+	SLOT3 = 3
+};
+
+enum itemType
+{
+	LIGHTER = 1,
+	CANDLE = 2,
+	MUSICBOX = 3
+};
+
 UCLASS()
 class EXILIUM_API APlayerCharacter : public ACharacter
 {
@@ -131,6 +145,12 @@ public:
     void CheckSprint();
 
     void CheckHeadBob();
+
+	void CheckItemSlot1();
+	void CheckItemSlot2();
+	void CheckItemSlot3();
+
+	void CheckItemType(int type);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
     bool bForward;
