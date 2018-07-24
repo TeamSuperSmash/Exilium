@@ -29,5 +29,5 @@ FString APickup::GetUseText() const
 	//FString Name = "Item";
 	//FString Action = "Pick up";
 
-	return FString::Printf(TEXT("%s : Press F To %s"), *Name, *Action);
+	return FString::Printf(TEXT("%s : Press E To %s"), *Name, *Action);
 }

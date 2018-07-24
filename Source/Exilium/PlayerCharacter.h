@@ -19,13 +19,10 @@ struct FCraftingInfo : public FTableRowBase
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FName ComponentID;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FName ProductID;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bDestroyItemA;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bDestroyItemB;
 };
@@ -42,31 +39,22 @@ public:
 		Description = FText::FromString("Please enter a description for the item");
 		Value = 10;
 	}
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FName ItemID;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<class APickup> ItemPickup;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FText Name;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FText Action;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 Value;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UTexture2D* Thumbnail;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FText Description;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<FCraftingInfo> CraftingCombinations;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bCanBeUsed;
 
@@ -80,21 +68,7 @@ public:
 	}
 };
 
-enum slotType
-{
-	SLOT1 = 1,
-	SLOT2 = 2,
-	SLOT3 = 3
-};
-
-enum itemType
-{
-	LIGHTER = 1,
-	CANDLE = 2,
-	MUSICBOX = 3
-};
-
-UCLASS()
+UCLASS(config = Game, hidecategories = ("Pawn|Character|InternalEvents|CharacterMovement"))
 class EXILIUM_API APlayerCharacter : public ACharacter
 {
     GENERATED_BODY()
@@ -103,54 +77,29 @@ public:
     APlayerCharacter();
 
     virtual void BeginPlay() override;
-
     virtual void Tick(float DeltaTime) override;
-
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
     void MoveForward(float _value);
-
     void MoveRight(float _value);
-
     void StartJump();
-
     void StopJump();
-
     void StartCrouch();
-
     void StopCrouch();
-
     void CrouchImplement(float DeltaTime);
-
     void StartSprint();
-
     void StopSprint();
-
     void StartForward();
-
     void StopForward();
-
     void HoldLighter();
-
     void HoldCandle();
-
     void HoldMusicBox();
-
     void HoldBareHand();
-
     void ActivateItem();
-
     void DeActivateItem();
-
     void CheckSprint();
-
     void CheckHeadBob();
-
-	void CheckItemSlot1();
-	void CheckItemSlot2();
-	void CheckItemSlot3();
-
-	void CheckItemType(int type);
+	void CheckForInteractables();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
     bool bForward;
@@ -166,56 +115,44 @@ public:
 	bool bPickup;
 
     UPROPERTY(EditAnywhere)
-        float currentSpeed = 600.0f;
+    float currentSpeed = 600.0f;
     UPROPERTY(EditAnywhere)
-        float sprintMultiplier = 2.0f;
+    float sprintMultiplier = 2.0f;
     UPROPERTY(EditAnywhere)
-        float crouchMultiplier = 0.5f;
+    float crouchMultiplier = 0.5f;
     UPROPERTY(EditAnywhere)
-        float interactionDistance = 200.0f;
+    float interactionDistance = 200.0f;
     UPROPERTY(EditAnywhere)
-        float _baseEyeHeight = 64.0f;
+    float _baseEyeHeight = 64.0f;
     UPROPERTY(EditAnywhere)
-        float _capsuleHeight = 88.0f;
+    float _capsuleHeight = 88.0f;
     UPROPERTY(EditAnywhere)
-        float lighterIntensity = 1000.0f;
+    float lighterIntensity = 1000.0f;
     UPROPERTY(EditAnywhere)
-        float candleIntensity = 3000.0f;
+    float candleIntensity = 3000.0f;
     UPROPERTY(EditAnywhere)
-        int itemType = 0;
+    int itemType = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool isLeaning = false;
-    UPROPERTY(EditAnywhere)
-		TArray<FString> Inventory;
-
-    FCollisionQueryParams TraceParams;
-
-	void CheckForInteractables();
+	bool isLeaning = false;
+	FCollisionQueryParams TraceParams;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-        UCameraComponent* FPSCameraComponent;
-
+    UCameraComponent* FPSCameraComponent;
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Mesh)
-        USkeletalMeshComponent* FPSMesh;
-
+    USkeletalMeshComponent* FPSMesh;
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Light)
-        UPointLightComponent* PlayerLight;
-
+    UPointLightComponent* PlayerLight;
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Sound)
-        UAudioComponent* PlayerSound;
-
+    UAudioComponent* PlayerSound;
     UPROPERTY(EditAnywhere)
-        TSubclassOf<UCameraShake> IdleShake;
-
+    TSubclassOf<UCameraShake> IdleShake;
     UPROPERTY(EditAnywhere)
-        TSubclassOf<UCameraShake> WalkShake;
-
+    TSubclassOf<UCameraShake> WalkShake;
     UPROPERTY(EditAnywhere)
-        TSubclassOf<UCameraShake> RunShake;
-
+    TSubclassOf<UCameraShake> RunShake;
 	//Audio for openDoorSound -- connected with blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
-		USoundBase* openDoorSound;
+	USoundBase* openDoorSound;
 
 // Interactable
 public:
