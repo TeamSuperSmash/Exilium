@@ -14,7 +14,6 @@ AFogCube::AFogCube()
 void AFogCube::BeginPlay()
 {
 	Super::BeginPlay();
-	//isActive = true;
 }
 
 // Called every frame
@@ -30,21 +29,25 @@ void AFogCube::SetActive(bool value)
 
 void AFogCube::Spread()
 {
-	if (next != nullptr)
+	isActive = true;
+	for (int i = 0; i < neighbour.Num(); i++)
 	{
-		SetActive(true);
+		if (neighbour[i] != nullptr)
+		{
+			neighbour[i]->isActive = true;
+		}
 	}
-	if (previous != nullptr)
+}
+
+
+void AFogCube::Reduce(AFogCube* exclude)
+{
+	for (int i = 0; i < neighbour.Num(); i++)
 	{
-		SetActive(true);
-	}
-	if (left != nullptr)
-	{
-		SetActive(true);
-	}
-	if (right != nullptr)
-	{
-		SetActive(true);
+		if (neighbour[i] != exclude)
+		{
+			neighbour[i]->isActive = false;
+		}
 	}
 }
 
