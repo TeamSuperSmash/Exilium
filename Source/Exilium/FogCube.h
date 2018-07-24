@@ -25,14 +25,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
-	class AFogCube* next;
-	UPROPERTY(EditAnywhere)
-	class AFogCube* previous;
-	UPROPERTY(EditAnywhere)
-	class AFogCube* left;
-	UPROPERTY(EditAnywhere)
-	class AFogCube* right;
-	UPROPERTY(EditAnywhere)
+	TArray<AFogCube*> neighbour;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool isActive;
 
 	UFUNCTION(BlueprintCallable, Category = "Fog")
@@ -40,4 +34,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Fog")
 	void Spread();
+
+	UFUNCTION(BlueprintCallable, Category = "Fog")
+	void Reduce(AFogCube* exclude);
 };
