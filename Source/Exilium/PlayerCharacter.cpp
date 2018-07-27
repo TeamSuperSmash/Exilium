@@ -58,11 +58,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
     CrouchImplement(DeltaTime);
-
     CheckSprint();
-
     CheckHeadBob();
-
 	CheckForInteractables();
 }
 
@@ -99,8 +96,8 @@ void APlayerCharacter::MoveForward(float _value)
     //FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
     //AddMovementInput(Direction, _value);
 
-    const FRotator YawOnlyRotation = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
-    AddMovementInput(FRotationMatrix(YawOnlyRotation).GetUnitAxis(EAxis::X), _value);
+	const FRotator YawOnlyRotation = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
+	AddMovementInput(FRotationMatrix(YawOnlyRotation).GetUnitAxis(EAxis::X), _value);
 }
 
 void APlayerCharacter::MoveRight(float _value)

@@ -10,6 +10,7 @@
 #include "Components/PointLightComponent.h"
 #include "Components/AudioComponent.h"
 #include "Engine/DataTable.h"
+#include "Sound/SoundCue.h"
 #include "PlayerCharacter.generated.h"
 
 USTRUCT(BlueprintType)
@@ -68,7 +69,17 @@ public:
 	}
 };
 
-UCLASS(config = Game, hidecategories = ("Pawn|Character|InternalEvents|CharacterMovement"))
+// "BlueprintType" is essential to include
+UENUM(BlueprintType)
+enum class ESanityState : uint8
+{
+	SANITY_LEVEL_0		UMETA(DisplayName = "SANITY_LEVEL_0"),
+	SANITY_LEVEL_1		UMETA(DisplayName = "SANITY_LEVEL_1"),
+	SANITY_LEVEL_2		UMETA(DisplayName = "SANITY_LEVEL_2"),
+	SANITY_LEVEL_3		UMETA(DisplayName = "SANITY_LEVEL_3")
+};
+
+UCLASS(config = Game, hidecategories = ("CharacterMovement"))
 class EXILIUM_API APlayerCharacter : public ACharacter
 {
     GENERATED_BODY()
@@ -113,27 +124,37 @@ public:
 	bool bOpenDoor;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Action")
 	bool bPickup;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Action")
+	bool isLeaning;
 
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float currentSpeed = 600.0f;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float sprintMultiplier = 2.0f;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float crouchMultiplier = 0.5f;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float interactionDistance = 200.0f;
-    UPROPERTY(EditAnywhere)
+	// needed to store the value of the player's original height
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float _baseEyeHeight = 64.0f;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float _capsuleHeight = 88.0f;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float lighterIntensity = 1000.0f;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float candleIntensity = 3000.0f;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int itemType = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool isLeaning = false;
+	float currentSanity;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float maximumSanity;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float minimumSanity;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
+	ESanityState SanityState;
+
 	FCollisionQueryParams TraceParams;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -142,13 +163,15 @@ public:
     USkeletalMeshComponent* FPSMesh;
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Light)
     UPointLightComponent* PlayerLight;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sound)
+	TSubclassOf<UAudioComponent> ItemSound;
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Sound)
     UAudioComponent* PlayerSound;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<UCameraShake> IdleShake;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<UCameraShake> WalkShake;
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<UCameraShake> RunShake;
 	//Audio for openDoorSound -- connected with blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
