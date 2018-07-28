@@ -6,6 +6,8 @@
 #include "AIController.h"
 #include "AI_Bot_Controller.generated.h"
 
+class UPawnSensingComponent;
+
 /**
  * 
  */
@@ -25,8 +27,13 @@ public:
 
 	virtual FRotator GetControlRotation() const;
 
+	//Keeps a list of detected player pawns
 	UFUNCTION()
 		void OnPawnDetected(const TArray<AActor*> &DetectedPawns);
+
+	//Keeps a list of detected noise
+	UFUNCTION()
+		void OnNoiseHeard(APawn* DetectedPawn, const FVector& Location, float Volume);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		float AISightRadius = 500.0f;
@@ -41,15 +48,18 @@ public:
 		float AIFieldOfView = 90.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
-		class UAISenseConfig_Sight* SightConfig;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		bool bIsPlayerDetected = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		float DistanceToPlayer = 0.0f;
 	
+	//Will be obsolete for this project
+	//AIPerception component to detect pawns 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+		class UAISenseConfig_Sight* SightConfig;
 	
-	
+	//PawnSensing component to detect pawns
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+		UPawnSensingComponent* PawnSensingComponent;
 	
 };
