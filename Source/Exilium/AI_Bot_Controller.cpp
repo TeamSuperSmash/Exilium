@@ -4,14 +4,18 @@
 #include "AI_Bot_Character.h"
 #include "Waypoint.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
 #include "PlayerCharacter.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/PawnSensingComponent.h"
 
 AAI_Bot_Controller::AAI_Bot_Controller()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	//Will soon be obsolete for this project
+	//Initialize AIPerception component for AI pawn detection
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 	SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
 
@@ -27,6 +31,11 @@ AAI_Bot_Controller::AAI_Bot_Controller()
 	GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
 	GetPerceptionComponent()->OnPerceptionUpdated.AddDynamic(this, &AAI_Bot_Controller::OnPawnDetected);
 	GetPerceptionComponent()->ConfigureSense(*SightConfig);
+
+	//Initialize PawnSensing component for AI pawn detection
+	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing Component"));
+
+	PawnSensingComponent->OnHearNoise.AddDynamic(this, &AAI_Bot_Controller::OnNoiseHeard);
 
 }
 
@@ -90,6 +99,11 @@ void AAI_Bot_Controller::OnPawnDetected(const TArray<AActor*> &DetectedPawns)
 	}
 
 	bIsPlayerDetected = true;
+}
+
+void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Location, float Volume)
+{
+	DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColor::Green, false, 10.0f);
 }
 
 

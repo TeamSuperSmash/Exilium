@@ -13,6 +13,8 @@
 #include "Sound/SoundCue.h"
 #include "PlayerCharacter.generated.h"
 
+class UPawnNoiseEmitterComponent;
+
 USTRUCT(BlueprintType)
 struct FCraftingInfo : public FTableRowBase
 {
@@ -83,6 +85,10 @@ UCLASS(config = Game, hidecategories = ("CharacterMovement"))
 class EXILIUM_API APlayerCharacter : public ACharacter
 {
     GENERATED_BODY()
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	UPawnNoiseEmitterComponent* NoiseEmitterComponent;
 
 public:
     APlayerCharacter();

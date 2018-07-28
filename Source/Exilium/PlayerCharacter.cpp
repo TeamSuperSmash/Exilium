@@ -4,6 +4,7 @@
 #include "GameplayController.h"
 #include "Interactable.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/PawnNoiseEmitterComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -44,6 +45,8 @@ APlayerCharacter::APlayerCharacter()
 	(TEXT("Blueprint'/Game/Characters/Player/Blueprints/HeadBob_Run_BP.HeadBob_Run_BP'"));*/
 
     TraceParams = FCollisionQueryParams(FName(TEXT("Trace")), true, this);
+
+	NoiseEmitterComponent = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitterComponent"));
 }
 
 void APlayerCharacter::BeginPlay()
