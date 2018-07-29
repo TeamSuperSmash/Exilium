@@ -288,6 +288,15 @@ void APlayerCharacter::CheckSanityLevel()
 	{
 		SanityState = ESanityState::SANITY_LEVEL_0;
 	}
+
+	if (currentSanity > maximumSanity)
+	{
+		currentSanity = maximumSanity;
+	}
+	else if (currentSanity < minimumSanity)
+	{
+		currentSanity = minimumSanity;
+	}
 }
 
 void APlayerCharacter::CrouchImplement(float DeltaTime)

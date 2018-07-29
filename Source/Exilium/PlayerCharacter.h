@@ -148,11 +148,11 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int itemType = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float currentSanity;
+	float currentSanity = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float maximumSanity = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float minimumSanity;
+	float minimumSanity = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float sanityIncrementDelay = 1.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
