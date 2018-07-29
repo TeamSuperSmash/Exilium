@@ -111,6 +111,7 @@ public:
     void CheckSprint();
     void CheckHeadBob();
 	void CheckForInteractables();
+	void CheckSanityLevel();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
     bool bForward;
@@ -149,9 +150,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float currentSanity;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float maximumSanity;
+	float maximumSanity = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float minimumSanity;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float sanityIncrementDelay = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float sanityThreshold0 = 30.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float sanityThreshold1 = 60.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float sanityThreshold2 = 90.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
 	ESanityState SanityState;
 

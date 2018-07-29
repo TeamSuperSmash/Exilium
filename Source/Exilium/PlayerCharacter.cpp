@@ -61,6 +61,7 @@ void APlayerCharacter::Tick(float DeltaTime)
     CheckSprint();
     CheckHeadBob();
 	CheckForInteractables();
+	CheckSanityLevel();
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -267,6 +268,26 @@ void APlayerCharacter::CheckForInteractables()
 	}
 	// If did not hit anything, or hit unusable. Set current interactable to nullptr.
 	Controller->CurrentInteractable = nullptr;
+}
+
+void APlayerCharacter::CheckSanityLevel()
+{
+	if (currentSanity >= sanityThreshold0 && currentSanity < sanityThreshold1)
+	{
+		SanityState = ESanityState::SANITY_LEVEL_1;
+	}
+	else if (currentSanity >= sanityThreshold1 && currentSanity < sanityThreshold2)
+	{
+		SanityState = ESanityState::SANITY_LEVEL_2;
+	}
+	else if (currentSanity >= sanityThreshold2)
+	{
+		SanityState = ESanityState::SANITY_LEVEL_3;
+	}
+	else if (currentSanity < sanityThreshold0)
+	{
+		SanityState = ESanityState::SANITY_LEVEL_0;
+	}
 }
 
 void APlayerCharacter::CrouchImplement(float DeltaTime)
