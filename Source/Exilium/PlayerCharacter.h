@@ -81,6 +81,7 @@ enum class ESanityState : uint8
 	SANITY_LEVEL_3		UMETA(DisplayName = "SANITY_LEVEL_3")
 };
 
+
 UCLASS(config = Game, hidecategories = ("CharacterMovement"))
 class EXILIUM_API APlayerCharacter : public ACharacter
 {

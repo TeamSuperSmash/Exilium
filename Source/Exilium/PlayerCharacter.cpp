@@ -275,6 +275,23 @@ void APlayerCharacter::CheckForInteractables()
 
 void APlayerCharacter::CheckSanityLevel()
 {
+	if (SanityState == ESanityState::SANITY_LEVEL_1)
+	{
+
+	}
+	else if (SanityState == ESanityState::SANITY_LEVEL_2)
+	{
+
+	}
+	else if (SanityState == ESanityState::SANITY_LEVEL_3)
+	{
+
+	}
+	else if (SanityState == ESanityState::SANITY_LEVEL_0)
+	{
+
+	}
+/*
 	if (currentSanity >= sanityThreshold0 && currentSanity < sanityThreshold1)
 	{
 		SanityState = ESanityState::SANITY_LEVEL_1;
@@ -300,6 +317,7 @@ void APlayerCharacter::CheckSanityLevel()
 	{
 		currentSanity = minimumSanity;
 	}
+	*/
 }
 
 void APlayerCharacter::CrouchImplement(float DeltaTime)
