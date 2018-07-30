@@ -191,6 +191,8 @@ public:
 	//Audio for openDoorSound -- connected with blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 	USoundBase* openDoorSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	USoundBase* walkingSound;
 
 // Interactable
 public:
