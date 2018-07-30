@@ -10,9 +10,9 @@
 #include "Components/PointLightComponent.h"
 #include "Components/AudioComponent.h"
 #include "Engine/DataTable.h"
+#include "PlayerStat.h"
 #include "Sound/SoundCue.h"
 #include "PlayerCharacter.generated.h"
-
 class UPawnNoiseEmitterComponent;
 
 USTRUCT(BlueprintType)
@@ -80,6 +80,7 @@ enum class ESanityState : uint8
 	SANITY_LEVEL_2		UMETA(DisplayName = "SANITY_LEVEL_2"),
 	SANITY_LEVEL_3		UMETA(DisplayName = "SANITY_LEVEL_3")
 };
+
 
 UCLASS(config = Game, hidecategories = ("CharacterMovement"))
 class EXILIUM_API APlayerCharacter : public ACharacter
@@ -153,6 +154,8 @@ public:
     float candleIntensity = 3000.0f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int itemType = 0;
+
+	//sanity stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float currentSanity = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -161,15 +164,31 @@ public:
 	float minimumSanity = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float sanityIncrementDelay = 1.0f;
+	//! sanity threshold
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float sanityThreshold0 = 30.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float sanityThreshold1 = 60.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float sanityThreshold2 = 90.0f;
+	//! sanity state
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
 	ESanityState SanityState;
+	//! sanity counter
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Counter)
+	float fogCounter;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Counter)
+	float lookCounter;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Counter)
+	float MONSTER_DURATION;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Counter)
+	float FOGROOM_DURATION;
+	
+	//player state
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
+	EPlayerState currentState;
 
+	
 	FCollisionQueryParams TraceParams;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -199,4 +218,7 @@ public:
 	/** Cast a line trace to detect IInteractable object **/
 	UFUNCTION(BlueprintCallable, Category = Interactable)
 	bool LineTraceInteractable(float range, FHitResult& outHit);
+
+	UFUNCTION(BlueprintCallable, Category = Interactable)
+	void UpdatePlayerState(float deltaTime);
 };
