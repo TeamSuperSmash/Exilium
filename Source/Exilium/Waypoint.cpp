@@ -2,6 +2,10 @@
 
 #include "Waypoint.h"
 #include "AI_Bot_Character.h"
+#include "AI_Bot_Controller.h"
+#include "Perception/PawnSensingComponent.h"
+#include "Components/PawnNoiseEmitterComponent.h"
+#include "PlayerCharacter.h"
 
 
 // Sets default values
@@ -47,10 +51,17 @@ void AWaypoint::OnPlayerEnter(UPrimitiveComponent* OverlapComponent,
 
 		if (Character != nullptr)
 		{
-			if (Character->bIsPlayerDetected == false)
+			if (Character->MyController->MonsterState == EMonsterState::MS_ROAM && Character->NextWaypoint == this)
 			{
 				Character->NextWaypoint = NextWaypoint;
-				Character->QTEStart(Character);
+				Character->MyController->NavTarget = NextWaypoint->GetActorLocation();
+
+				Character->MyController->AICanMove = false;
+				Character->MyController->PawnSensingComponent->HearingThreshold = Character->MyController->SpecialDetectionRadius;
+				Character->MyController->CurrDetectionRadius = Character->MyController->SpecialDetectionRadius;
+
+				Character->MyController->Player->GetPawnNoiseEmitterComponent()->MakeNoise(Character->MyController->Player, 1.0f,
+															Character->MyController->Player->GetActorLocation());
 			}
 		}
 	}

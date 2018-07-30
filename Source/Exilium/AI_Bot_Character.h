@@ -18,18 +18,29 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class AWaypoint* NextWaypoint;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class AAI_Bot_Controller* MyController;
+
+
+		class UCharacterMovementComponent* MovementComponent;
+
 	//Function declared in c++ but defined inside blueprint
 	UFUNCTION(BlueprintImplementableEvent, Category = CustomStuff)
-		void QTEStart(AActor* Actor);
+		void QTEStart(AActor* Actor, int currState );
 
 	UFUNCTION(BlueprintImplementableEvent, Category = CustomStuff)
-		void SwitchQTEType();
+		void SetMaxAcceleration(float setSpeed);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = CustomStuff)
+		void CheckRendered();
 
 	UFUNCTION(BlueprintCallable, Category = CustomStuff)
 		void EventFailQTE();
 
 	UFUNCTION(BlueprintCallable, Category = CustomStuff)
 		void HeartbeatSuccess();
+
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = CustomStuff)
 		bool bIsPlayerDetected = false;

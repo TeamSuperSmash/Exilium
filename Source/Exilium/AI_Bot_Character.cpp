@@ -2,7 +2,9 @@
 
 #include "AI_Bot_Character.h"
 #include "AI_Bot_Controller.h"
+#include "Perception/PawnSensingComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "PlayerCharacter.h"
 
 
 // Sets default values
@@ -24,16 +26,26 @@ AAI_Bot_Character::AAI_Bot_Character()
 void AAI_Bot_Character::EventFailQTE()
 {
 	bIsPlayerDetected = true;
-	AAI_Bot_Controller* Character = Cast<AAI_Bot_Controller>(GetController());
 
-	Character->bIsPlayerDetected = true;
+	MyController->bIsPlayerDetected = true;
+
+	MyController->MonsterState = EMonsterState::MS_CHASE;
+
+
+	MyController->ChaseDuration = 5.0f;
+	MyController->AICanMove = true;
+
+	MyController->PawnSensingComponent->HearingThreshold = MyController->AlertDetectionRadius;
+	MyController->CurrDetectionRadius = MyController->AlertDetectionRadius;
 }
 
 void AAI_Bot_Character::HeartbeatSuccess()
 {
-	AAI_Bot_Controller* Character = Cast<AAI_Bot_Controller>(GetController());
+	MyController->bIsPlayerDetected = false;
 
-	Character->bIsPlayerDetected = false;
+	MyController->NavTarget = MyController->Player->GetActorLocation();
+
+	MyController->MonsterState = EMonsterState::MS_ALERT;
 }
 
 // Called when the game starts or when spawned
@@ -41,6 +53,9 @@ void AAI_Bot_Character::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	MyController = Cast<AAI_Bot_Controller>(GetController());
+	MovementComponent = Cast<UCharacterMovementComponent>(GetCharacterMovement());
+
 }
 
 // Called every frame
