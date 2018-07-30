@@ -2,18 +2,14 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "Engine/UserDefinedStruct.h"
 #include "PlayerStat.generated.h"
 
-/**
- * 
- */
-UCLASS()
-class EXILIUM_API UPlayerStat : public UUserDefinedStruct
+UENUM(BlueprintType)
+enum class EPlayerState : uint8
 {
-	GENERATED_BODY()
-
-	USTRUCT(BlueprintType)
-	struct BoolVar;
+	NONE	UMETA(DisplayName = "NONE"),
+	INFOG	UMETA(DisplayName = "INFOG"),
+	LOOKATMONSTER	UMETA(DisplayName = "LOOKATMONSTER"),
+	BREATHINGMINI	UMETA(DisplayName = "BREATHINGMINI"),
+	HEARTBEATMINI	UMETA(DisplayName = "HEARTBEATMINI")
 };

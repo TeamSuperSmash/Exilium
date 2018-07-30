@@ -275,23 +275,6 @@ void APlayerCharacter::CheckForInteractables()
 
 void APlayerCharacter::CheckSanityLevel()
 {
-	if (SanityState == ESanityState::SANITY_LEVEL_1)
-	{
-
-	}
-	else if (SanityState == ESanityState::SANITY_LEVEL_2)
-	{
-
-	}
-	else if (SanityState == ESanityState::SANITY_LEVEL_3)
-	{
-
-	}
-	else if (SanityState == ESanityState::SANITY_LEVEL_0)
-	{
-
-	}
-/*
 	if (currentSanity >= sanityThreshold0 && currentSanity < sanityThreshold1)
 	{
 		SanityState = ESanityState::SANITY_LEVEL_1;
@@ -317,7 +300,6 @@ void APlayerCharacter::CheckSanityLevel()
 	{
 		currentSanity = minimumSanity;
 	}
-	*/
 }
 
 void APlayerCharacter::CrouchImplement(float DeltaTime)
@@ -410,6 +392,59 @@ bool APlayerCharacter::LineTraceInteractable(float range, FHitResult& outHit)
 	}
 
 	return false;
+}
+
+void APlayerCharacter::UpdatePlayerState(float deltaTime)
+{
+	if (currentState == EPlayerState::NONE)
+	{
+		if (fogCounter > 0)
+		{
+			fogCounter -= deltaTime;
+		}
+		if (lookCounter > 0)
+		{
+			lookCounter -= deltaTime;
+		}
+	}
+	else if (currentState == EPlayerState::INFOG)
+	{
+		fogCounter += deltaTime;
+		//sanityValue += (threshold + 30) / FOGROOM_DURATION;
+		/*if (sanityValue >= threshold + 30)
+		{
+			sanityValue = threshold + 30;
+		}*/
+		if (fogCounter >= FOGROOM_DURATION)
+		{
+			fogCounter = 0;
+			currentState = EPlayerState::BREATHINGMINI;
+		}
+	}
+	else if (currentState == EPlayerState::LOOKATMONSTER)
+	{
+		lookCounter += deltaTime;
+		if (lookCounter >= MONSTER_DURATION)
+		{
+			lookCounter = 0;
+			currentState = EPlayerState::BREATHINGMINI;
+		}
+	}
+	else if (currentState == EPlayerState::BREATHINGMINI)
+	{
+		//play breathing minigame
+		//if success
+		//change music
+		//set sanity
+		currentState = EPlayerState::NONE;
+		//else 
+		//change music
+		currentState = EPlayerState::HEARTBEATMINI;
+	}
+	else if (currentState == EPlayerState::HEARTBEATMINI)
+	{
+		//lose
+	}
 }
 
 

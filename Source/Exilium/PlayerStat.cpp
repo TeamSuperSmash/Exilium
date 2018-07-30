@@ -2,13 +2,6 @@
 
 #include "PlayerStat.h"
 
-struct MyStruct
-{
-public:
-	bool boolValue;
-	float timer;
-};
-
 
 
 
