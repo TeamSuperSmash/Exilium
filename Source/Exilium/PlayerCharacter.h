@@ -135,11 +135,11 @@ public:
 	bool isLeaning;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    float currentSpeed = 600.0f;
+    float currentSpeed = 420.0f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    float sprintMultiplier = 2.0f;
+    float sprintMultiplier = 1.5f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    float crouchMultiplier = 0.5f;
+    float crouchMultiplier = 0.3f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float interactionDistance = 200.0f;
 	// needed to store the value of the player's original height
