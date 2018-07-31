@@ -119,6 +119,7 @@ public:
     void CheckHeadBob();
 	void CheckForInteractables();
 	void CheckSanityLevel();
+	void UpdatePlayerState(float deltaTime);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
     bool bForward;
@@ -156,14 +157,16 @@ public:
     int itemType = 0;
 
 	//sanity stats
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
 	float currentSanity = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float maximumSanity = 100.0f;
+	float maximumSanity = 90.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float minimumSanity = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float sanityIncrementDelay = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float sanityThresholdGap = 30.0f;
 	//! sanity threshold
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float sanityThreshold0 = 30.0f;
@@ -172,21 +175,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float sanityThreshold2 = 90.0f;
 	//! sanity state
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
 	ESanityState SanityState;
 	//! sanity counter
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Counter)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
 	float fogCounter;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Counter)
-	float lookCounter;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Counter)
-	float MONSTER_DURATION;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Counter)
-	float FOGROOM_DURATION;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
+	float fogTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
+	float lookTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
+	float lookDuration;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
+	float stayDuration;
 	
 	//player state
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
 	EPlayerState currentState;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
+	EPlayerState previousState;
 
 	
 	FCollisionQueryParams TraceParams;
@@ -219,6 +226,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Interactable)
 	bool LineTraceInteractable(float range, FHitResult& outHit);
 
-	UFUNCTION(BlueprintCallable, Category = Interactable)
-	void UpdatePlayerState(float deltaTime);
+	UFUNCTION(BlueprintCallable, Category = Sanity)
+	void CheckValidFogState();
 };

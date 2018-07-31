@@ -54,6 +54,10 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
     UE_LOG(LogTemp, Warning, TEXT("Starting PlayerCharacter"));
+	currentState = EPlayerState::NONE;
+	previousState = EPlayerState::NONE;
+	stayDuration = 60.0f;
+	lookDuration = 5.0f;
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -65,6 +69,7 @@ void APlayerCharacter::Tick(float DeltaTime)
     CheckHeadBob();
 	CheckForInteractables();
 	CheckSanityLevel();
+	UpdatePlayerState(DeltaTime);
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -394,52 +399,82 @@ bool APlayerCharacter::LineTraceInteractable(float range, FHitResult& outHit)
 	return false;
 }
 
+void APlayerCharacter::CheckValidFogState()
+{
+	if (currentState == EPlayerState::NONE || currentState == EPlayerState::INFOG)
+	{
+		currentState = EPlayerState::INFOG;
+	}
+}
+
 void APlayerCharacter::UpdatePlayerState(float deltaTime)
 {
 	if (currentState == EPlayerState::NONE)
 	{
 		if (fogCounter > 0)
 		{
-			fogCounter -= deltaTime;
+			fogTimer += deltaTime;
+			if (fogTimer >= 1.0f)
+			{
+				fogTimer = 0;
+				fogCounter--;
+			}
 		}
-		if (lookCounter > 0)
+		if (lookDuration > 0)
 		{
-			lookCounter -= deltaTime;
+			lookDuration -= deltaTime;
 		}
 	}
 	else if (currentState == EPlayerState::INFOG)
 	{
-		fogCounter += deltaTime;
-		//sanityValue += (threshold + 30) / FOGROOM_DURATION;
-		/*if (sanityValue >= threshold + 30)
+		fogTimer += deltaTime;
+		float curThreshold = (static_cast<int>(SanityState) * sanityThresholdGap) + sanityThresholdGap;
+		float insanityIncrement = sanityThresholdGap / stayDuration;
+		
+		if (fogTimer >= 1.0f)
 		{
-			sanityValue = threshold + 30;
-		}*/
-		if (fogCounter >= FOGROOM_DURATION)
+			fogTimer = 0;
+			fogCounter++;
+			
+			if (currentSanity + insanityIncrement < curThreshold)
+			{
+				currentSanity += insanityIncrement;
+			}
+		}
+		
+		if (fogCounter >= stayDuration)
 		{
 			fogCounter = 0;
+			fogTimer = 0;
+			previousState = EPlayerState::INFOG;
 			currentState = EPlayerState::BREATHINGMINI;
 		}
 	}
 	else if (currentState == EPlayerState::LOOKATMONSTER)
 	{
-		lookCounter += deltaTime;
-		if (lookCounter >= MONSTER_DURATION)
+		//! --monster cannot move fuction
+		lookTimer += deltaTime;
+		if (lookTimer >= lookDuration)
 		{
-			lookCounter = 0;
+			lookTimer = 0;
+			//! --monster move toward function
+			previousState = EPlayerState::LOOKATMONSTER;
 			currentState = EPlayerState::BREATHINGMINI;
+			//trigger breating mini game
 		}
 	}
 	else if (currentState == EPlayerState::BREATHINGMINI)
 	{
-		//play breathing minigame
-		//if success
-		//change music
-		//set sanity
-		currentState = EPlayerState::NONE;
-		//else 
-		//change music
-		currentState = EPlayerState::HEARTBEATMINI;
+		currentSanity = (static_cast<int>(SanityState) * sanityThresholdGap) + sanityThresholdGap;
+		currentState = previousState;
+		
+		//! --if success
+		//! --change music
+		//! --set sanity
+		//! --set to previosState
+		//! --else 
+		//! --change music
+		//currentState = EPlayerState::HEARTBEATMINI;
 	}
 	else if (currentState == EPlayerState::HEARTBEATMINI)
 	{
