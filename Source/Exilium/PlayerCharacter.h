@@ -228,4 +228,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Sanity)
 	void CheckValidFogState();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Sanity)
+		bool IsPlayerDangerChaseBGM = false;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Sanity)
+		void PlayDangerChaseBGM();
 };
