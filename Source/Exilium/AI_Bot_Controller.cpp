@@ -177,6 +177,8 @@ void AAI_Bot_Controller::FindPath()
 			MonsterState = EMonsterState::MS_ALERT;
 			bIsPlayerDetected = false;
 
+			Player->IsPlayerDangerChaseBGM = false;
+
 			ChaseDuration = 15.0f;
 
 			return;

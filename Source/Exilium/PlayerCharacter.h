@@ -246,6 +246,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Sanity)
 		bool IsPlayerDangerChaseBGM = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Sanity)
+		bool ContinuePlayerDangerChaseBGM = false;
+
 	UFUNCTION(BlueprintImplementableEvent, Category = Sanity)
 		void PlayDangerChaseBGM();
 };
