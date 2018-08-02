@@ -56,8 +56,22 @@ void APlayerCharacter::BeginPlay()
     UE_LOG(LogTemp, Warning, TEXT("Starting PlayerCharacter"));
 	currentState = EPlayerState::NONE;
 	previousState = EPlayerState::NONE;
+	//initialize sanity properties
 	stayDuration = 60.0f;
 	lookDuration = 5.0f;
+	//initialize post processing Dynamic Material Instance
+	TArray<UPostProcessComponent*> pcomps;
+	GetComponents<UPostProcessComponent>(pcomps);
+	postComp = pcomps[0];
+	sanityDMI = UMaterialInstanceDynamic::Create(sanityMat, this);
+	sanityDMI->SetScalarParameterValue("Strength", currentSanity/10.0f);
+	FPostProcessVolumeProperties prop = postComp->GetProperties();
+	//prop.Settings->AddBlendable(sanityDMI, 1.0f);
+
+	if (sanityDMI->GetClass()->ImplementsInterface(UBlendableInterface::StaticClass()))
+	{
+		postComp->AddOrUpdateBlendable(TScriptInterface<IBlendableInterface>(sanityDMI), 1.0f);
+	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -409,6 +423,9 @@ void APlayerCharacter::CheckValidFogState()
 
 void APlayerCharacter::UpdatePlayerState(float deltaTime)
 {
+	float strength = FMath::Lerp(0.0f, 0.09f, currentSanity / 90.0f);
+
+	sanityDMI->SetScalarParameterValue("Strength", strength);
 	if (currentState == EPlayerState::NONE)
 	{
 		if (fogCounter > 0)

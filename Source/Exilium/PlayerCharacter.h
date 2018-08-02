@@ -12,6 +12,7 @@
 #include "Engine/DataTable.h"
 #include "PlayerStat.h"
 #include "Sound/SoundCue.h"
+#include "Components/PostProcessComponent.h"
 #include "PlayerCharacter.generated.h"
 class UPawnNoiseEmitterComponent;
 
@@ -174,9 +175,11 @@ public:
 	float sanityThreshold1 = 60.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float sanityThreshold2 = 90.0f;
+
 	//! sanity state
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
 	ESanityState SanityState;
+
 	//! sanity counter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
 	float fogCounter;
@@ -214,11 +217,22 @@ public:
     TSubclassOf<UCameraShake> WalkShake;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<UCameraShake> RunShake;
+
 	//Audio for openDoorSound -- connected with blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 	USoundBase* openDoorSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 	USoundBase* walkingSound;
+
+	//Post processing 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Post processing")
+	UPostProcessComponent* postComp;
+	//! post process material
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Post processing")
+	UMaterialInstance* sanityMat;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Post processing")
+	UMaterialInstanceDynamic* sanityDMI;
+	
 
 // Interactable
 public:
