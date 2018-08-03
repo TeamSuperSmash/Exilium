@@ -158,7 +158,8 @@ void AAI_Bot_Controller::FindPath()
 		{
 			MonsterState = EMonsterState::MS_ROAM;
 
-			NavTarget = MyCharacter->NextWaypoint->GetActorLocation();
+			if(MyCharacter->NextWaypoint != nullptr)
+				NavTarget = MyCharacter->NextWaypoint->GetActorLocation();
 
 			return;
 		}
