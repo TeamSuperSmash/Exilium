@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "FogCube_Manager.h"
+#include "InterestPoint.h"
 
 
 // Sets default values
-AFogCube_Manager::AFogCube_Manager()
+AInterestPoint::AInterestPoint()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -12,26 +12,24 @@ AFogCube_Manager::AFogCube_Manager()
 }
 
 // Called when the game starts or when spawned
-void AFogCube_Manager::BeginPlay()
+void AInterestPoint::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
-void AFogCube_Manager::Tick(float DeltaTime)
+void AInterestPoint::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-void AFogCube_Manager::CheckCurrent(AFogCube* cube)
+bool AInterestPoint::GetState()
 {
-	if (current != nullptr)
-	{
-		current->Reduce(cube);
-		cube->Spread();
-		current = cube;
-	}
+	return isSettled;
+}
+
+void AInterestPoint::SetState(bool value)
+{
+	isSettled = value;
 }
 
