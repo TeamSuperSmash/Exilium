@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PuzzlePropsTypeEnum.h"
+#include "RoomIDEnum.h"
 #include "InterestPoint.generated.h"
 
 UCLASS()
@@ -28,6 +29,8 @@ private:
 	bool isSettled;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ERoomIDEnum roomID;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EPuzzlePropsTypeEnum slot;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
