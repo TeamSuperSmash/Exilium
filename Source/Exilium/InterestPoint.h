@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PuzzlePropsTypeEnum.h"
+#include "RoomIDEnum.h"
 #include "InterestPoint.generated.h"
 
 UCLASS()
@@ -29,13 +30,21 @@ private:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ERoomIDEnum roomID;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EPuzzlePropsTypeEnum slot;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EPuzzlePropsTypeEnum item;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector itemLocation;
 
 	UFUNCTION(BlueprintCallable, Category = "Interest point")
 	bool GetState();
 	UFUNCTION(BlueprintCallable, Category = "Interest point")
-	void SetState(bool value);
+	void UpdateState();
+	UFUNCTION(BlueprintCallable, Category = "Interest point")
+	void SetItem(EPuzzlePropsTypeEnum var);
+	
+
 	
 };
