@@ -122,6 +122,43 @@ FRotator AAI_Bot_Controller::GetControlRotation() const
 
 void AAI_Bot_Controller::FindPrey()
 {
+
+	if (QTEStarted != true && bIsPlayerDetected != true)
+	{
+
+		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= CurrDetectionRadius)
+		{
+			MyCharacter->CheckRendered();
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, TEXT("Seen Duration ") + FString::SanitizeFloat(SeenDuration));
+
+			if (SeenDuration >= 5.0f && MonsterState != EMonsterState::MS_CHASE)
+			{
+				MyCharacter->QTEStart(MyCharacter, 1);
+				QTEStarted = true;
+				SeenDuration = 0.0f;
+
+				return;
+			}
+		}
+
+
+
+	}
+	else if (QTEStarted != true && bIsPlayerDetected == true)
+	{
+		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= BreathingDetectionRadius)
+		{
+			QTEStarted = true;
+			MyCharacter->QTEStart(MyCharacter, 0);
+
+			return;
+		}
+	}
+
+	if(SeenDuration >= 0.0f)
+		SeenDuration -= GetWorld()->DeltaTimeSeconds * 0.25f;
+
 	FindPath();
 }
 
@@ -201,29 +238,7 @@ void AAI_Bot_Controller::FindPath()
 	DrawDebugSphere(GetWorld(), Dest, 32.0f, 12, FColor::Red, false, 10.0f);
 
 	
-	if (QTEStarted != true && bIsPlayerDetected != true)
-	{
-		MyCharacter->CheckRendered();
-
-		
-		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= CurrDetectionRadius)
-		{
-
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, TEXT("Seen Duration ") + FString::SanitizeFloat(SeenDuration));
-
-			if(SeenDuration >= 5.0f && MonsterState != EMonsterState::MS_CHASE)
-				MyCharacter->QTEStart(MyCharacter, 1);
-		}
-		
-	}
-	else if (QTEStarted != true && bIsPlayerDetected == true)
-	{
-		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= BreathingDetectionRadius)
-		{
-			QTEStarted = true;
-			MyCharacter->QTEStart(MyCharacter, 0);
-		}
-	}
+	
 
 	if (AICanMove)
 	{
