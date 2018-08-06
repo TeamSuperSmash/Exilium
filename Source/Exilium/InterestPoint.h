@@ -31,11 +31,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EPuzzlePropsTypeEnum slot;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EPuzzlePropsTypeEnum item;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector itemLocation;
 
 	UFUNCTION(BlueprintCallable, Category = "Interest point")
 	bool GetState();
 	UFUNCTION(BlueprintCallable, Category = "Interest point")
-	void SetState(bool value);
+	void UpdateState();
+	UFUNCTION(BlueprintCallable, Category = "Interest point")
+	void SetItem(EPuzzlePropsTypeEnum var);
+	
+
 	
 };

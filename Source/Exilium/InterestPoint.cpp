@@ -28,8 +28,23 @@ bool AInterestPoint::GetState()
 	return isSettled;
 }
 
-void AInterestPoint::SetState(bool value)
+void AInterestPoint::UpdateState()
 {
-	isSettled = value;
+	if (slot == item)
+	{
+		isSettled = true;
+	}
+	else
+	{
+		isSettled = false;
+	}
 }
+
+void AInterestPoint::SetItem(EPuzzlePropsTypeEnum var)
+{
+	item = var;
+	UpdateState();
+}
+
+
 

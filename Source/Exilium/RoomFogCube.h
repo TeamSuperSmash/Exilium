@@ -35,5 +35,4 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Fog")
 	void UpdateFogState();
-
 };
