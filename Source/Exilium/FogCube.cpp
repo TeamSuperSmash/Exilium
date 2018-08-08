@@ -44,9 +44,12 @@ void AFogCube::Reduce(AFogCube* exclude)
 {
 	for (int i = 0; i < neighbour.Num(); i++)
 	{
-		if (neighbour[i] != exclude && neighbour[i] != nullptr)
+		if (neighbour[i] != nullptr)
 		{
-			neighbour[i]->isActive = false;
+			if (neighbour[i] != exclude)
+			{
+				neighbour[i]->isActive = false;
+			}
 		}
 	}
 }
