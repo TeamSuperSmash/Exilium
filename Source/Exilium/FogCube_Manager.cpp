@@ -15,14 +15,13 @@ AFogCube_Manager::AFogCube_Manager()
 void AFogCube_Manager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	isCompleted = false;
 }
 
 // Called every frame
 void AFogCube_Manager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AFogCube_Manager::CheckCurrent(AFogCube* cube)
@@ -32,6 +31,22 @@ void AFogCube_Manager::CheckCurrent(AFogCube* cube)
 		current->Reduce(cube);
 		cube->Spread();
 		current = cube;
+	}
+}
+
+void AFogCube_Manager::CheckProgress()
+{
+	int count = 0;
+	for (int i = 0; i < fogRoomList.Num(); i++)
+	{
+		if (fogRoomList[i]->isNormalized)
+		{
+			count++;
+		}
+		else
+		{
+			return;
+		}
 	}
 }
 
