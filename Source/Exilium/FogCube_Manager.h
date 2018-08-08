@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "FogCube.h"
+#include "RoomFogCube.h"
 #include "FogCube_Manager.generated.h"
 
 UCLASS()
@@ -26,7 +27,14 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	AFogCube* current;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<ARoomFogCube*> fogRoomList;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool isCompleted;
 
 	UFUNCTION(BlueprintCallable, Category = "FogManager")
 	void CheckCurrent(AFogCube* cube);
+	UFUNCTION(BlueprintCallable, Category = "FogManager")
+	void CheckProgress();
+	 
 };

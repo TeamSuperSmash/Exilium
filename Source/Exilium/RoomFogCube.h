@@ -40,9 +40,14 @@ public:
 	TArray<AInterestPoint*> puzzleList;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int debugCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float timer;
 
 	UFUNCTION(BlueprintCallable, Category = "Fog")
 	void CheckPuzzleProgress();
 	UFUNCTION(BlueprintCallable, Category = "Fog")
 	void UpdateFogState();
+	UFUNCTION(BlueprintCallable, Category = "Fog")
+	void SetCouplingRate(float duration, float targetRate, float currentRate, float deltaTime);
+
 };
