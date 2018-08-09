@@ -121,6 +121,8 @@ void APlayerCharacter::MoveForward(float _value)
 
 	const FRotator YawOnlyRotation = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
 	AddMovementInput(FRotationMatrix(YawOnlyRotation).GetUnitAxis(EAxis::X), _value);
+
+	UGameplayStatics::PlaySoundAtLocation(this, walkingSound, GetActorLocation());
 }
 
 void APlayerCharacter::MoveRight(float _value)
@@ -163,7 +165,6 @@ void APlayerCharacter::StopSprint()
 void APlayerCharacter::StartForward()
 {
     bForward = true;
-	UGameplayStatics::PlaySoundAtLocation(this, walkingSound,GetActorLocation());
 }
 
 void APlayerCharacter::StopForward()
