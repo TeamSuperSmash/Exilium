@@ -24,11 +24,23 @@ void AFogCube_Manager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void AFogCube_Manager::InactivateAllFog()
+{
+	for (int i = 0; i < fogCubeList.Num(); i++)
+	{
+		if (fogCubeList[i] != nullptr)
+		{
+			fogCubeList[i]->isActive = false;
+		}
+	}
+}
+
 void AFogCube_Manager::CheckCurrent(AFogCube* cube)
 {
 	if (current != nullptr)
 	{
-		current->Reduce(cube);
+		//current->Reduce(cube);
+		InactivateAllFog();
 		cube->Spread();
 		current = cube;
 	}
