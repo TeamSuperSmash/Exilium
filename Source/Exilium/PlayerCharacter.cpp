@@ -163,6 +163,7 @@ void APlayerCharacter::StopSprint()
 void APlayerCharacter::StartForward()
 {
     bForward = true;
+	UGameplayStatics::PlaySoundAtLocation(this, walkingSound,GetActorLocation());
 }
 
 void APlayerCharacter::StopForward()
