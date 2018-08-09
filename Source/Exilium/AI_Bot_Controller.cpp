@@ -21,21 +21,21 @@ AAI_Bot_Controller::AAI_Bot_Controller()
 
 	//Will soon be obsolete for this project
 	//Initialize AIPerception component for AI pawn detection
-	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
-	SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
+	//SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
+	//SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
 
-	SightConfig->SightRadius = AISightRadius;
-	SightConfig->LoseSightRadius = AILoseSightRadius;
-	SightConfig->PeripheralVisionAngleDegrees = AIFieldOfView;
-	SightConfig->SetMaxAge(AISightAge);
+	//SightConfig->SightRadius = AISightRadius;
+	//SightConfig->LoseSightRadius = AILoseSightRadius;
+	//SightConfig->PeripheralVisionAngleDegrees = AIFieldOfView;
+	//SightConfig->SetMaxAge(AISightAge);
 
-	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
-	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
-	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	//SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	//SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+	//SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 
-	GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
+	//GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
 	//GetPerceptionComponent()->OnPerceptionUpdated.AddDynamic(this, &AAI_Bot_Controller::OnPawnDetected);
-	GetPerceptionComponent()->ConfigureSense(*SightConfig);
+	//GetPerceptionComponent()->ConfigureSense(*SightConfig);
 
 	//Initialize PawnSensing component for AI pawn detection
 	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing Component"));
