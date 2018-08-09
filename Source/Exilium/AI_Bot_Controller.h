@@ -67,7 +67,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		bool IsBeingSeen = true;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float SeenDuration;
 
 
