@@ -60,8 +60,8 @@ void AWaypoint::OnPlayerEnter(UPrimitiveComponent* OverlapComponent,
 				Character->MyController->PawnSensingComponent->HearingThreshold = Character->MyController->SpecialDetectionRadius;
 				Character->MyController->CurrDetectionRadius = Character->MyController->SpecialDetectionRadius;
 
-				Character->MyController->Player->GetPawnNoiseEmitterComponent()->MakeNoise(Character->MyController->Player, 1.0f,
-															Character->MyController->Player->GetActorLocation());
+				//Character->MyController->Player->GetPawnNoiseEmitterComponent()->MakeNoise(Character->MyController->Player, 1.0f,
+				//											Character->MyController->Player->GetActorLocation());
 			}
 		}
 	}
