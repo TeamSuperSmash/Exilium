@@ -102,25 +102,25 @@ public:
 	UFUNCTION(BlueprintCallable, Category = AI)
 		void SetMonsterState(int newState);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float RoamSpeed = 50.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float AlertSpeed = 85.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float ChaseSpeed = 125.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		float ChaseDuration;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float AlertDetectionRadius = 850.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float BreathingDetectionRadius = 500.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float SpecialDetectionRadius = 1250.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
