@@ -28,13 +28,17 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	AFogCube* current;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<AFogCube*> fogCubeList;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<ARoomFogCube*> fogRoomList;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isCompleted;
 
+	void InactivateAllFog();
 	UFUNCTION(BlueprintCallable, Category = "FogManager")
 	void CheckCurrent(AFogCube* cube);
 	UFUNCTION(BlueprintCallable, Category = "FogManager")
 	void CheckProgress();
+	
 	 
 };
