@@ -60,7 +60,7 @@ void AAI_Bot_Controller::BeginPlay()
 	//Set monster state to roam
 	MonsterState = EMonsterState::MS_ROAM;
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster State Roam"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster State Roam"));
 
 	CurrDetectionRadius = BreathingDetectionRadius;
 
@@ -95,7 +95,7 @@ void AAI_Bot_Controller::Tick(float DeltaSeconds)
 	if (!AICanMove)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("AI Cannot Move"));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AI Cannot Move"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AI Cannot Move"));
 	}
 	/*
 	else
@@ -130,7 +130,7 @@ void AAI_Bot_Controller::FindPrey()
 		{
 			MyCharacter->CheckRendered();
 
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, TEXT("Seen Duration ") + FString::SanitizeFloat(SeenDuration));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, TEXT("Seen Duration ") + FString::SanitizeFloat(SeenDuration));
 
 			if (SeenDuration >= 5.0f && MonsterState != EMonsterState::MS_CHASE)
 			{
@@ -235,7 +235,7 @@ void AAI_Bot_Controller::FindPath()
 	}
 
 
-	DrawDebugSphere(GetWorld(), Dest, 32.0f, 12, FColor::Red, false, 10.0f);
+	//DrawDebugSphere(GetWorld(), Dest, 32.0f, 12, FColor::Red, false, 10.0f);
 
 	
 	
@@ -254,7 +254,7 @@ void AAI_Bot_Controller::FindPath()
 		if (ChaseDuration >= 0.0f && MonsterState != EMonsterState::MS_ROAM)
 		{
 			ChaseDuration -= GetWorld()->GetDeltaSeconds();
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(ChaseDuration));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(ChaseDuration));
 		}
 
 	}
@@ -329,7 +329,7 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 {
 	if (MonsterState != EMonsterState::MS_CHASE)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster State Alert"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster State Alert"));
 
 		MonsterState = EMonsterState::MS_ALERT;
 		ChaseDuration = 15.0f;
@@ -353,13 +353,13 @@ FVector AAI_Bot_Controller::GetNextPathPoint(FVector DestPos)
 
 	if (NavPath->PathPoints.Num() > 0)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Nav Points ") + FString::SanitizeFloat(NavPath->PathPoints.Num()));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Nav Points ") + FString::SanitizeFloat(NavPath->PathPoints.Num()));
 
 		//return next path
 		return NavPath->PathPoints[0];
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AI Reach Point"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AI Reach Point"));
 
 	//Return naxt waypoint as destination
 	AICanMove = false;
