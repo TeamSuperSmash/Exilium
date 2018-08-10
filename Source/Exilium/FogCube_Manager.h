@@ -40,5 +40,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "FogManager")
 	void CheckProgress();
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool CountReached;
 	 
 };

@@ -57,6 +57,8 @@ void AFogCube_Manager::CheckProgress()
 		}
 		else
 		{
+			CountReached = true;
+
 			return;
 		}
 	}
