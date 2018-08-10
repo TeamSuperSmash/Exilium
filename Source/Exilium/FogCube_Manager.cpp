@@ -46,7 +46,7 @@ void AFogCube_Manager::CheckCurrent(AFogCube* cube)
 	}
 }
 
-void AFogCube_Manager::CheckProgress()
+int AFogCube_Manager::CheckProgress()
 {
 	int count = 0;
 	for (int i = 0; i < fogRoomList.Num(); i++)
@@ -59,8 +59,10 @@ void AFogCube_Manager::CheckProgress()
 		{
 			CountReached = true;
 
-			return;
+			return count;
 		}
 	}
+
+	return count;
 }
 

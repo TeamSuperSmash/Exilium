@@ -38,7 +38,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "FogManager")
 	void CheckCurrent(AFogCube* cube);
 	UFUNCTION(BlueprintCallable, Category = "FogManager")
-	void CheckProgress();
+	int CheckProgress();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool CountReached;
