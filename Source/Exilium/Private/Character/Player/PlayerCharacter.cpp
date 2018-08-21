@@ -37,13 +37,6 @@ APlayerCharacter::APlayerCharacter()
     PlayerSound->SetupAttachment(GetCapsuleComponent());
     PlayerSound->bAutoActivate = false;
 
-	/*static ConstructorHelpers::FObjectFinder<UCameraShake> IdleShake
-	(TEXT("Blueprint'/Game/Characters/Player/Blueprints/HeadBob_Idle_BP.HeadBob_Idle_BP'"));
-	static ConstructorHelpers::FObjectFinder<UCameraShake> WalkShake
-	(TEXT("Blueprint'/Game/Characters/Player/Blueprints/HeadBob_Walk_BP.HeadBob_Walk_BP'"));
-	static ConstructorHelpers::FObjectFinder<UCameraShake> RunShake
-	(TEXT("Blueprint'/Game/Characters/Player/Blueprints/HeadBob_Run_BP.HeadBob_Run_BP'"));*/
-
     TraceParams = FCollisionQueryParams(FName(TEXT("Trace")), true, this);
 
 	NoiseEmitterComponent = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitterComponent"));
