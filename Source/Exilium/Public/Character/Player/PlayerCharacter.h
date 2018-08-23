@@ -13,6 +13,7 @@
 #include "PlayerStat.h"
 #include "Sound/SoundCue.h"
 #include "Components/PostProcessComponent.h"
+#include "SanityState.h"
 #include "PlayerCharacter.generated.h"
 class UPawnNoiseEmitterComponent;
 
@@ -71,17 +72,6 @@ public:
 		return false;
 	}
 };
-
-// "BlueprintType" is essential to include
-UENUM(BlueprintType)
-enum class ESanityState : uint8
-{
-	SANITY_LEVEL_0		UMETA(DisplayName = "SANITY_LEVEL_0"),
-	SANITY_LEVEL_1		UMETA(DisplayName = "SANITY_LEVEL_1"),
-	SANITY_LEVEL_2		UMETA(DisplayName = "SANITY_LEVEL_2"),
-	SANITY_LEVEL_3		UMETA(DisplayName = "SANITY_LEVEL_3")
-};
-
 
 UCLASS(config = Game, hidecategories = ("CharacterMovement"))
 class EXILIUM_API APlayerCharacter : public ACharacter
