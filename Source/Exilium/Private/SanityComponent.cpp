@@ -89,22 +89,20 @@ void USanityComponent::UpdatePlayerState(float deltaTime)
 	}
 	else if (currentState == EPlayerState::LOOKATMONSTER)
 	{
-		// need to integrate with Naim and Luqman's code
-		lookTimer += deltaTime;
+		// check rendered function(do in blue print)
+		/*lookTimer += deltaTime;
 		if (lookTimer >= lookDuration)
 		{
 			lookTimer = 0;
-			//! --monster move toward function
 			previousState = EPlayerState::LOOKATMONSTER;
 			currentState = EPlayerState::BREATHINGMINI;
 			//trigger breating mini game
-		}
+		}*/
 	}
-	else if (currentState == EPlayerState::BREATHINGMINI)
+	/*else if (currentState == EPlayerState::BREATHINGMINI)
 	{
 		//currentSanity = (static_cast<int>(SanityState) * sanityThresholdGap) + sanityThresholdGap;
 		currentState = previousState;
-
 		//! --if success
 		//! --change music
 		//! --set sanity
@@ -116,6 +114,13 @@ void USanityComponent::UpdatePlayerState(float deltaTime)
 	else if (currentState == EPlayerState::HEARTBEATMINI)
 	{
 		//lose
-	}
+	}*/
 }
+
+void USanityComponent::ChangePlayerState(EPlayerState state)
+{
+	previousState = currentState;
+	currentState = state;
+}
+
 

@@ -56,4 +56,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Sanity)
 		void UpdatePlayerState(float deltaTime);
+
+	UFUNCTION(BlueprintCallable, Category = Sanity)
+		void ChangePlayerState(EPlayerState state);
 };
