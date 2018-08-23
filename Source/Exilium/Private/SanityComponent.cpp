@@ -18,11 +18,21 @@ USanityComponent::USanityComponent()
 void USanityComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	//initialize sanity properties
 	currentState = EPlayerState::NONE;
 	previousState = EPlayerState::NONE;
 	stayDuration = 60.0f;
 	lookDuration = 5.0f;
+
+	//initialize post processing Dynamic Material Instance
+	TArray<UPostProcessComponent*> pcomps;
+	player->GetComponents<UPostProcessComponent>(pcomps);
+	postComp = pcomps[0];
+	sanityDMI = UMaterialInstanceDynamic::Create(sanityMat, this);
+	sanityDMI->SetScalarParameterValue("Strength", currentSanity / 10.0f);
+	FPostProcessVolumeProperties prop = postComp->GetProperties();
+
 }
 
 
@@ -44,8 +54,6 @@ void USanityComponent::CheckValidFogState()
 
 void USanityComponent::UpdatePlayerState(float deltaTime)
 {
-	float strength = FMath::Lerp(0.0f, 0.09f, currentSanity / 90.0f);
-	//sanityDMI->SetScalarParameterValue("Strength", strength); //invlove post processing
 	if (currentState == EPlayerState::NONE)
 	{
 		if (fogCounter > 0)
@@ -65,7 +73,9 @@ void USanityComponent::UpdatePlayerState(float deltaTime)
 	else if (currentState == EPlayerState::INFOG)
 	{
 		fogTimer += deltaTime;
-		//float curThreshold = (static_cast<int>(SanityState) * sanityThresholdGap) + sanityThresholdGap;
+		float strength = FMath::Lerp(0.0f, 0.09f, currentSanity / 90.0f);
+		sanityDMI->SetScalarParameterValue("Strength", strength); //invlove post processing
+		float curThreshold = (static_cast<int>(player->SanityState) * sanityThresholdGap) + sanityThresholdGap;
 		float insanityIncrement = sanityThresholdGap / stayDuration;
 
 		if (fogTimer >= 1.0f)
@@ -73,10 +83,10 @@ void USanityComponent::UpdatePlayerState(float deltaTime)
 			fogTimer = 0;
 			fogCounter++;
 
-			/*if (currentSanity + insanityIncrement < curThreshold)
+			if (currentSanity + insanityIncrement < curThreshold)
 			{
 				currentSanity += insanityIncrement;
-			}*/
+			}
 		}
 
 		if (fogCounter >= stayDuration)
@@ -87,7 +97,29 @@ void USanityComponent::UpdatePlayerState(float deltaTime)
 			currentState = EPlayerState::BREATHINGMINI;
 		}
 	}
-	else if (currentState == EPlayerState::LOOKATMONSTER)
+}
+
+void USanityComponent::ChangePlayerState(EPlayerState state)
+{
+	previousState = currentState;
+	currentState = state;
+}
+
+void USanityComponent::UpdateSanity()
+{
+	for (int i = 0; i < int(ESanityState::SANITY_LEVEL_3); i++)
+	{
+		if (currentSanity >= i * sanityThresholdGap && currentSanity < (i + 1)* sanityThresholdGap)
+		{
+			player->SanityState = ESanityState(i);
+			break;
+		}
+	}
+}
+
+//void 
+//! legacy for UpdatePlayerState
+	/*else if (currentState == EPlayerState::LOOKATMONSTER)
 	{
 		// check rendered function(do in blue print)
 		/*lookTimer += deltaTime;
@@ -97,8 +129,8 @@ void USanityComponent::UpdatePlayerState(float deltaTime)
 			previousState = EPlayerState::LOOKATMONSTER;
 			currentState = EPlayerState::BREATHINGMINI;
 			//trigger breating mini game
-		}*/
-	}
+		}
+	}*/
 	/*else if (currentState == EPlayerState::BREATHINGMINI)
 	{
 		//currentSanity = (static_cast<int>(SanityState) * sanityThresholdGap) + sanityThresholdGap;
@@ -107,7 +139,7 @@ void USanityComponent::UpdatePlayerState(float deltaTime)
 		//! --change music
 		//! --set sanity
 		//! --set to previosState
-		//! --else 
+		//! --else
 		//! --change music
 		//currentState = EPlayerState::HEARTBEATMINI;
 	}
@@ -115,12 +147,5 @@ void USanityComponent::UpdatePlayerState(float deltaTime)
 	{
 		//lose
 	}*/
-}
-
-void USanityComponent::ChangePlayerState(EPlayerState state)
-{
-	previousState = currentState;
-	currentState = state;
-}
 
 
