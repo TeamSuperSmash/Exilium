@@ -20,7 +20,7 @@ APlayerCharacter::APlayerCharacter()
     FPSCameraComponent->SetupAttachment(GetCapsuleComponent());
     FPSCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 50 + BaseEyeHeight));
     FPSCameraComponent->bUsePawnControlRotation = true;
-
+	
     FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
     FPSMesh->SetOnlyOwnerSee(true);
     FPSMesh->SetupAttachment(GetCapsuleComponent());
