@@ -86,12 +86,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
-	//PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
-    //PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
-
-    //PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::StartJump);
-    //PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::StopJump);
-
     PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &APlayerCharacter::StartCrouch);
     PlayerInputComponent->BindAction("Crouch", IE_Released, this, &APlayerCharacter::StopCrouch);
 
@@ -101,17 +95,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("ForwardKey", IE_Pressed, this, &APlayerCharacter::StartForward);
     PlayerInputComponent->BindAction("ForwardKey", IE_Released, this, &APlayerCharacter::StopForward);
 
-    //PlayerInputComponent->BindAction("SwitchItem1", IE_Pressed, this, &APlayerCharacter::CheckItemSlot1);
-    //PlayerInputComponent->BindAction("SwitchItem2", IE_Pressed, this, &APlayerCharacter::CheckItemSlot2);
-    //PlayerInputComponent->BindAction("SwitchItem3", IE_Pressed, this, &APlayerCharacter::CheckItemSlot3);
     PlayerInputComponent->BindAction("LeftMouse", IE_Pressed, this, &APlayerCharacter::ActivateItem);
 }
 
 void APlayerCharacter::MoveForward(float _value)
 {
-    //FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-    //AddMovementInput(Direction, _value);
-
 	const FRotator YawOnlyRotation = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
 	AddMovementInput(FRotationMatrix(YawOnlyRotation).GetUnitAxis(EAxis::X), _value);
 
@@ -353,12 +341,10 @@ void APlayerCharacter::CheckSprint()
 {
     if (bSprinting && bForward && !bCrouching)
     {
-        //UE_LOG(LogTemp, Warning, TEXT("Player is sprinting!"));
         GetCharacterMovement()->MaxWalkSpeed = currentSpeed * sprintMultiplier;
     }
     else if (bCrouching)
     {
-        //UE_LOG(LogTemp, Warning, TEXT("Player is crouching!"));
         GetCharacterMovement()->MaxWalkSpeed = currentSpeed * crouchMultiplier;
     }
     else
