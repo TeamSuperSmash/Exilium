@@ -3,8 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Components/ActorComponent.h"
+#include "Components/PostProcessComponent.h"
 #include "PlayerStat.h"
+#include "PlayerCharacter.h"
 #include "SanityComponent.generated.h"
 
 
@@ -28,6 +31,17 @@ public:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
 		//ESanityState SanityState;
 
+	APlayerCharacter* player;
+	//Post processing 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Post processing")
+		UPostProcessComponent* postComp;
+	//! post process material
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Post processing")
+		UMaterialInstance* sanityMat;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Post processing")
+		UMaterialInstanceDynamic* sanityDMI;
+
+	//Sanity stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
 		float currentSanity = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -50,6 +64,8 @@ public:
 		EPlayerState currentState;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
 		EPlayerState previousState;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
+		ESanityState curSanityState;
 
 	UFUNCTION(BlueprintCallable, Category = Sanity)
 		void CheckValidFogState();
@@ -59,4 +75,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Sanity)
 		void ChangePlayerState(EPlayerState state);
+
+	UFUNCTION(BlueprintCallable, Category = Sanity)
+		void UpdateSanity();
 };
