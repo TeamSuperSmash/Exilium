@@ -20,7 +20,7 @@ void ARoomFogCube::Tick(float DeltaTime)
 }*/
 
 
-void ARoomFogCube::CheckPuzzleProgress()
+/*void ARoomFogCube::CheckPuzzleProgress()
 {
 	int count = 1;
 	for (int i = 0; i < puzzleList.Num(); i++)
@@ -42,7 +42,7 @@ void ARoomFogCube::CheckPuzzleProgress()
 		curState = static_cast<ERoomFogStateEnum>(count);
 		debugCount = count;
 	}
-}
+}*/
 
 void ARoomFogCube::UpdateFogState()
 {

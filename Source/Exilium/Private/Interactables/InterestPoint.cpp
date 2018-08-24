@@ -23,12 +23,12 @@ void AInterestPoint::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-bool AInterestPoint::GetState()
+bool AInterestPoint::CheckMatch()
 {
 	return isSettled;
 }
 
-void AInterestPoint::UpdateState()
+/*void AInterestPoint::UpdateState()
 {
 	if (slot == item)
 	{
@@ -44,7 +44,7 @@ void AInterestPoint::SetItem(EPuzzlePropsTypeEnum var)
 {
 	item = var;
 	UpdateState();
-}
+}*/
 
 
 

@@ -43,8 +43,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float timer;
 
-	UFUNCTION(BlueprintCallable, Category = "Fog")
-	void CheckPuzzleProgress();
+	/*UFUNCTION(BlueprintCallable, Category = "Fog")
+	void CheckPuzzleProgress();*/
 	UFUNCTION(BlueprintCallable, Category = "Fog")
 	void UpdateFogState();
 	UFUNCTION(BlueprintCallable, Category = "Fog")
