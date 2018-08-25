@@ -124,39 +124,41 @@ void AWeirdDoor::SetState()
 
 bool AWeirdDoor::Interact_Implementation()
 {
-	if (isReady)
-	{
-		isOpened = !isOpened;
+	//if (isReady)
+	//{
+	//	isOpened = !isOpened;
+	//
+	//	APawn* Player = UGameplayStatics::GetPlayerPawn(this, 0);
+	//	FVector Direction = GetActorLocation() - Player->GetActorLocation();
+	//	Direction = UKismetMathLibrary::LessLess_VectorRotator(Direction, GetActorRotation());
+	//
+	//	if (isOpened)
+	//	{
+	//		if (Direction.X >= 0.0f)
+	//		{
+	//			rotateDirection = 1.0f;
+	//		}
+	//		else
+	//		{
+	//			rotateDirection = -1.0f;
+	//		}
+	//
+	//		isReady = false;
+	//		doorTimeline.PlayFromStart();
+	//	}
+	//	else
+	//	{
+	//		isReady = false;
+	//		doorTimeline.Reverse();
+	//	}
+	//
+	//	this->OnInteract();
+	//	return true;
+	//}
+	//return false;
 
-		APawn* Player = UGameplayStatics::GetPlayerPawn(this, 0);
-		FVector Direction = GetActorLocation() - Player->GetActorLocation();
-		Direction = UKismetMathLibrary::LessLess_VectorRotator(Direction, GetActorRotation());
-
-		if (isOpened)
-		{
-			if (Direction.X >= 0.0f)
-			{
-				rotateDirection = 1.0f;
-			}
-			else
-			{
-				rotateDirection = -1.0f;
-			}
-
-			isReady = false;
-			doorTimeline.PlayFromStart();
-		}
-		else
-		{
-			isReady = false;
-			doorTimeline.Reverse();
-		}
-
-		this->OnInteract();
-		return true;
-	}
-
-	return false;
+	this->OnInteract();
+	return true;
 }
 
 void AWeirdDoor::Debug_ChangeDoorHandlePosition()
