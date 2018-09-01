@@ -1,8 +1,22 @@
 variables:
-  GIT_STRATEGY: none                # we disable fetch, clone or checkout for every job
-  GIT_CHECKOUT: "false"             # as we only want to checkout and fetch in the preperation stage
+  GIT_STRATEGY: fetch                # we disable fetch, clone or checkout for every job
+  GIT_CHECKOUT: "true"             # as we only want to checkout and fetch in the preperation stage
   GIT_SUBMODULE_STRATEGY: none      # same as submodules
 #  CI_PROJECT_DIR: C:/Users/acub3team/Documents/GitLab-Runner/builds/$CI_COMMIT_REF_SLUG/$CI_PROJECT_NAME
+
+cache:
+  key: ${CI_COMMIT_SHA}
+  untracked: true
+  paths:
+    - Intermediate/
+    - Saved/
+    - ${CI_PROJECT_NAME}.sln
+    
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  untracked: true
+  paths:
+    - Binaries/
 
 stages:
   - preperations
@@ -11,19 +25,18 @@ stages:
   - build
   - cook
   - package
-  - publish
 
-preparations:
+prepare-editor:
   stage: preperations
-  variables:
-    GIT_STRATEGY: fetch
-    GIT_CHECKOUT: "true"
-    GIT_SUBMODULE_STRATEGY: normal
+  script:
+    - echo "Preparing editor files ..."
+    - call "%SCRIPTS_DIR%\PrepareEditor.bat"
+
+prepare-project:
+  stage: preperations
   script:
     - echo "Preparing %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\PrepareProject.bat"
-    - echo "Preparing editor files ..."
-    - call "%SCRIPTS_DIR%\PrepareEditor.bat"
 
 .build-lightmap:
   stage: build-lightmap
@@ -90,8 +103,11 @@ cook:
 package:
   stage: package
   only:
-    - web                 # only archive when started through the web interface
-    - schedules           # only archive when started at a specific schedule
+    refs:
+      - web                 # only archive when started through the web interface
+      - schedules           # only archive when started at a specific schedule
+    variables:
+      - $PACKAGE
   script:
     - echo "Adding build to the artifacts ..."
     - call "%SCRIPTS_DIR%\ArchiveBuild.bat"
@@ -102,7 +118,7 @@ package:
     expire_in: 7d
 
 release:
-  stage: publish
+  stage: package
   only:
     - tags                # only archive when a tag is provided
   script:
