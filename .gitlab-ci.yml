@@ -97,8 +97,11 @@ cook:
 package:
   stage: package
   only:
-    - web                 # only archive when started through the web interface
-    - schedules           # only archive when started at a specific schedule
+    refs:
+      - web                 # only archive when started through the web interface
+      - schedules           # only archive when started at a specific schedule
+    variables:
+      - $PACKAGE
   script:
     - echo "Adding build to the artifacts ..."
     - call "%SCRIPTS_DIR%\ArchiveBuild.bat"
