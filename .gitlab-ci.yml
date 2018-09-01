@@ -1,6 +1,6 @@
 variables:
-  GIT_STRATEGY: none                # we disable fetch, clone or checkout for every job
-  GIT_CHECKOUT: "false"             # as we only want to checkout and fetch in the preperation stage
+  GIT_STRATEGY: fetch                # we disable fetch, clone or checkout for every job
+  GIT_CHECKOUT: "true"             # as we only want to checkout and fetch in the preperation stage
   GIT_SUBMODULE_STRATEGY: none      # same as submodules
 #  CI_PROJECT_DIR: C:/Users/acub3team/Documents/GitLab-Runner/builds/$CI_COMMIT_REF_SLUG/$CI_PROJECT_NAME
 
@@ -25,7 +25,7 @@ preparations:
   variables:
     GIT_STRATEGY: fetch
     GIT_CHECKOUT: "true"
-    GIT_SUBMODULE_STRATEGY: normal
+    GIT_SUBMODULE_STRATEGY: none
   script:
     - echo "Preparing %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\PrepareProject.bat"
