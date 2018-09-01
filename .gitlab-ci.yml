@@ -5,12 +5,18 @@ variables:
 #  CI_PROJECT_DIR: C:/Users/acub3team/Documents/GitLab-Runner/builds/$CI_COMMIT_REF_SLUG/$CI_PROJECT_NAME
 
 cache:
-  key: "%CI_COMMIT_SHA%"
+  key: ${CI_COMMIT_SHA}
+  untracked: true
+  paths:
+    - Intermediate/
+    - Saved/
+    - ${CI_PROJECT_NAME}.sln
+    
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
   untracked: true
   paths:
     - Binaries/
-    - Intermediate/
-    - Saved/
 
 stages:
   - preperations
@@ -20,17 +26,17 @@ stages:
   - cook
   - package
 
-preparations:
+prepare-editor:
   stage: preperations
-  variables:
-    GIT_STRATEGY: fetch
-    GIT_CHECKOUT: "true"
-    GIT_SUBMODULE_STRATEGY: none
+  script:
+    - echo "Preparing editor files ..."
+    - call "%SCRIPTS_DIR%\PrepareEditor.bat"
+
+prepare-project:
+  stage: preperations
   script:
     - echo "Preparing %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\PrepareProject.bat"
-    - echo "Preparing editor files ..."
-    - call "%SCRIPTS_DIR%\PrepareEditor.bat"
 
 .build-lightmap:
   stage: build-lightmap
