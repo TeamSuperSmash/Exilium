@@ -4,6 +4,14 @@ variables:
   GIT_SUBMODULE_STRATEGY: none      # same as submodules
 #  CI_PROJECT_DIR: C:/Users/acub3team/Documents/GitLab-Runner/builds/$CI_COMMIT_REF_SLUG/$CI_PROJECT_NAME
 
+cache:
+  key: "%CI_COMMIT_SHA%"
+  untracked: true
+  paths:
+    - Binaries/
+    - Intermediate/
+    - Saved/
+
 stages:
   - preperations
   - build-lightmap
@@ -11,7 +19,6 @@ stages:
   - build
   - cook
   - package
-  - publish
 
 preparations:
   stage: preperations
@@ -102,7 +109,7 @@ package:
     expire_in: 7d
 
 release:
-  stage: publish
+  stage: package
   only:
     - tags                # only archive when a tag is provided
   script:
