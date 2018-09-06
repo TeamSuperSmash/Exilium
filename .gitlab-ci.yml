@@ -9,7 +9,6 @@ cache:
   untracked: true
   paths:
     - Saved/
-    - ${CI_PROJECT_NAME}.sln
     
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -17,6 +16,7 @@ cache:
   paths:
     - Binaries/
     - Intermediate/
+    - ${CI_PROJECT_NAME}.sln
 
 stages:
   - preperations
