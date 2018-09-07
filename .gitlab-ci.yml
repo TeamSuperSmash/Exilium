@@ -1,6 +1,6 @@
 variables:
-  GIT_STRATEGY: fetch                # we disable fetch, clone or checkout for every job
-  GIT_CHECKOUT: "true"             # as we only want to checkout and fetch in the preperation stage
+  GIT_STRATEGY: fetch               # we disable fetch, clone or checkout for every job
+  GIT_CHECKOUT: "true"              # as we only want to checkout and fetch in the preperation stage
   GIT_SUBMODULE_STRATEGY: none      # same as submodules
 #  CI_PROJECT_DIR: C:/Users/acub3team/Documents/GitLab-Runner/builds/$CI_COMMIT_REF_SLUG/$CI_PROJECT_NAME
 
@@ -8,10 +8,15 @@ cache:
   key: ${CI_COMMIT_SHA}
   untracked: true
   paths:
-    - Binaries/
     - Intermediate/
     - Saved/
     - ${CI_PROJECT_NAME}.sln
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  untracked: true
+  paths:
+    - Binaries/
 
 stages:
   - preperations
@@ -21,17 +26,13 @@ stages:
   - cook
   - package
 
-prepare-editor:
-  stage: preperations
-  script:
-    - echo "Preparing editor files ..."
-    - call "%SCRIPTS_DIR%\PrepareEditor.bat"
-
-prepare-project:
+preparations:
   stage: preperations
   script:
     - echo "Preparing %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\PrepareProject.bat"
+    - echo "Preparing editor files ..."
+    - call "%SCRIPTS_DIR%\PrepareEditor.bat"
 
 .build-lightmap:
   stage: build-lightmap
