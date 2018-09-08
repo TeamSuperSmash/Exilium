@@ -71,8 +71,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    CrouchImplement(DeltaTime);
-    CheckSprint();
+    //CrouchImplement(DeltaTime);
+    //CheckSprint();
     CheckHeadBob();
 	CheckForInteractables();
 	CheckSanityLevel();
