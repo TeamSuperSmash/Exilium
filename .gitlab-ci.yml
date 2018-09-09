@@ -8,15 +8,10 @@ cache:
   key: ${CI_COMMIT_SHA}
   untracked: true
   paths:
+    - Binaries/
     - Intermediate/
     - Saved/
     - ${CI_PROJECT_NAME}.sln
-
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  untracked: true
-  paths:
-    - Binaries/
 
 stages:
   - preperations
