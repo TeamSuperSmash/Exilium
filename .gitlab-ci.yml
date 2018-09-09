@@ -5,7 +5,7 @@ variables:
 #  CI_PROJECT_DIR: C:/Users/acub3team/Documents/GitLab-Runner/builds/$CI_COMMIT_REF_SLUG/$CI_PROJECT_NAME
 
 cache:
-  key: ${CI_COMMIT_SHA:0:8}
+  key: ${CI_COMMIT_SHA}
   untracked: true
   paths:
     - Binaries/
