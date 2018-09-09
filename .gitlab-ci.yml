@@ -12,7 +12,7 @@ cache:
     - Intermediate/
     - Saved/
     - .vs/
-    - .sln
+    - Exilium.sln
 
 stages:
   - preperations
