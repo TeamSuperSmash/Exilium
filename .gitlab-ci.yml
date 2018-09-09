@@ -11,7 +11,7 @@ cache:
     - Binaries/
     - Intermediate/
     - Saved/
-    - ${CI_PROJECT_NAME}.sln
+    - %CI_PROJECT_NAME%.sln
 
 stages:
   - preperations
