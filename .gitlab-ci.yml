@@ -12,7 +12,7 @@ cache:
     - Intermediate/
     - Saved/
     - .vs/
-    - *.sln
+    - .sln
 
 stages:
   - preperations
