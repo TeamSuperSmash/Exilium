@@ -47,24 +47,6 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
     UE_LOG(LogTemp, Warning, TEXT("Starting PlayerCharacter"));
-	currentState = EPlayerState::NONE;
-	previousState = EPlayerState::NONE;
-	//initialize sanity properties
-	stayDuration = 60.0f;
-	lookDuration = 5.0f;
-	//initialize post processing Dynamic Material Instance
-	TArray<UPostProcessComponent*> pcomps;
-	GetComponents<UPostProcessComponent>(pcomps);
-	postComp = pcomps[0];
-	sanityDMI = UMaterialInstanceDynamic::Create(sanityMat, this);
-	sanityDMI->SetScalarParameterValue("Strength", currentSanity/10.0f);
-	FPostProcessVolumeProperties prop = postComp->GetProperties();
-	//prop.Settings->AddBlendable(sanityDMI, 1.0f);
-
-	if (sanityDMI->GetClass()->ImplementsInterface(UBlendableInterface::StaticClass()))
-	{
-		postComp->AddOrUpdateBlendable(TScriptInterface<IBlendableInterface>(sanityDMI), 1.0f);
-	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -75,8 +57,6 @@ void APlayerCharacter::Tick(float DeltaTime)
     CheckSprint();
     CheckHeadBob();
 	CheckForInteractables();
-	CheckSanityLevel();
-	UpdatePlayerState(DeltaTime);
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -275,35 +255,6 @@ void APlayerCharacter::CheckForInteractables()
 	Controller->CurrentInteractable = nullptr;
 }
 
-void APlayerCharacter::CheckSanityLevel()
-{
-	if (currentSanity >= sanityThreshold0 && currentSanity < sanityThreshold1)
-	{
-		SanityState = ESanityState::SANITY_LEVEL_1;
-	}
-	else if (currentSanity >= sanityThreshold1 && currentSanity < sanityThreshold2)
-	{
-		SanityState = ESanityState::SANITY_LEVEL_2;
-	}
-	else if (currentSanity >= sanityThreshold2)
-	{
-		SanityState = ESanityState::SANITY_LEVEL_3;
-	}
-	else if (currentSanity < sanityThreshold0)
-	{
-		SanityState = ESanityState::SANITY_LEVEL_0;
-	}
-
-	if (currentSanity > maximumSanity)
-	{
-		currentSanity = maximumSanity;
-	}
-	else if (currentSanity < minimumSanity)
-	{
-		currentSanity = minimumSanity;
-	}
-}
-
 void APlayerCharacter::CrouchImplement(float DeltaTime)
 {
     float TargetBaseEyeHeight = NULL;
@@ -394,91 +345,6 @@ bool APlayerCharacter::LineTraceInteractable(float range, FHitResult& outHit)
 	return false;
 }
 
-void APlayerCharacter::CheckValidFogState()
-{
-	if (currentState == EPlayerState::NONE || currentState == EPlayerState::INFOG)
-	{
-		currentState = EPlayerState::INFOG;
-	}
-}
-
-void APlayerCharacter::UpdatePlayerState(float deltaTime)
-{
-	float strength = FMath::Lerp(0.0f, 0.09f, currentSanity / 90.0f);
-
-	sanityDMI->SetScalarParameterValue("Strength", strength);
-	if (currentState == EPlayerState::NONE)
-	{
-		if (fogCounter > 0)
-		{
-			fogTimer += deltaTime;
-			if (fogTimer >= 1.0f)
-			{
-				fogTimer = 0;
-				fogCounter--;
-			}
-		}
-		if (lookDuration > 0)
-		{
-			lookDuration -= deltaTime;
-		}
-	}
-	else if (currentState == EPlayerState::INFOG)
-	{
-		fogTimer += deltaTime;
-		float curThreshold = (static_cast<int>(SanityState) * sanityThresholdGap) + sanityThresholdGap;
-		float insanityIncrement = sanityThresholdGap / stayDuration;
-		
-		if (fogTimer >= 1.0f)
-		{
-			fogTimer = 0;
-			fogCounter++;
-			
-			if (currentSanity + insanityIncrement < curThreshold)
-			{
-				currentSanity += insanityIncrement;
-			}
-		}
-		
-		if (fogCounter >= stayDuration)
-		{
-			fogCounter = 0;
-			fogTimer = 0;
-			previousState = EPlayerState::INFOG;
-			currentState = EPlayerState::BREATHINGMINI;
-		}
-	}
-	else if (currentState == EPlayerState::LOOKATMONSTER)
-	{
-		//! --monster cannot move fuction
-		lookTimer += deltaTime;
-		if (lookTimer >= lookDuration)
-		{
-			lookTimer = 0;
-			//! --monster move toward function
-			previousState = EPlayerState::LOOKATMONSTER;
-			currentState = EPlayerState::BREATHINGMINI;
-			//trigger breating mini game
-		}
-	}
-	else if (currentState == EPlayerState::BREATHINGMINI)
-	{
-		currentSanity = (static_cast<int>(SanityState) * sanityThresholdGap) + sanityThresholdGap;
-		currentState = previousState;
-		
-		//! --if success
-		//! --change music
-		//! --set sanity
-		//! --set to previosState
-		//! --else 
-		//! --change music
-		//currentState = EPlayerState::HEARTBEATMINI;
-	}
-	else if (currentState == EPlayerState::HEARTBEATMINI)
-	{
-		//lose
-	}
-}
 
 
 

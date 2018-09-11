@@ -109,8 +109,6 @@ public:
     void CheckSprint();
     void CheckHeadBob();
 	void CheckForInteractables();
-	void CheckSanityLevel();
-	void UpdatePlayerState(float deltaTime);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
     bool bForward;
@@ -147,47 +145,6 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int itemType = 0;
 
-	//sanity stats
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
-	float currentSanity = 0.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float maximumSanity = 90.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float minimumSanity = 0.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float sanityIncrementDelay = 1.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float sanityThresholdGap = 30.0f;
-	//! sanity threshold
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float sanityThreshold0 = 30.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float sanityThreshold1 = 60.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float sanityThreshold2 = 90.0f;
-
-	//! sanity state
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
-	ESanityState SanityState;
-
-	//! sanity counter
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
-	float fogCounter;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
-	float fogTimer;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
-	float lookTimer;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
-	float lookDuration;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sanity)
-	float stayDuration;
-	
-	//player state
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
-	EPlayerState currentState;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
-	EPlayerState previousState;
-
 	
 	FCollisionQueryParams TraceParams;
 
@@ -213,15 +170,6 @@ public:
 	USoundBase* openDoorSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 	USoundBase* walkingSound;
-
-	//Post processing 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Post processing")
-	UPostProcessComponent* postComp;
-	//! post process material
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Post processing")
-	UMaterialInstance* sanityMat;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Post processing")
-	UMaterialInstanceDynamic* sanityDMI;
 	
 
 // Interactable
@@ -229,9 +177,6 @@ public:
 	/** Cast a line trace to detect IInteractable object **/
 	UFUNCTION(BlueprintCallable, Category = Interactable)
 	bool LineTraceInteractable(float range, FHitResult& outHit);
-
-	UFUNCTION(BlueprintCallable, Category = Sanity)
-	void CheckValidFogState();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Sanity)
 		bool IsPlayerDangerChaseBGM = false;
