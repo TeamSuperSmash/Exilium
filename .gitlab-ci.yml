@@ -1,12 +1,8 @@
 variables:
   GIT_STRATEGY: fetch               # we disable fetch, clone or checkout for every job
   GIT_CHECKOUT: "true"              # as we only want to checkout and fetch in the preperation stage
-  GIT_SUBMODULE_STRATEGY: normal    # same as submodules
+  GIT_SUBMODULE_STRATEGY: none    # same as submodules
 #  CI_PROJECT_DIR: C:/Users/acub3team/Documents/GitLab-Runner/builds/$CI_COMMIT_REF_SLUG/$CI_PROJECT_NAME
-
-before-script:
-  - rm -rf external_libraries/BEACHhtml
-  - git submodule update
 
 cache:
   key: ${CI_PIPELINE_ID}
