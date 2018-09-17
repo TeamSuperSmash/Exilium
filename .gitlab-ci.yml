@@ -23,6 +23,7 @@ stages:
   - package
 
 before_script:
+  - echo "Updating Scripts ..."
   - pushd %SCRIPTS_DIR%
   - git pull
   - popd
