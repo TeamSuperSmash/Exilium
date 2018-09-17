@@ -22,11 +22,6 @@ stages:
   - cook
   - package
 
-before_script:
-  - pushd %SCRIPTS_DIR%
-  - git pull
-  - popd
-
 preparations:
   stage: preperations
   script:
