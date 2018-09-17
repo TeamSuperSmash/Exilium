@@ -52,7 +52,7 @@ public:
 		FText Name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FText Action;
-		UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 Value;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UTexture2D* Thumbnail;
@@ -100,12 +100,6 @@ public:
     void StopSprint();
     void StartForward();
     void StopForward();
-    void HoldLighter();
-    void HoldCandle();
-    void HoldMusicBox();
-    void HoldBareHand();
-    void ActivateItem();
-    void DeActivateItem();
     void CheckSprint();
     void CheckHeadBob();
 	void CheckForInteractables();
@@ -152,8 +146,6 @@ public:
     UCameraComponent* FPSCameraComponent;
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Mesh)
     USkeletalMeshComponent* FPSMesh;
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Light)
-    UPointLightComponent* PlayerLight;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sound)
 	TSubclassOf<UAudioComponent> ItemSound;
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Sound)
@@ -164,12 +156,6 @@ public:
     TSubclassOf<UCameraShake> WalkShake;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<UCameraShake> RunShake;
-
-	//Audio for openDoorSound -- connected with blueprint
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
-	USoundBase* openDoorSound;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
-	USoundBase* walkingSound;
 	
 
 // Interactable

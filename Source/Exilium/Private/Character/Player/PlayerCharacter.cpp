@@ -27,12 +27,6 @@ APlayerCharacter::APlayerCharacter()
     FPSMesh->bCastDynamicShadow = false;
     FPSMesh->CastShadow = false;
 
-    GetMesh()->SetOwnerNoSee(true);
-
-    PlayerLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight"));
-    PlayerLight->SetupAttachment(FPSMesh);
-    PlayerLight->bVisible = false;
-
     PlayerSound = CreateDefaultSubobject<UAudioComponent>(TEXT("Sound"));
     PlayerSound->SetupAttachment(GetCapsuleComponent());
     PlayerSound->bAutoActivate = false;
@@ -74,16 +68,12 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
     PlayerInputComponent->BindAction("ForwardKey", IE_Pressed, this, &APlayerCharacter::StartForward);
     PlayerInputComponent->BindAction("ForwardKey", IE_Released, this, &APlayerCharacter::StopForward);
-
-    PlayerInputComponent->BindAction("LeftMouse", IE_Pressed, this, &APlayerCharacter::ActivateItem);
 }
 
 void APlayerCharacter::MoveForward(float _value)
 {
 	const FRotator YawOnlyRotation = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
 	AddMovementInput(FRotationMatrix(YawOnlyRotation).GetUnitAxis(EAxis::X), _value);
-
-	UGameplayStatics::PlaySoundAtLocation(this, walkingSound, GetActorLocation());
 }
 
 void APlayerCharacter::MoveRight(float _value)
@@ -133,92 +123,6 @@ void APlayerCharacter::StopForward()
     bForward = false;
 }
 #pragma endregion
-
-void APlayerCharacter::HoldLighter()
-{
-    if (itemType != 1)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Currently holding lighter!"));
-
-        DeActivateItem(); 
-        itemType = 1;
-
-		bLighter = true;
-
-        PlayerLight->SetIntensity(lighterIntensity);
-    }
-}
-
-void APlayerCharacter::HoldCandle()
-{
-    if (itemType != 2)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Currently holding candle!"));
-
-        DeActivateItem();
-        itemType = 2;
-
-        PlayerLight->SetIntensity(candleIntensity);
-    }
-}
-
-void APlayerCharacter::HoldMusicBox()
-{
-    if (itemType != 3)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Currently holding music box!"));
-
-        DeActivateItem();
-        itemType = 3;
-    }
-}
-
-void APlayerCharacter::HoldBareHand()
-{
-    if (itemType != 0)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Currently holding bare hands!"));
-
-        DeActivateItem();
-        itemType = 0;
-    }
-}
-
-void APlayerCharacter::ActivateItem()
-{
-    if (itemType == 1 || itemType == 2)
-    {
-        if (PlayerLight->bVisible)
-        {
-            PlayerLight->SetVisibility(false);
-        }
-        else
-        {
-            PlayerLight->SetVisibility(true);
-        }
-    }
-    else if (itemType == 3)
-    {
-        if (PlayerSound->bIsActive)
-        {
-            PlayerSound->SetActive(false);
-        }
-        else
-        {
-            PlayerSound->SetActive(true);
-        }
-    }
-}
-
-void APlayerCharacter::DeActivateItem()
-{
-    PlayerLight->SetVisibility(false);
-    PlayerSound->SetActive(false);
-
-	bLighter = false;
-	bOpenDoor = false;
-	bPickup = false;
-}
 
 void APlayerCharacter::CheckForInteractables()
 {
