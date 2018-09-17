@@ -24,7 +24,7 @@ stages:
 
 before_script:
   - pushd %SCRIPTS_DIR%
-  - git pull https://%GITHUB_ACCESS_TOKEN%@github.com/TeamSuperSmash/ci-scripts.git
+  - git pull
   - popd
 
 preparations:
