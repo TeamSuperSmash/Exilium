@@ -47,10 +47,10 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    CrouchImplement(DeltaTime);
-    CheckSprint();
-    CheckHeadBob();
-	CheckForInteractables();
+    //CrouchImplement(DeltaTime);
+    //CheckSprint();
+    //CheckHeadBob();
+	//CheckForInteractables();
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
