@@ -21,6 +21,7 @@ stages:
   - build
   - cook
   - package
+  - cleanup
 
 before_script:
   - echo "Updating/initializing submodules ..."
@@ -130,3 +131,10 @@ release:
     paths:
       - Artifacts/*-Build.zip
     expire_in: 30d
+
+cleanup:
+  stage: cleanup
+  when: always
+  script:
+    - echo "Cleaning up ..."
+    - rm -rf "%CACHE_PATH%/%CI_PIPELINE_ID%"
