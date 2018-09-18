@@ -137,4 +137,4 @@ cleanup:
   when: always
   script:
     - echo "Cleaning up ..."
-    - rm -rf "%CACHE_PATH%/%CI_PIPELINE_ID%"
+    - rm -rf "%CACHE_PATH%\%CI_PIPELINE_ID%"
