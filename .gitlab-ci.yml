@@ -26,7 +26,7 @@ stages:
 before_script:
   - echo "Updating/initializing submodules ..."
   - git submodule sync --recursive FMODProject
-  - git submodule update --init --recursive FMODProject
+  - git submodule update --init --recursive --remote FMODProject
   - echo "Updating scripts ..."
   - pushd %SCRIPTS_DIR%
   - git pull
