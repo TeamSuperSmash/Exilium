@@ -132,6 +132,12 @@ release:
 cleanup:
   stage: cleanup
   when: always
+  variables:
+    GIT_STRATEGY: none
+    GIT_CHECKOUT: "false"
+    GIT_SUBMODULE_STRATEGY: none
+  cache: {}
+  before_script: []
   script:
     - echo "Cleaning up ..."
-    - rm -rf "%CACHE_PATH%\%CI_PIPELINE_ID%"
+    - rmdir /s /q "%CACHE_PATH%\%CI_PIPELINE_ID%"
