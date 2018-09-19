@@ -16,12 +16,12 @@ cache:
 
 stages:
   - preperations
+  - cleanup
   - build-lightmap
   - compile
   - build
   - cook
   - package
-  - cleanup
 
 before_script:
   - echo "Updating scripts ..."
@@ -140,4 +140,5 @@ cleanup:
   before_script: []
   script:
     - echo "Cleaning up ..."
+    - echo "%CACHE_PATH%\%CI_PIPELINE_ID%"
     - rmdir /s /q "%CACHE_PATH%\%CI_PIPELINE_ID%"
