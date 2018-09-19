@@ -15,8 +15,6 @@ cache:
     - Exilium.sln
 
 stages:
-  - test
-  - cleanup
   - preperations
   - build-lightmap
   - compile
@@ -30,11 +28,6 @@ before_script:
   - pushd %SCRIPTS_DIR%
   - git pull
   - popd
-
-test:
-  stage: test
-  script:
-    - echo "Test"
 
 preparations:
   stage: preperations
@@ -147,5 +140,5 @@ cleanup:
   before_script: []
   script:
     - echo "Cleaning up ..."
-    - echo "%CACHE_PATH%\%CI_PIPELINE_ID%-7"
-    - rmdir /s /q "%CACHE_PATH%\%CI_PIPELINE_ID%-7"
+    - echo "%CACHE_PATH%\%CI_PIPELINE_ID%-%CACHE_APPEND%"
+    - rmdir /s /q "%CACHE_PATH%\%CI_PIPELINE_ID%-%CACHE_APPEND%"
