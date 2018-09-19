@@ -5,7 +5,7 @@ variables:
 #  CI_PROJECT_DIR: C:/Users/acub3team/Documents/GitLab-Runner/builds/$CI_COMMIT_REF_SLUG/$CI_PROJECT_NAME
 
 cache:
-  key: ${CI_PIPELINE_ID}
+  key: "%CI_PIPELINE_ID%"
   untracked: true
   paths:
     - Binaries/
@@ -147,5 +147,7 @@ cleanup:
   before_script: []
   script:
     - echo "Cleaning up ..."
+    #- for /d %G in ("%CACHE_PATH%\%CI_PIPELINE_ID%*") do rmdir /s /q "%~G"
+    - for /d %G in ("%CACHE_PATH%\%CI_PIPELINE_ID%*") do echo "%~G"
     - echo "%CACHE_PATH%\%CI_PIPELINE_ID%"
     - rmdir /s /q "%CACHE_PATH%\%CI_PIPELINE_ID%"
