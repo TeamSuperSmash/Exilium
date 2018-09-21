@@ -29,7 +29,7 @@ private:
 	bool isSettled;
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Config)
 	ERoomIDEnum roomID;
 
 	/*UPROPERTY(EditAnywhere, BlueprintReadWrite)

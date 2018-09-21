@@ -28,8 +28,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;*/
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	ERoomIDEnum iD;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Config)
+	ERoomIDEnum roomID;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ERoomFogStateEnum curState;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
