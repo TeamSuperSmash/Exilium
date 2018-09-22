@@ -70,6 +70,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float SeenDuration;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
+		bool DebugMode = true;
+
 
 
 
