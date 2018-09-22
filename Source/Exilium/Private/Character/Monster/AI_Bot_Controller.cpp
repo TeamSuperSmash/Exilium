@@ -105,7 +105,10 @@ void AAI_Bot_Controller::Tick(float DeltaSeconds)
 	}
 	*/
 
-	FindPrey();
+	if (DebugMode)
+		FindPrey();
+	else
+		return;
 
 	
 }
