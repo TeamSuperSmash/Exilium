@@ -36,9 +36,11 @@ commit-release:
       - $SCHEDULED
   script:
     - echo "Making a commit to release branch for %CI_PROJECT_NAME% ..."
+    - git config --global user.name "${GITLAB_USER_NAME}"
+    - git config --global user.email "${GITLAB_USER_EMAIL}"
     - git checkout -B release
     - git merge origin/master --no-ff
-    - git push origin release
+    - git push http://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@gitlab.com/TeamACube/Exilium.git release
 
 preparations:
   stage: preperations
