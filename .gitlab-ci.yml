@@ -45,8 +45,9 @@ commit-new-release:
     - git config --global user.name %GITLAB_USER_NAME%
     - git config --global user.email %GITLAB_USER_EMAIL%
     - git config lfs.http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/Exilium.git/info/lfs.locksverify false
+    - git checkout -B master
     - git checkout -B release
-    - git merge origin/master
+    - git merge master
     - git push http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/Exilium.git release
 
 preparations:
