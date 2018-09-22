@@ -29,8 +29,22 @@ before_script:
   - git pull
   - popd
 
+commit-release:
+  stage: preperations
+  only:
+    variables:
+      - $SCHEDULED
+  script:
+    - echo "Making a commit to release branch for %CI_PROJECT_NAME% ..."
+    - git checkout -B release
+    - git merge origin/master --no-ff
+    - git push origin release
+
 preparations:
   stage: preperations
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Preparing %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\PrepareProject.bat"
@@ -42,6 +56,9 @@ preparations:
   only:
     variables:
       - $CI_COMMIT_MESSAGE =~ /build-lightmap/
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Rebuilding Lightmaps ..."
     - call "%SCRIPTS_DIR%\PrebuildLightmaps.bat"
@@ -50,24 +67,36 @@ preparations:
   stage: build-lightmap
   only:
     - schedules
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Rebuilding Lightmaps (Scheduled)..."
     - call "%SCRIPTS_DIR%\PrebuildLightmaps.bat"
 
 compile:
   stage: compile
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Compiling Scripts for %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\CompileScripts.bat"
 
 build:
   stage: build
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Building %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\BuildProject.bat"
 
 cook:
   stage: cook
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Cooking %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\CookProject.bat"
@@ -77,6 +106,9 @@ cook:
   only:
     variables:
       - $CI_COMMIT_MESSAGE =~ /build-lightmap/
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Adding lightmaps to the artifacts ..."
     - call "%SCRIPTS_DIR%\ArchiveLightmaps.bat"
@@ -90,6 +122,9 @@ cook:
   stage: package
   only:
     - schedules
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Adding lightmaps to the artifacts (Scheduled)..."
     - call "%SCRIPTS_DIR%\ArchiveLightmaps.bat"
@@ -107,6 +142,9 @@ package:
       - schedules           # only archive when started at a specific schedule
     variables:
       - $PACKAGE
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Adding build to the artifacts ..."
     - call "%SCRIPTS_DIR%\ArchiveBuild.bat"
@@ -120,6 +158,9 @@ release:
   stage: package
   only:
     - tags                # only archive when a tag is provided
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Adding release to the artifacts ..."
     - call "%SCRIPTS_DIR%\ArchiveBuild.bat"
@@ -132,6 +173,9 @@ release:
 cleanup:
   stage: cleanup
   when: always
+  except:
+    variables:
+      - $SCHEDULED
   variables:
     GIT_STRATEGY: none
     GIT_CHECKOUT: "false"
