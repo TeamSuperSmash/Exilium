@@ -47,10 +47,10 @@ commit-new-release:
     - git remote add exilium-ci http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/Exilium.git
     - git remote set-url exilium-ci http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/Exilium.git
     - git config lfs.exilium-ci/info/lfs.locksverify false
-    - git checkout -B master exilium-ci/master
-    - git pull exilium-ci master
+    - git checkout -B master
+    - git pull origin master
     - git checkout -B release
-    - git merge exilium-ci/master
+    - git merge master
     - git push exilium-ci release
 
 preparations:
