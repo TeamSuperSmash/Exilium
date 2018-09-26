@@ -44,35 +44,13 @@ start-release:
     - echo "Making a commit to release branch for %CI_PROJECT_NAME% ..."
     - git config --global user.name %GITLAB_USER_NAME%
     - git config --global user.email %GITLAB_USER_EMAIL%
-    - git remote add exilium-ci http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git
-    - git config lfs.https://gitlab.com.locksverify true
     - git fetch origin
     - git checkout -B release
     - git reset --hard origin/master
-    - git push -q exilium-ci release       # Hides the logs to prevent credentials from leaking
-    - git remote remove exilium-ci
+    - git push --no-verify http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git release      # Hides the logs to prevent credentials from leaking
 
-cleanup-release:
+end-release:
   stage: cleanup
-  when: on_failure
-  only:
-    refs:
-      - schedules
-    variables:
-      - $SCHEDULED
-  cache: {}
-  before_script: []
-  variables:
-    GIT_STRATEGY: none
-    GIT_CHECKOUT: "false"
-    GIT_SUBMODULE_STRATEGY: none
-  script:
-    - echo "Cleaning up ..."
-    - git remote remove exilium-ci
-  allow_failure: true
-
-halt:
-  stage: halt
   when: manual
   allow_failure: false
   only:
@@ -87,7 +65,7 @@ halt:
     GIT_CHECKOUT: "false"
     GIT_SUBMODULE_STRATEGY: none
   script:
-    - echo "This pipeline is not supposed to be passed!"
+    - echo "The pipeline has been cleaned!"
 
 preparations:
   stage: preperations
