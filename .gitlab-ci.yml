@@ -48,6 +48,22 @@ commit-new-release:
     - git checkout -B release
     - git reset -q --hard origin/master
     - git push exilium-ci release -q
+
+cleanup-release:
+  stage: cleanup
+  when: always
+  only:
+    refs:
+      - schedules
+    variables:
+      - $SCHEDULED
+  cache: {}
+  before_script: []
+  variables:
+    GIT_STRATEGY: none
+    GIT_CHECKOUT: "false"
+    GIT_SUBMODULE_STRATEGY: none
+  script:
     - git remote remove exilium-ci
 
 preparations:
