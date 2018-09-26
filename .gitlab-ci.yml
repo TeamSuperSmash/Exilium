@@ -187,6 +187,7 @@ release:
     variables:
       - $SCHEDULED
   only:
+    - release
     - tags                # only archive when a tag is provided
   script:
     - echo "Adding release to the artifacts ..."
@@ -195,7 +196,7 @@ release:
     name: "%CI_PROJECT_NAME%-%CI_COMMIT_REF_NAME%-Build"
     paths:
       - Artifacts/*-Build.zip
-    expire_in: 30d
+    expire_in: 7d
 
 cleanup:
   stage: cleanup
