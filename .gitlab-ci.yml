@@ -34,7 +34,6 @@ commit-new-release:
   stage: start
   only:
     refs:
-      - release
       - schedules
     variables:
       - $SCHEDULED
