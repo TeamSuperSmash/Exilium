@@ -49,11 +49,14 @@ commit-new-release:
     - git checkout -B master
     - git pull origin master
     - git checkout -B release
-    - git merge master
+    - git merge --ff-only master
     - git push exilium-ci release
 
 preparations:
   stage: preperations
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Preparing %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\PrepareProject.bat"
@@ -62,6 +65,9 @@ preparations:
 
 .build-lightmap:
   stage: build-lightmap
+  except:
+    variables:
+      - $SCHEDULED
   only:
     variables:
       - $CI_COMMIT_MESSAGE =~ /build-lightmap/
@@ -71,6 +77,9 @@ preparations:
 
 .scheduled-build-lightmap:
   stage: build-lightmap
+  except:
+    variables:
+      - $SCHEDULED
   only:
     - schedules
   script:
@@ -79,24 +88,36 @@ preparations:
 
 compile:
   stage: compile
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Compiling Scripts for %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\CompileScripts.bat"
 
 build:
   stage: build
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Building %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\BuildProject.bat"
 
 cook:
   stage: cook
+  except:
+    variables:
+      - $SCHEDULED
   script:
     - echo "Cooking %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\CookProject.bat"
 
 .lightmaps:
   stage: package
+  except:
+    variables:
+      - $SCHEDULED
   only:
     variables:
       - $CI_COMMIT_MESSAGE =~ /build-lightmap/
@@ -111,6 +132,9 @@ cook:
 
 .scheduled-lightmaps:
   stage: package
+  except:
+    variables:
+      - $SCHEDULED
   only:
     - schedules
   script:
@@ -124,6 +148,9 @@ cook:
 
 package:
   stage: package
+  except:
+    variables:
+      - $SCHEDULED
   only:
     refs:
       - web                 # only archive when started through the web interface
@@ -141,6 +168,9 @@ package:
 
 release:
   stage: package
+  except:
+    variables:
+      - $SCHEDULED
   only:
     - tags                # only archive when a tag is provided
   script:
@@ -154,6 +184,9 @@ release:
 
 cleanup:
   stage: cleanup
+  except:
+    variables:
+      - $SCHEDULED
   when: always
   variables:
     GIT_STRATEGY: none
