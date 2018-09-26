@@ -47,7 +47,7 @@ start-release:
     - git fetch origin
     - git checkout -B release
     - git reset -q --hard origin/master
-    - git push exilium-ci release &> /dev/null      # Hides the logs to prevent credentials from leaking
+    - git push exilium-ci release > /dev/null 2>&1      # Hides the logs to prevent credentials from leaking
     - git remote remove exilium-ci
 
 cleanup-release:
