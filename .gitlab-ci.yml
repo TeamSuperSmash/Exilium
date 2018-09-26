@@ -45,7 +45,7 @@ start-release:
     - git config --global user.name %GITLAB_USER_NAME%
     - git config --global user.email %GITLAB_USER_EMAIL%
     - git remote add exilium-ci http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git
-    - git config 'lfs.http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git/info/lfs.locksverify' true
+    - git config 'lfs.https://gitlab.com.locksverify' true
     - git fetch origin
     - git checkout -B release
     - git reset --hard origin/master
