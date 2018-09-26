@@ -45,6 +45,7 @@ commit-new-release:
     - git config --global user.email %GITLAB_USER_EMAIL%
     - git remote add exilium-ci http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git
     - git fetch origin
+    - git checkout -B release
     - git reset -q --hard origin/master
     - git push exilium-ci release -q
     - git remote remove exilium-ci
