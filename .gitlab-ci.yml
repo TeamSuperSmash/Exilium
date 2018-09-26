@@ -15,7 +15,6 @@ cache:
     - Exilium.sln
 
 stages:
-  - start
   - preperations
   - build-lightmap
   - compile
@@ -23,7 +22,6 @@ stages:
   - cook
   - package
   - cleanup
-  - halt
 
 before_script:
   - echo "Updating scripts ..."
@@ -32,7 +30,7 @@ before_script:
   - popd
 
 start-release:
-  stage: start
+  stage: preperations
   only:
     refs:
       - schedules
