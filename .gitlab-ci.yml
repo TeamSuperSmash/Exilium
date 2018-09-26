@@ -43,12 +43,31 @@ start-release:
     - echo "Making a commit to release branch for %CI_PROJECT_NAME% ..."
     - git config --global user.name %GITLAB_USER_NAME%
     - git config --global user.email %GITLAB_USER_EMAIL%
-    - git remote remove exilium-ci
     - git remote add exilium-ci http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git
     - git fetch origin
     - git checkout -B release
     - git reset -q --hard origin/master
     - git push exilium-ci release &> /dev/null      # Hides the logs to prevent credentials from leaking
+    - git remote remove exilium-ci
+
+cleanup-release:
+  stage: cleanup
+  when: on_failure
+  only:
+    refs:
+      - schedules
+    variables:
+      - $SCHEDULED
+  cache: {}
+  before_script: []
+  variables:
+    GIT_STRATEGY: none
+    GIT_CHECKOUT: "false"
+    GIT_SUBMODULE_STRATEGY: none
+  script:
+    - echo "Cleaning up ..."
+    - git remote remove exilium-ci
+  allow_failure: true
 
 preparations:
   stage: preperations
