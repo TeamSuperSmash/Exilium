@@ -30,7 +30,7 @@ before_script:
   - git pull
   - popd
 
-commit-new-release:
+start-release:
   stage: start
   only:
     refs:
@@ -64,6 +64,7 @@ cleanup-release:
     GIT_CHECKOUT: "false"
     GIT_SUBMODULE_STRATEGY: none
   script:
+    - echo "Cleaning up ..."
     - git remote remove exilium-ci
 
 preparations:
