@@ -48,8 +48,8 @@ start-release:
     - git config lfs.http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git/info/lfs.locksverify true
     - git fetch origin
     - git checkout -B release
-    - git reset -q --hard origin/master
-    - git push exilium-ci release       # Hides the logs to prevent credentials from leaking
+    - git reset --hard origin/master
+    - git push -q exilium-ci release       # Hides the logs to prevent credentials from leaking
     - git remote remove exilium-ci
 
 cleanup-release:
@@ -87,7 +87,7 @@ halt:
     GIT_CHECKOUT: "false"
     GIT_SUBMODULE_STRATEGY: none
   script:
-    - echo "Successfully halted the pipeline !"
+    - echo "This pipeline is not supposed to be passed!"
 
 preparations:
   stage: preperations
