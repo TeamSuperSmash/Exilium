@@ -70,6 +70,8 @@ preparations:
   except:
     variables:
       - $SCHEDULED
+  tags:
+    - ue4
   script:
     - echo "Preparing %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\PrepareProject.bat"
@@ -84,6 +86,8 @@ preparations:
   only:
     variables:
       - $CI_COMMIT_MESSAGE =~ /build-lightmap/
+  tags:
+    - ue4
   script:
     - echo "Rebuilding Lightmaps ..."
     - call "%SCRIPTS_DIR%\PrebuildLightmaps.bat"
@@ -95,6 +99,8 @@ preparations:
       - $SCHEDULED
   only:
     - schedules
+  tags:
+    - ue4
   script:
     - echo "Rebuilding Lightmaps (Scheduled)..."
     - call "%SCRIPTS_DIR%\PrebuildLightmaps.bat"
@@ -104,6 +110,8 @@ compile:
   except:
     variables:
       - $SCHEDULED
+  tags:
+    - ue4
   script:
     - echo "Compiling Scripts for %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\CompileScripts.bat"
@@ -113,6 +121,8 @@ build:
   except:
     variables:
       - $SCHEDULED
+  tags:
+    - ue4
   script:
     - echo "Building %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\BuildProject.bat"
@@ -122,6 +132,8 @@ cook:
   except:
     variables:
       - $SCHEDULED
+  tags:
+    - ue4
   script:
     - echo "Cooking %CI_PROJECT_NAME% ..."
     - call "%SCRIPTS_DIR%\CookProject.bat"
@@ -134,6 +146,8 @@ cook:
   only:
     variables:
       - $CI_COMMIT_MESSAGE =~ /build-lightmap/
+  tags:
+    - ue4
   script:
     - echo "Adding lightmaps to the artifacts ..."
     - call "%SCRIPTS_DIR%\ArchiveLightmaps.bat"
@@ -150,6 +164,8 @@ cook:
       - $SCHEDULED
   only:
     - schedules
+  tags:
+    - ue4
   script:
     - echo "Adding lightmaps to the artifacts (Scheduled)..."
     - call "%SCRIPTS_DIR%\ArchiveLightmaps.bat"
@@ -170,6 +186,8 @@ package:
       - schedules           # only archive when started at a specific schedule
     variables:
       - $PACKAGE
+  tags:
+    - ue4
   script:
     - echo "Adding build to the artifacts ..."
     - call "%SCRIPTS_DIR%\ArchiveBuild.bat"
@@ -187,6 +205,8 @@ release:
   only:
     - release
     - tags                # only archive when a tag is provided
+  tags:
+    - ue4
   script:
     - echo "Adding release to the artifacts ..."
     - call "%SCRIPTS_DIR%\ArchiveBuild.bat"
@@ -208,6 +228,8 @@ cleanup:
     GIT_SUBMODULE_STRATEGY: none
   cache: {}
   before_script: []
+  tags:
+    - ue4
   script:
     - echo "Cleaning up ..."
     - echo "%CACHE_PATH%\%CI_PIPELINE_ID%-%CACHE_APPEND%"
