@@ -45,7 +45,7 @@ start-release:
     - git fetch origin
     - git checkout -B release
     - git reset --hard master       # Use current master where the pipeline triggers
-    - git push --no-verify http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git release      # Hides the logs to prevent credentials from leaking
+    - git push --no-verify --force http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git release      # Hides the logs to prevent credentials from leaking
 
 end-release:
   stage: cleanup
