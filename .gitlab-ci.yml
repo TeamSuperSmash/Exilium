@@ -44,7 +44,7 @@ start-release:
     - git config --global user.email %GITLAB_USER_EMAIL%
     - git checkout -B release
     - git pull origin release
-    - git reset --hard master       # Use current master where the pipeline triggers
+    - git reset --hard %CI_COMMIT_SHA%       # Use current master where the pipeline triggers
     - git push --no-verify http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git release      # Hides the logs to prevent credentials from leaking
 
 end-release:
