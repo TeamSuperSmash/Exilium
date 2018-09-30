@@ -38,6 +38,10 @@ start-release:
       - $SCHEDULED
   cache: {}
   before_script: []
+  variables:
+    GIT_STRATEGY: clone
+    GIT_CHECKOUT: "false"
+    GIT_SUBMODULE_STRATEGY: none
   script:
     - echo "Making a new release for %CI_PROJECT_NAME% ..."
     - git config --global user.name %GITLAB_USER_NAME%
