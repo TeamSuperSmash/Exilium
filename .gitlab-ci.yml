@@ -38,17 +38,19 @@ start-release:
       - $SCHEDULED
   cache: {}
   before_script: []
+  tags:
+    - gce
   variables:
     GIT_STRATEGY: clone
     GIT_CHECKOUT: "false"
     GIT_SUBMODULE_STRATEGY: none
   script:
-    - echo "Making a new release for %CI_PROJECT_NAME% ..."
-    - git config --global user.name %GITLAB_USER_NAME%
-    - git config --global user.email %GITLAB_USER_EMAIL%
+    - echo "Making a new release for ${CI_PROJECT_NAME} ..."
+    - git config --global user.name ${GITLAB_USER_NAME}
+    - git config --global user.email ${GITLAB_USER_EMAIL}
     - git checkout -B release
     - git pull origin release
-    - git reset --hard %CI_COMMIT_SHA%       # Use current master where the pipeline triggers
+    - git reset --hard ${CI_COMMIT_SHA}       # Use current master where the pipeline triggers
     - git push --no-verify --quiet http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git release      # Hides the logs to prevent credentials from leaking
 
 end-release:
@@ -62,6 +64,8 @@ end-release:
       - $SCHEDULED
   cache: {}
   before_script: []
+  tags:
+    - gce
   variables:
     GIT_STRATEGY: none
     GIT_CHECKOUT: "false"
