@@ -42,8 +42,8 @@ start-release:
     - echo "Making a commit to release branch for %CI_PROJECT_NAME% ..."
     - git config --global user.name %GITLAB_USER_NAME%
     - git config --global user.email %GITLAB_USER_EMAIL%
-    - git fetch origin
     - git checkout -B release
+    - git pull origin release
     - git reset --hard master       # Use current master where the pipeline triggers
     - git push --no-verify --force http://gitlab-ci-token:%GITLAB_ACCESS_TOKEN%@gitlab.com/TeamACube/%CI_PROJECT_NAME%.git release      # Hides the logs to prevent credentials from leaking
 
