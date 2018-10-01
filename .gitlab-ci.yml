@@ -240,5 +240,5 @@ cleanup:
     - ue4
   script:
     - echo "Cleaning up ..."
-    - echo "%CACHE_PATH%\%CI_PIPELINE_ID%-%CACHE_APPEND%"
-    - rmdir /s /q "%CACHE_PATH%\%CI_PIPELINE_ID%-%CACHE_APPEND%"
+    - echo "%CACHE_PATH%\%CI_PROJECT_NAMESPACE%\%CI_PROJECT_NAME%\%CI_PIPELINE_ID%-%CACHE_APPEND%"
+    - rmdir /s /q "%CACHE_PATH%\%CI_PROJECT_NAMESPACE%\%CI_PROJECT_NAME%\%CI_PIPELINE_ID%-%CACHE_APPEND%"
