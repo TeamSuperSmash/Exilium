@@ -1,6 +1,7 @@
 [submodule "LFS-GUI"]
 	path = LFS-GUI
 	url = https://github.com/FattyMieo/LFS-GUI.git
+    branch = master
 [submodule "FMODProject"]
 	path = FMODProject
 	url = https://gitlab.com/TeamACube/FMODProject.git
