@@ -26,7 +26,7 @@ public:
 
 	//Function declared in c++ but defined inside blueprint
 	UFUNCTION(BlueprintImplementableEvent, Category = CustomStuff)
-		void QTEStart(AActor* Actor, int currState );
+		void QTEStart(int currState );
 
 	UFUNCTION(BlueprintImplementableEvent, Category = CustomStuff)
 		void SetMaxAcceleration(float setSpeed);
