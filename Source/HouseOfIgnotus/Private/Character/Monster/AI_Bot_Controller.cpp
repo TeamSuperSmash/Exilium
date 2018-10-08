@@ -137,7 +137,7 @@ void AAI_Bot_Controller::FindPrey()
 
 			if (SeenDuration >= 5.0f && MonsterState != EMonsterState::MS_CHASE)
 			{
-				MyCharacter->QTEStart(MyCharacter, 1);
+				MyCharacter->QTEStart(1);
 				QTEStarted = true;
 				SeenDuration = 0.0f;
 
@@ -153,7 +153,7 @@ void AAI_Bot_Controller::FindPrey()
 		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= BreathingDetectionRadius)
 		{
 			QTEStarted = true;
-			MyCharacter->QTEStart(MyCharacter, 0);
+			MyCharacter->QTEStart(0);
 
 			return;
 		}
@@ -375,7 +375,7 @@ FVector AAI_Bot_Controller::GetNextPathPoint(FVector DestPos)
 		{
 			QTEStarted = true;
 
-			MyCharacter->QTEStart(MyCharacter, static_cast<int>(MonsterState));
+			MyCharacter->QTEStart(static_cast<int>(MonsterState));
 		}
 	}
 
