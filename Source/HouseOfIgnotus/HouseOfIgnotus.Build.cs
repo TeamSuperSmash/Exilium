@@ -9,7 +9,7 @@ public class HouseOfIgnotus : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore",
-            "HeadMountedDisplay", "UMG", "Slate", "SlateCore", "AIModule"});
+            "HeadMountedDisplay", "UMG", "Slate", "SlateCore", "AIModule","FMODStudio"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
