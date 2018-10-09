@@ -342,6 +342,8 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 	}
 
 	NavTarget = Location;
+
+	//DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColor::Red, false, 10.0f);
 }
 
 void AAI_Bot_Controller::SetMonsterState(int newState)
