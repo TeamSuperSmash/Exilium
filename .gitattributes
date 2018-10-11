@@ -10,8 +10,8 @@
 *.wav filter=lfs diff=lfs merge=lfs -text lockable
 *.xcf filter=lfs diff=lfs merge=lfs -text lockable
 *.jpg filter=lfs diff=lfs merge=lfs -text lockable
-*.mp4 filter=lfs diff=lfs merge=lfs -text
-*.tga filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text lockable
+*.tga filter=lfs diff=lfs merge=lfs -text lockable
 
 # Anything in `/RawContent` dir.
 /RawContent/**/* filter=lfs diff=lfs merge=lfs -text lockable
