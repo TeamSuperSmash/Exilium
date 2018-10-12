@@ -330,7 +330,7 @@ void AAI_Bot_Controller::OnPawnDetected(const TArray<AActor*> &DetectedPawns)
 
 void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Location, float Volume)
 {
-	if (MonsterState != EMonsterState::MS_CHASE)
+	if (MonsterState == EMonsterState::MS_ROAM)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster State Alert"));
 
@@ -339,6 +339,8 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 
 		PawnSensingComponent->HearingThreshold = AlertDetectionRadius;
 		CurrDetectionRadius = AlertDetectionRadius;
+
+		PlayMonsterDetectSFX();
 	}
 
 	NavTarget = Location;
