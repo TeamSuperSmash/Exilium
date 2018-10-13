@@ -257,7 +257,7 @@ void AAI_Bot_Controller::FindPath()
 		if (ChaseDuration >= 0.0f && MonsterState != EMonsterState::MS_ROAM)
 		{
 			ChaseDuration -= GetWorld()->GetDeltaSeconds();
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(ChaseDuration));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(ChaseDuration));
 		}
 
 	}
@@ -322,7 +322,7 @@ void AAI_Bot_Controller::OnPawnDetected(const TArray<AActor*> &DetectedPawns)
 		{
 			//DistanceToPlayer = GetPawn()->GetDistanceTo(DetectedPawns[i]);
 
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, DetectedPawns[i]->GetName());
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, DetectedPawns[i]->GetName());
 
 			CheckOpenDoors(DetectedPawns[i]);
 		}
