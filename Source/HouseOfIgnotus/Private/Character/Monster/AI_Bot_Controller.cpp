@@ -21,21 +21,21 @@ AAI_Bot_Controller::AAI_Bot_Controller()
 
 	//Will soon be obsolete for this project
 	//Initialize AIPerception component for AI pawn detection
-	//SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
-	//SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
+	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
+	SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
 
-	//SightConfig->SightRadius = AISightRadius;
-	//SightConfig->LoseSightRadius = AILoseSightRadius;
-	//SightConfig->PeripheralVisionAngleDegrees = AIFieldOfView;
-	//SightConfig->SetMaxAge(AISightAge);
+	SightConfig->SightRadius = AISightRadius;
+	SightConfig->LoseSightRadius = AILoseSightRadius;
+	SightConfig->PeripheralVisionAngleDegrees = AIFieldOfView;
+	SightConfig->SetMaxAge(AISightAge);
 
-	//SightConfig->DetectionByAffiliation.bDetectEnemies = true;
-	//SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
-	//SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 
-	//GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
-	//GetPerceptionComponent()->OnPerceptionUpdated.AddDynamic(this, &AAI_Bot_Controller::OnPawnDetected);
-	//GetPerceptionComponent()->ConfigureSense(*SightConfig);
+	GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
+	GetPerceptionComponent()->OnPerceptionUpdated.AddDynamic(this, &AAI_Bot_Controller::OnPawnDetected);
+	GetPerceptionComponent()->ConfigureSense(*SightConfig);
 
 	//Initialize PawnSensing component for AI pawn detection
 	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing Component"));
@@ -257,7 +257,7 @@ void AAI_Bot_Controller::FindPath()
 		if (ChaseDuration >= 0.0f && MonsterState != EMonsterState::MS_ROAM)
 		{
 			ChaseDuration -= GetWorld()->GetDeltaSeconds();
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(ChaseDuration));
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(ChaseDuration));
 		}
 
 	}
@@ -278,7 +278,7 @@ void AAI_Bot_Controller::FindPath()
 				if (MonsterState != EMonsterState::MS_ROAM)
 				{
 
-					NavTarget = UNavigationSystem::GetCurrent(GetWorld())->GetRandomPointInNavigableRadius(this, MyCharacter->GetActorLocation(), 250.0f);
+					NavTarget = UNavigationSystem::GetCurrent(GetWorld())->GetRandomPointInNavigableRadius(this, MyCharacter->GetActorLocation(), RandMovementRadius);
 					NavTarget.Z = MyCharacter->GetActorLocation().Z;
 					AIMovePause = 0.25f;
 
@@ -293,7 +293,7 @@ void AAI_Bot_Controller::FindPath()
 					}
 					else if(ChaseDuration > 0.0f && bIsPlayerDetected == true)
 					{
-						NavTarget = UNavigationSystem::GetCurrent(GetWorld())->GetRandomPointInNavigableRadius(this, Player->GetActorLocation(), 250.0f);
+						NavTarget = UNavigationSystem::GetCurrent(GetWorld())->GetRandomPointInNavigableRadius(this, Player->GetActorLocation(), RandMovementRadius);
 					}
 					else
 					{
@@ -316,10 +316,18 @@ void AAI_Bot_Controller::FindPath()
 
 void AAI_Bot_Controller::OnPawnDetected(const TArray<AActor*> &DetectedPawns)
 {
-	for (size_t i = 0; i < DetectedPawns.Num(); i++)
+	if (MonsterState == EMonsterState::MS_ROAM)
 	{
-		DistanceToPlayer = GetPawn()->GetDistanceTo(DetectedPawns[i]);
+		for (size_t i = 0; i < DetectedPawns.Num(); i++)
+		{
+			//DistanceToPlayer = GetPawn()->GetDistanceTo(DetectedPawns[i]);
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, DetectedPawns[i]->GetName());
+
+			CheckOpenDoors(DetectedPawns[i]);
+		}
 	}
+	
 
 	//AIMovePause = 1.0f;
 	//AICanMove = true;
@@ -339,6 +347,8 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 
 		PawnSensingComponent->HearingThreshold = AlertDetectionRadius;
 		CurrDetectionRadius = AlertDetectionRadius;
+
+		RandMovementRadius = 250.0f;
 
 		PlayMonsterDetectSFX();
 	}

@@ -53,6 +53,11 @@ void AWaypoint::OnPlayerEnter(UPrimitiveComponent* OverlapComponent,
 		{
 			if (Character->MyController->MonsterState == EMonsterState::MS_ROAM && Character->NextWaypoint == this)
 			{
+				if (resetInvestigatedDoors)
+				{
+					Character->MyController->OpenedDoorsArray.Empty();
+				}
+
 				Character->NextWaypoint = NextWaypoint;
 				Character->MyController->NavTarget = NextWaypoint->GetActorLocation();
 

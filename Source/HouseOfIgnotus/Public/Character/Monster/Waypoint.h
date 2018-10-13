@@ -25,6 +25,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		AWaypoint* NextWaypoint;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool resetInvestigatedDoors;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
