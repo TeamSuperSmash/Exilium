@@ -53,6 +53,9 @@ public:
 		void FindPath();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Sound)
+		void CheckOpenDoors(AActor* otherActor);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Sound)
 		void PlayMonsterDetectSFX();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
@@ -76,7 +79,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		bool DebugMode = true;
 
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+		TArray<AActor*> OpenedDoorsArray;
 
 
 
@@ -131,6 +135,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		float CurrDetectionRadius;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+		float RandMovementRadius;
 
 	FVector GetNextPathPoint(FVector DestPos);
 
