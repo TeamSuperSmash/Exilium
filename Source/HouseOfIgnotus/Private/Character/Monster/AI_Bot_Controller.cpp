@@ -238,14 +238,37 @@ void AAI_Bot_Controller::FindPath()
 	}
 
 
-	//DrawDebugSphere(GetWorld(), Dest, 32.0f, 12, FColor::Red, false, 10.0f);
-
-	
-	
-
 	if (AICanMove)
 	{
+		if (MyCharacter->GetVelocity().X <= 0.1f && MyCharacter->GetVelocity().Y <= 0.1f && MyCharacter->GetVelocity().Z <= 0.1f)
+		{
+			ImmobilityCount -= GetWorld()->DeltaTimeSeconds;
+
+			if (ImmobilityCount <= 0.0f)
+			{
+				MyCharacter->SetActorLocation(MyCharacter->NextWaypoint->GetActorLocation(), false);
+				ImmobilityCount = 10.0f;
+			}
+		}
+		else
+		{
+			ImmobilityCount = 10.0f;
+		}
+
 		MoveToLocation(Dest, 0.0f);
+
+		if (MonsterState != EMonsterState::MS_CHASE && FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= 70.0 && !QTEStarted)
+		{
+			QTEStarted = true;
+
+			MonsterState = EMonsterState::MS_CHASE;
+
+			MyCharacter->QTEStart(0);
+
+			AICanMove = false;
+
+			ChaseDuration = 0.0f;
+		}
 
 		if (MonsterState != EMonsterState::MS_ROAM && FVector::Dist(MyCharacter->GetActorLocation(), Dest) <= 100.0)
 		{
@@ -338,24 +361,28 @@ void AAI_Bot_Controller::OnPawnDetected(const TArray<AActor*> &DetectedPawns)
 
 void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Location, float Volume)
 {
-	if (MonsterState == EMonsterState::MS_ROAM)
+	if (DebugMode)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster State Alert"));
+		if (MonsterState == EMonsterState::MS_ROAM)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster State Alert"));
 
-		MonsterState = EMonsterState::MS_ALERT;
-		ChaseDuration = 15.0f;
+			MonsterState = EMonsterState::MS_ALERT;
+			ChaseDuration = 15.0f;
 
-		PawnSensingComponent->HearingThreshold = AlertDetectionRadius;
-		CurrDetectionRadius = AlertDetectionRadius;
+			PawnSensingComponent->HearingThreshold = AlertDetectionRadius;
+			CurrDetectionRadius = AlertDetectionRadius;
 
-		RandMovementRadius = 250.0f;
+			RandMovementRadius = 250.0f;
 
-		PlayMonsterDetectSFX();
+			PlayMonsterDetectSFX();
+		}
+
+		NavTarget = Location;
+
+		//DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColor::Red, false, 10.0f);
 	}
-
-	NavTarget = Location;
-
-	//DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColor::Red, false, 10.0f);
+	
 }
 
 void AAI_Bot_Controller::SetMonsterState(int newState)
@@ -368,9 +395,12 @@ FVector AAI_Bot_Controller::GetNextPathPoint(FVector DestPos)
 
 	UNavigationPath* NavPath = UNavigationSystem::FindPathToLocationSynchronously(this, MyCharacter->GetActorLocation(), DestPos);
 
+
 	if (NavPath->PathPoints.Num() > 0)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Nav Points ") + FString::SanitizeFloat(NavPath->PathPoints.Num()));
+
+		//DrawDebugSphere(GetWorld(), NavPath->PathPoints[0], 32.0f, 12, FColor::Red, false, 10.0f);
 
 		//return next path
 		return NavPath->PathPoints[0];
