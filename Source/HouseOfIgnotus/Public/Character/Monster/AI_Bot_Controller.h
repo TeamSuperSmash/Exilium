@@ -62,6 +62,9 @@ public:
 		FVector NavTarget; 
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+		float ImmobilityCount = 10.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		float AIMovePause = 1.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
