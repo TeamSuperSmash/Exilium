@@ -12,7 +12,7 @@ cache:
     - Intermediate/
     - Saved/
     - .vs/
-    - Exilium.sln
+    - HouseOfIgnotus.sln
 
 stages:
   - preperations
