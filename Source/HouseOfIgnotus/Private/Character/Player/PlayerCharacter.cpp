@@ -1,7 +1,6 @@
 
 #include "PlayerCharacter.h"
-#include "Exilium.h"
-#include "GameplayController.h"
+#include "HouseOfIgnotus.h"
 #include "Interactable.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/PawnNoiseEmitterComponent.h"
@@ -138,8 +137,6 @@ void APlayerCharacter::CheckForInteractables()
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(this);
 
-	AGameplayController* Controller = Cast<AGameplayController>(GetController());
-
 	if (!Controller)
 	{
 		return;
@@ -151,12 +148,10 @@ void APlayerCharacter::CheckForInteractables()
 		if(HitResult.GetActor()->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
 		{
 			//IInteractable* Interactable = Cast<IInteractable>(HitResult.GetActor());
-			Controller->CurrentInteractable = HitResult.GetActor();
 			return;
 		}
 	}
 	// If did not hit anything, or hit unusable. Set current interactable to nullptr.
-	Controller->CurrentInteractable = nullptr;
 }
 
 void APlayerCharacter::CrouchImplement(float DeltaTime)
