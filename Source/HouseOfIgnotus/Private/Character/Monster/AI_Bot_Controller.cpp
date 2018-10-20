@@ -184,11 +184,18 @@ void AAI_Bot_Controller::FindPath()
 			Dest = MyCharacter->NextWaypoint->GetActorLocation();
 		}
 
+		if (MyCharacter->MovementComponent->MaxWalkSpeed != RoamSpeed)
+		{
+			MyCharacter->MovementComponent->MaxWalkSpeed = RoamSpeed;
+		}
+		
 
+		/*
 		if (MyCharacter->MovementComponent->MaxAcceleration != RoamSpeed)
 		{
 			MyCharacter->SetMaxAcceleration(RoamSpeed);
 		}
+		*/
 	}
 	else if (MonsterState == EMonsterState::MS_ALERT)
 	{
@@ -204,10 +211,17 @@ void AAI_Bot_Controller::FindPath()
 			return;
 		}
 
+		if (MyCharacter->MovementComponent->MaxWalkSpeed != AlertSpeed)
+		{
+			MyCharacter->MovementComponent->MaxWalkSpeed = AlertSpeed;
+		}
+
+		/*
 		if (MyCharacter->MovementComponent->MaxAcceleration != AlertSpeed)
 		{
 			MyCharacter->SetMaxAcceleration(AlertSpeed);
 		}
+		*/
 	}
 	else if (MonsterState == EMonsterState::MS_CHASE)
 	{
@@ -225,10 +239,17 @@ void AAI_Bot_Controller::FindPath()
 			return;
 		}
 
+		if (MyCharacter->MovementComponent->MaxWalkSpeed != ChaseSpeed)
+		{
+			MyCharacter->MovementComponent->MaxWalkSpeed = ChaseSpeed;
+		}
+
+		/*
 		if (MyCharacter->MovementComponent->MaxAcceleration != ChaseSpeed)
 		{
 			MyCharacter->SetMaxAcceleration(ChaseSpeed);
 		}
+		*/
 
 		if (bIsPlayerDetected == true)
 		{
@@ -376,12 +397,12 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 			PawnSensingComponent->HearingThreshold = AlertDetectionRadius;
 			CurrDetectionRadius = AlertDetectionRadius;
 
-			RandMovementRadius = 250.0f;
-
 			PlayMonsterDetectSFX();
 		}
 
 		NavTarget = Location;
+
+		RandMovementRadius = 250.0f;
 
 		//DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColor::Red, false, 10.0f);
 	}
