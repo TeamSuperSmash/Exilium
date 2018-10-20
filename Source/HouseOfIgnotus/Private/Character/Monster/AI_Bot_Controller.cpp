@@ -247,6 +247,7 @@ void AAI_Bot_Controller::FindPath()
 			if (ImmobilityCount <= 0.0f)
 			{
 				MyCharacter->SetActorLocation(MyCharacter->NextWaypoint->GetActorLocation(), false);
+				MyCharacter->NextWaypoint = MyCharacter->NextWaypoint->NextWaypoint;
 				ImmobilityCount = 10.0f;
 			}
 		}
@@ -301,9 +302,11 @@ void AAI_Bot_Controller::FindPath()
 				if (MonsterState != EMonsterState::MS_ROAM)
 				{
 
-					NavTarget = UNavigationSystem::GetCurrent(GetWorld())->GetRandomPointInNavigableRadius(this, MyCharacter->GetActorLocation(), RandMovementRadius);
+					NavTarget = UNavigationSystem::GetCurrent(GetWorld())->GetRandomReachablePointInRadius(this, MyCharacter->GetActorLocation(), RandMovementRadius);
 					NavTarget.Z = MyCharacter->GetActorLocation().Z;
 					AIMovePause = 0.25f;
+
+					//DrawDebugSphere(GetWorld(), NavTarget, 32.0f, 12, FColor::Red, false, 10.0f);
 
 					if (ChaseDuration <= 0.0f && bIsPlayerDetected != true)
 					{
@@ -316,7 +319,7 @@ void AAI_Bot_Controller::FindPath()
 					}
 					else if(ChaseDuration > 0.0f && bIsPlayerDetected == true)
 					{
-						NavTarget = UNavigationSystem::GetCurrent(GetWorld())->GetRandomPointInNavigableRadius(this, Player->GetActorLocation(), RandMovementRadius);
+						NavTarget = UNavigationSystem::GetCurrent(GetWorld())->GetRandomReachablePointInRadius(this, Player->GetActorLocation(), RandMovementRadius);
 					}
 					else
 					{
