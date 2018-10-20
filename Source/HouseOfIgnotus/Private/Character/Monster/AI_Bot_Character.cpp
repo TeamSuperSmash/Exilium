@@ -31,8 +31,8 @@ void AAI_Bot_Character::EventFailQTE()
 
 	MyController->MonsterState = EMonsterState::MS_CHASE;
 
-
-	MyController->ChaseDuration = 5.0f;
+	MyController->RandMovementRadius = 250.0f;
+	MyController->ChaseDuration = 8.0f;
 	MyController->AICanMove = true;
 
 	MyController->PawnSensingComponent->HearingThreshold = MyController->AlertDetectionRadius;
