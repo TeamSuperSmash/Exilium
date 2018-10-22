@@ -281,7 +281,7 @@ void AAI_Bot_Controller::FindPath()
 
 		if (MonsterState != EMonsterState::MS_CHASE && FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= 70.0 && !QTEStarted)
 		{
-			QTEStarted = true;
+			//QTEStarted = true;
 
 			MonsterState = EMonsterState::MS_CHASE;
 
@@ -464,7 +464,7 @@ FVector AAI_Bot_Controller::GetNextPathPoint(FVector DestPos)
 	{
 		if (QTEStarted != true)
 		{
-			QTEStarted = true;
+			//QTEStarted = true;
 
 			MyCharacter->QTEStart(static_cast<int>(MonsterState));
 		}
