@@ -410,6 +410,33 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 {
 	if (DebugMode && !QTEStarted)
 	{
+		float distance = PawnSensingComponent->HearingThreshold;
+		FHitResult hit;
+		FVector startVector = MyCharacter->GetActorLocation();
+		FVector endVector = Location;
+		FCollisionQueryParams CollisionParams;
+
+		CollisionParams.AddIgnoredActor(MyCharacter);
+
+
+		GetWorld()->LineTraceSingleByChannel(hit, startVector, endVector, ECC_WorldStatic, CollisionParams);
+
+		if (hit.bBlockingHit)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Hit : %s") + hit.GetActor()->GetName());
+
+			FVector hitDist = endVector - hit.Location;
+			hitDist = hitDist.GetAbs();
+
+			if ((hitDist.Size() / PawnSensingComponent->HearingThreshold) > 0.25f)
+			{
+				return;
+			}
+		}
+
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster Heard"));
+
+
 		if (MonsterState == EMonsterState::MS_ROAM)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster State Alert"));

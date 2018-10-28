@@ -80,7 +80,7 @@ public:
 		float SeenDuration;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
-		bool DebugMode = true;
+		bool DebugMode = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		TArray<AActor*> OpenedDoorsArray;
@@ -116,13 +116,13 @@ public:
 		void SetMonsterState(int newState);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
-		float RoamSpeed = 50.0f;
+		float RoamSpeed = 180.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
-		float AlertSpeed = 85.0f;
+		float AlertSpeed = 220.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
-		float ChaseSpeed = 125.0f;
+		float ChaseSpeed = 380.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		float ChaseDuration;
@@ -136,7 +136,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float SpecialDetectionRadius = 1250.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float CurrDetectionRadius;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
