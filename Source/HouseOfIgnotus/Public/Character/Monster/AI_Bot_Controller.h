@@ -74,10 +74,16 @@ public:
 		bool QTEStarted = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
-		bool IsBeingSeen = true;
+		float closeChase = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float SeenDuration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
+		bool heartCountDown = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
+		bool roomCountDown = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		bool DebugMode = false;
@@ -112,9 +118,6 @@ public:
 	UFUNCTION()
 		void OnNoiseHeard(APawn* DetectedPawn, const FVector& Location, float Volume);
 
-	UFUNCTION(BlueprintCallable, Category = AI)
-		void SetMonsterState(int newState);
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float RoamSpeed = 180.0f;
 
@@ -128,13 +131,13 @@ public:
 		float ChaseDuration;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
+		float HeartbeatDetectionRadius = 200.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
+		float RoamDetectionRadius = 1250.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float AlertDetectionRadius = 850.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
-		float BreathingDetectionRadius = 500.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
-		float SpecialDetectionRadius = 1250.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		float CurrDetectionRadius;

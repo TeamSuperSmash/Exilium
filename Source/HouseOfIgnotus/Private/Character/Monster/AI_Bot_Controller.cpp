@@ -55,6 +55,9 @@ void AAI_Bot_Controller::BeginPlay()
 	AICanMove = true;
 	QTEStarted = false;
 	bIsPlayerDetected = false;
+	heartCountDown = false;
+	roomCountDown = false;
+	closeChase = 0.0f;
 	ChaseDuration = 5.0f;
 
 	//Set monster state to roam
@@ -62,15 +65,12 @@ void AAI_Bot_Controller::BeginPlay()
 
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster State Roam"));
 
-	CurrDetectionRadius = BreathingDetectionRadius;
+	CurrDetectionRadius = RoamDetectionRadius;
 
 	PawnSensingComponent->HearingThreshold = CurrDetectionRadius;
 
 	if(MyCharacter->NextWaypoint != nullptr)
 		NavTarget = MyCharacter->NextWaypoint->GetActorLocation();
-
-	//Run BP function to set max acceleration because setting in c++ will crash UE4
-	MyCharacter->SetMaxAcceleration(RoamSpeed);
 
 	if (GetPerceptionComponent() != nullptr)
 	{
@@ -129,38 +129,48 @@ void AAI_Bot_Controller::FindPrey()
 	if (QTEStarted != true && bIsPlayerDetected != true)
 	{
 
-		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= CurrDetectionRadius)
+		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= 125.0f)
 		{
-			MyCharacter->CheckRendered();
+			heartCountDown = true;
+		}
+		else
+		{
+			heartCountDown = false;
 
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, TEXT("Seen Duration ") + FString::SanitizeFloat(SeenDuration));
+			//if (SeenDuration >= 0.0f)
+			//	SeenDuration -= GetWorld()->DeltaTimeSeconds;
+		}
 
-			if (SeenDuration >= 5.0f && MonsterState != EMonsterState::MS_CHASE)
+		if (heartCountDown || roomCountDown)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "CountDownstart");
+
+			SeenDuration += GetWorld()->DeltaTimeSeconds;
+
+			if (SeenDuration >= 3.0f && MonsterState != EMonsterState::MS_CHASE)
 			{
-				MyCharacter->QTEStart(1);
-				//QTEStarted = true;
-				SeenDuration = 0.0f;
+				MyCharacter->QTEStart(0);
 
 				return;
 			}
 		}
-
-
+		else
+		{
+			SeenDuration = 0.0f;
+		}
 
 	}
+	/*
 	else if (QTEStarted != true && bIsPlayerDetected == true)
 	{
-		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= BreathingDetectionRadius)
+		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= HeartbeatDetectionRadius)
 		{
-			//QTEStarted = true;
 			MyCharacter->QTEStart(0);
 
 			return;
 		}
 	}
-
-	if(SeenDuration >= 0.0f)
-		SeenDuration -= GetWorld()->DeltaTimeSeconds * 0.25f;
+	*/
 
 	FindPath();
 }
@@ -169,11 +179,6 @@ void AAI_Bot_Controller::FindPath()
 {
 	//FVector for AI movement destination
 	FVector Dest;
-
-	/*
-	if (DistanceToPlayer > AISightRadius)
-	bIsPlayerDetected = false;
-	*/
 
 	//Move To Waypoint & Set Movement Speed
 	if (MonsterState == EMonsterState::MS_ROAM)
@@ -188,14 +193,6 @@ void AAI_Bot_Controller::FindPath()
 		{
 			MyCharacter->MovementComponent->MaxWalkSpeed = RoamSpeed;
 		}
-		
-
-		/*
-		if (MyCharacter->MovementComponent->MaxAcceleration != RoamSpeed)
-		{
-			MyCharacter->SetMaxAcceleration(RoamSpeed);
-		}
-		*/
 	}
 	else if (MonsterState == EMonsterState::MS_ALERT)
 	{
@@ -215,13 +212,6 @@ void AAI_Bot_Controller::FindPath()
 		{
 			MyCharacter->MovementComponent->MaxWalkSpeed = AlertSpeed;
 		}
-
-		/*
-		if (MyCharacter->MovementComponent->MaxAcceleration != AlertSpeed)
-		{
-			MyCharacter->SetMaxAcceleration(AlertSpeed);
-		}
-		*/
 	}
 	else if (MonsterState == EMonsterState::MS_CHASE)
 	{
@@ -243,13 +233,6 @@ void AAI_Bot_Controller::FindPath()
 		{
 			MyCharacter->MovementComponent->MaxWalkSpeed = ChaseSpeed;
 		}
-
-		/*
-		if (MyCharacter->MovementComponent->MaxAcceleration != ChaseSpeed)
-		{
-			MyCharacter->SetMaxAcceleration(ChaseSpeed);
-		}
-		*/
 
 		if (bIsPlayerDetected == true)
 		{
@@ -279,30 +262,45 @@ void AAI_Bot_Controller::FindPath()
 
 		MoveToLocation(Dest, 0.0f);
 
-		if (MonsterState != EMonsterState::MS_CHASE && FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= 70.0 && !QTEStarted)
-		{
-			//QTEStarted = true;
 
-			MonsterState = EMonsterState::MS_CHASE;
-
-			MyCharacter->QTEStart(0);
-
-			AICanMove = false;
-
-			ChaseDuration = 0.0f;
-		}
-
-		if (MonsterState != EMonsterState::MS_ROAM && FVector::Dist(MyCharacter->GetActorLocation(), Dest) <= 100.0)
+		if (MonsterState != EMonsterState::MS_ROAM && FVector::Dist(MyCharacter->GetActorLocation(), Dest) <= 100.0f)
 		{
 			AICanMove = false;
 
 			return;
 		}
+		if (MonsterState == EMonsterState::MS_CHASE)
+		{
+			if (FVector::Dist(MyCharacter->GetActorLocation(), Dest) <= 150.0f)
+			{
+				heartCountDown = true;
+
+
+				/*
+				closeChase += GetWorld()->GetDeltaSeconds();
+
+				if (closeChase >= 3.0f)
+				{
+					closeChase = 0.0f;
+
+					AICanMove = false;
+
+					return;
+				}
+				*/
+			}
+			else
+			{
+				heartCountDown = false;
+
+
+				//closeChase = 0.0f;
+			}
+		}
 
 		if (ChaseDuration >= 0.0f && MonsterState != EMonsterState::MS_ROAM)
 		{
 			ChaseDuration -= GetWorld()->GetDeltaSeconds();
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(ChaseDuration));
 		}
 
 	}
@@ -350,14 +348,12 @@ void AAI_Bot_Controller::FindPath()
 					NavTarget.Z = MyCharacter->GetActorLocation().Z;
 					AIMovePause = 0.25f;
 
-					//DrawDebugSphere(GetWorld(), NavTarget, 32.0f, 12, FColor::Red, false, 10.0f);
-
 					if (ChaseDuration <= 0.0f && bIsPlayerDetected != true)
 					{
 						ChaseDuration = 5.0f;
 
-						PawnSensingComponent->HearingThreshold = BreathingDetectionRadius;
-						CurrDetectionRadius = BreathingDetectionRadius;
+						PawnSensingComponent->HearingThreshold = AlertDetectionRadius;
+						CurrDetectionRadius = AlertDetectionRadius;
 
 						MonsterState = EMonsterState::MS_ROAM;
 					}
@@ -373,8 +369,8 @@ void AAI_Bot_Controller::FindPath()
 				}
 				else
 				{
-					PawnSensingComponent->HearingThreshold = BreathingDetectionRadius;
-					CurrDetectionRadius = BreathingDetectionRadius;
+					PawnSensingComponent->HearingThreshold = RoamDetectionRadius;
+					CurrDetectionRadius = RoamDetectionRadius;
 				}
 
 			}
@@ -390,19 +386,11 @@ void AAI_Bot_Controller::OnPawnDetected(const TArray<AActor*> &DetectedPawns)
 	{
 		for (size_t i = 0; i < DetectedPawns.Num(); i++)
 		{
-			//DistanceToPlayer = GetPawn()->GetDistanceTo(DetectedPawns[i]);
-
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, DetectedPawns[i]->GetName());
 
 			CheckOpenDoors(DetectedPawns[i]);
 		}
 	}
-	
-
-	//AIMovePause = 1.0f;
-	//AICanMove = true;
-
-	//bIsPlayerDetected = true;
 }
 
 
@@ -423,8 +411,6 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 
 		if (hit.bBlockingHit)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Hit : %s") + hit.GetActor()->GetName());
-
 			FVector hitDist = endVector - hit.Location;
 			hitDist = hitDist.GetAbs();
 
@@ -434,34 +420,40 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 			}
 		}
 
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster Heard"));
-
 
 		if (MonsterState == EMonsterState::MS_ROAM)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Monster State Alert"));
-
 			MonsterState = EMonsterState::MS_ALERT;
 			ChaseDuration = 15.0f;
 
-			PawnSensingComponent->HearingThreshold = AlertDetectionRadius;
-			CurrDetectionRadius = AlertDetectionRadius;
+			PawnSensingComponent->HearingThreshold = RoamDetectionRadius;
+			CurrDetectionRadius = RoamDetectionRadius;
 
 			PlayMonsterDetectSFX();
 		}
 
+		if (FVector::Dist(MyCharacter->GetActorLocation(), Location) <= 120.0f)
+		{
+
+			if (Player != nullptr && Player->GetActorLocation() == Location)
+			{
+				bIsPlayerDetected = true;
+				MonsterState = EMonsterState::MS_CHASE;
+
+				ChaseDuration = 8.0f;
+			}
+			
+		}
+
+
 		NavTarget = Location;
+
+
 
 		RandMovementRadius = 250.0f;
 
-		//DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColor::Red, false, 10.0f);
 	}
 	
-}
-
-void AAI_Bot_Controller::SetMonsterState(int newState)
-{
-	MonsterState = static_cast<EMonsterState>(newState);
 }
 
 FVector AAI_Bot_Controller::GetNextPathPoint(FVector DestPos)
@@ -472,30 +464,13 @@ FVector AAI_Bot_Controller::GetNextPathPoint(FVector DestPos)
 
 	if (NavPath->PathPoints.Num() > 0)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Nav Points ") + FString::SanitizeFloat(NavPath->PathPoints.Num()));
-
-		//DrawDebugSphere(GetWorld(), NavPath->PathPoints[0], 32.0f, 12, FColor::Red, false, 10.0f);
 
 		//return next path
 		return NavPath->PathPoints[0];
 	}
 
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AI Reach Point"));
-
 	//Return naxt waypoint as destination
 	AICanMove = false;
-	
-	//PawnSensingComponent->HearingThreshold = SpecialDetectionRadius;
-
-	if (MonsterState == EMonsterState::MS_CHASE)
-	{
-		if (QTEStarted != true)
-		{
-			//QTEStarted = true;
-
-			MyCharacter->QTEStart(static_cast<int>(MonsterState));
-		}
-	}
 
 	return NavTarget;
 }
