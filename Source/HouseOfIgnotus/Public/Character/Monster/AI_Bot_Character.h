@@ -28,12 +28,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = CustomStuff)
 		void QTEStart(int currState );
 
-	UFUNCTION(BlueprintImplementableEvent, Category = CustomStuff)
-		void SetMaxAcceleration(float setSpeed);
-
-	UFUNCTION(BlueprintImplementableEvent, Category = CustomStuff)
-		void CheckRendered();
-
 	UFUNCTION(BlueprintCallable, Category = CustomStuff)
 		void EventFailQTE();
 
