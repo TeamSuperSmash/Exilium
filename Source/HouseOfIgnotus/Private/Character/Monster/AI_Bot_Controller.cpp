@@ -129,7 +129,7 @@ void AAI_Bot_Controller::FindPrey()
 	if (QTEStarted != true && bIsPlayerDetected != true)
 	{
 
-		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= 125.0f)
+		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= HeartbeatDetectionRadius)
 		{
 			heartCountDown = true;
 		}
