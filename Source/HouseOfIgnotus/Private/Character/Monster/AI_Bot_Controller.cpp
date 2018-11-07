@@ -150,6 +150,7 @@ void AAI_Bot_Controller::FindPrey()
 			if (SeenDuration >= 3.0f && MonsterState != EMonsterState::MS_CHASE)
 			{
 				MyCharacter->QTEStart(0);
+				SeenDuration = 0.0f;
 
 				return;
 			}
