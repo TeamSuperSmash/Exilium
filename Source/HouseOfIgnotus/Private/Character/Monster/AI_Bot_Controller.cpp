@@ -144,7 +144,7 @@ void AAI_Bot_Controller::FindPrey()
 		if (heartCountDown || roomCountDown)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "CountDownstart");
-
+			PlayHearbeatBuild();
 			SeenDuration += GetWorld()->DeltaTimeSeconds;
 
 			if (SeenDuration >= 3.0f && MonsterState != EMonsterState::MS_CHASE)
@@ -202,6 +202,9 @@ void AAI_Bot_Controller::FindPath()
 		if (ChaseDuration <= 0.0f)
 		{
 			MonsterState = EMonsterState::MS_ROAM;
+
+			if (Player->IsPlayerDangerChaseBGM == true)
+				Player->IsPlayerDangerChaseBGM = false;
 
 			if(MyCharacter->NextWaypoint != nullptr)
 				NavTarget = MyCharacter->NextWaypoint->GetActorLocation();
@@ -433,10 +436,12 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 			PlayMonsterDetectSFX();
 		}
 
-		if (FVector::Dist(MyCharacter->GetActorLocation(), Location) <= 120.0f)
+		if (Player != nullptr && Player->GetActorLocation() == Location)
 		{
+			if(Player->IsPlayerDangerChaseBGM == false)
+				Player->IsPlayerDangerChaseBGM = true;
 
-			if (Player != nullptr && Player->GetActorLocation() == Location)
+			if (FVector::Dist(MyCharacter->GetActorLocation(), Location) <= 120.0f)
 			{
 				bIsPlayerDetected = true;
 				MonsterState = EMonsterState::MS_CHASE;

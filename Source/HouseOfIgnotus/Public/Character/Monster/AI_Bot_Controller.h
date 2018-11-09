@@ -58,6 +58,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = Sound)
 		void PlayMonsterDetectSFX();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = Sound)
+		void PlayHearbeatBuild();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		FVector NavTarget; 
 
