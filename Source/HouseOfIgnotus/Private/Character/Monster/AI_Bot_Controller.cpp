@@ -144,7 +144,8 @@ void AAI_Bot_Controller::FindPrey()
 		if (heartCountDown || roomCountDown)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "CountDownstart");
-			PlayHearbeatBuild();
+			if(SeenDuration == 0.0f)
+				PlayHearbeatBuild();
 			SeenDuration += GetWorld()->DeltaTimeSeconds;
 
 			if (SeenDuration >= 3.0f && MonsterState != EMonsterState::MS_CHASE)
