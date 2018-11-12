@@ -126,7 +126,7 @@ FRotator AAI_Bot_Controller::GetControlRotation() const
 void AAI_Bot_Controller::FindPrey()
 {
 
-	if (QTEStarted != true && bIsPlayerDetected != true)
+	if (QTEStarted != true)
 	{
 
 		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= HeartbeatDetectionRadius)
@@ -151,7 +151,7 @@ void AAI_Bot_Controller::FindPrey()
 			if (SeenDuration >= 3.0f && MonsterState != EMonsterState::MS_CHASE)
 			{
 				MyCharacter->QTEStart(0);
-				SeenDuration = 0.0f;
+				//SeenDuration = 0.0f;
 
 				return;
 			}
@@ -268,7 +268,7 @@ void AAI_Bot_Controller::FindPath()
 		MoveToLocation(Dest, 0.0f);
 
 
-		if (MonsterState != EMonsterState::MS_ROAM && FVector::Dist(MyCharacter->GetActorLocation(), Dest) <= 100.0f)
+		if (MonsterState != EMonsterState::MS_ROAM && FVector::Dist(MyCharacter->GetActorLocation(), Dest) <= 125.0f)
 		{
 			AICanMove = false;
 
@@ -276,31 +276,17 @@ void AAI_Bot_Controller::FindPath()
 		}
 		if (MonsterState == EMonsterState::MS_CHASE)
 		{
+			/*
 			if (FVector::Dist(MyCharacter->GetActorLocation(), Dest) <= 150.0f)
 			{
 				heartCountDown = true;
-
-
-				/*
-				closeChase += GetWorld()->GetDeltaSeconds();
-
-				if (closeChase >= 3.0f)
-				{
-					closeChase = 0.0f;
-
-					AICanMove = false;
-
-					return;
-				}
-				*/
 			}
 			else
 			{
 				heartCountDown = false;
 
-
-				//closeChase = 0.0f;
 			}
+			*/
 		}
 
 		if (ChaseDuration >= 0.0f && MonsterState != EMonsterState::MS_ROAM)
