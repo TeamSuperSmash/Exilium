@@ -85,6 +85,8 @@ start-release:
 preparations:
   stage: preperations
   except:
+    refs:
+      - gitlab-ci-bot
     variables:
       - $SCHEDULED
   tags:
@@ -98,6 +100,8 @@ preparations:
 .build-lightmap:
   stage: build-lightmap
   except:
+    refs:
+      - gitlab-ci-bot
     variables:
       - $SCHEDULED
   only:
@@ -112,6 +116,8 @@ preparations:
 .scheduled-build-lightmap:
   stage: build-lightmap
   except:
+    refs:
+      - gitlab-ci-bot
     variables:
       - $SCHEDULED
   only:
@@ -125,6 +131,8 @@ preparations:
 compile:
   stage: compile
   except:
+    refs:
+      - gitlab-ci-bot
     variables:
       - $SCHEDULED
   tags:
@@ -136,6 +144,8 @@ compile:
 build:
   stage: build
   except:
+    refs:
+      - gitlab-ci-bot
     variables:
       - $SCHEDULED
   tags:
@@ -147,6 +157,8 @@ build:
 cook:
   stage: cook
   except:
+    refs:
+      - gitlab-ci-bot
     variables:
       - $SCHEDULED
   tags:
@@ -158,6 +170,8 @@ cook:
 .lightmaps:
   stage: package
   except:
+    refs:
+      - gitlab-ci-bot
     variables:
       - $SCHEDULED
   only:
@@ -177,6 +191,8 @@ cook:
 .scheduled-lightmaps:
   stage: package
   except:
+    refs:
+      - gitlab-ci-bot
     variables:
       - $SCHEDULED
   only:
@@ -195,6 +211,8 @@ cook:
 package:
   stage: package
   except:
+    refs:
+      - gitlab-ci-bot
     variables:
       - $SCHEDULED
   only:
@@ -217,6 +235,8 @@ package:
 release:
   stage: package
   except:
+    refs:
+      - gitlab-ci-bot
     variables:
       - $SCHEDULED
   only:
@@ -236,6 +256,8 @@ release:
 cleanup:
   stage: cleanup
   except:
+    refs:
+      - gitlab-ci-bot
     variables:
       - $SCHEDULED
   when: always
