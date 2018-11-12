@@ -56,7 +56,7 @@ start-release:
 #    - git reset --hard ${CI_COMMIT_SHA}       # Use current master where the pipeline triggers
     - git push --no-verify --quiet http://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@gitlab.com/TeamACube/${CI_PROJECT_NAME}.git release      # Hides the logs to prevent credentials from leaking
 
-.end-release:       # For older versions
+end-release:
   stage: cleanup
   when: manual
   allow_failure: false
