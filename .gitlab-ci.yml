@@ -33,6 +33,7 @@ start-release:
   stage: preperations
   only:
     refs:
+      - gitlab-ci-bot
       - schedules
     variables:
       - $SCHEDULED
@@ -55,13 +56,18 @@ start-release:
     - git reset --hard master
 #    - git reset --hard ${CI_COMMIT_SHA}       # Use current master where the pipeline triggers
     - git push --no-verify --quiet http://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@gitlab.com/TeamACube/${CI_PROJECT_NAME}.git release      # Hides the logs to prevent credentials from leaking
+    - git checkout -B gitlab-ci-bot
+    - git pull origin gitlab-ci-bot
+    - git reset --hard release
+    - git push --no-verify --quiet http://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@gitlab.com/TeamACube/${CI_PROJECT_NAME}.git gitlab-ci-bot      # Hides the logs to prevent credentials from leaking
 
-end-release:
+.end-release:
   stage: cleanup
   when: manual
   allow_failure: false
   only:
     refs:
+      - gitlab-ci-bot
       - schedules
     variables:
       - $SCHEDULED
