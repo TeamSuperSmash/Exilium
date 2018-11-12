@@ -58,7 +58,7 @@ start-release:
 
 end-release:
   stage: cleanup
-  when: manual
+  when: always
   allow_failure: false
   only:
     refs:
@@ -74,7 +74,7 @@ end-release:
     GIT_CHECKOUT: "false"
     GIT_SUBMODULE_STRATEGY: none
   script:
-    - echo "The pipeline has been cleaned!"
+    - echo "A pipeline has been triggered!"
 
 preparations:
   stage: preperations
