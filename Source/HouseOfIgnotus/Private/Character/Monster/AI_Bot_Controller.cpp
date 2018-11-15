@@ -129,7 +129,7 @@ void AAI_Bot_Controller::FindPrey()
 	if (QTEStarted != true)
 	{
 
-		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= HeartbeatDetectionRadius)
+		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= HeartbeatDetectionRadius * 1.5f)
 		{
 			heartCountDown = true;
 		}
@@ -144,14 +144,15 @@ void AAI_Bot_Controller::FindPrey()
 		if (heartCountDown || roomCountDown)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "CountDownstart");
-			if(SeenDuration == 0.0f)
+			if (SeenDuration == 0.0f)
 				PlayHearbeatBuild();
 			SeenDuration += GetWorld()->DeltaTimeSeconds;
 
-			if (SeenDuration >= 3.0f && MonsterState != EMonsterState::MS_CHASE)
+			if (SeenDuration >= 3.0f)
 			{
 				MyCharacter->QTEStart(0);
-				//SeenDuration = 0.0f;
+
+				MoveToLocation(MyCharacter->GetActorLocation(), 0.0f);
 
 				return;
 			}
@@ -162,17 +163,8 @@ void AAI_Bot_Controller::FindPrey()
 		}
 
 	}
-	/*
-	else if (QTEStarted != true && bIsPlayerDetected == true)
-	{
-		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= HeartbeatDetectionRadius)
-		{
-			MyCharacter->QTEStart(0);
-
-			return;
-		}
-	}
-	*/
+	else
+		return;
 
 	FindPath();
 }
