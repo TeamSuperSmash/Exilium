@@ -199,6 +199,9 @@ void AAI_Bot_Controller::FindPath()
 			if (Player->IsPlayerDangerChaseBGM == true)
 				Player->IsPlayerDangerChaseBGM = false;
 
+			if (Player->IsPlayerDangerAlertBGM == true)
+				Player->IsPlayerDangerAlertBGM = false;
+
 			if(MyCharacter->NextWaypoint != nullptr)
 				NavTarget = MyCharacter->NextWaypoint->GetActorLocation();
 
@@ -219,7 +222,10 @@ void AAI_Bot_Controller::FindPath()
 			MonsterState = EMonsterState::MS_ALERT;
 			bIsPlayerDetected = false;
 
+
 			Player->IsPlayerDangerChaseBGM = false;
+			Player->IsPlayerDangerAlertBGM = true;
+
 
 			ChaseDuration = 15.0f;
 
@@ -417,13 +423,33 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 
 		if (Player != nullptr && Player->GetActorLocation() == Location)
 		{
-			if(Player->IsPlayerDangerChaseBGM == false)
-				Player->IsPlayerDangerChaseBGM = true;
-
+			
 			if (FVector::Dist(MyCharacter->GetActorLocation(), Location) <= 120.0f)
 			{
+				//Turn monster state to chase mode
+
+				if (MonsterState != EMonsterState::MS_CHASE)
+				{
+					if (Player->IsPlayerDangerAlertBGM == true)
+						Player->IsPlayerDangerAlertBGM = false;
+
+					if (Player->IsPlayerDangerChaseBGM == false)
+						Player->IsPlayerDangerChaseBGM = true;
+				}
+				
+
 				bIsPlayerDetected = true;
 				MonsterState = EMonsterState::MS_CHASE;
+
+				ChaseDuration = 8.0f;
+			}
+			else
+			{
+				//Turn monster state to alert mode
+
+
+				if (Player->IsPlayerDangerChaseBGM != true)
+					Player->IsPlayerDangerAlertBGM = true;
 
 				ChaseDuration = 8.0f;
 			}
