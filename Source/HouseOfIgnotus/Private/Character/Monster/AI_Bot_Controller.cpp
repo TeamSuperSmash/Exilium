@@ -222,6 +222,7 @@ void AAI_Bot_Controller::FindPath()
 			MonsterState = EMonsterState::MS_ALERT;
 			bIsPlayerDetected = false;
 
+
 			Player->IsPlayerDangerChaseBGM = false;
 			Player->IsPlayerDangerAlertBGM = true;
 
@@ -427,12 +428,15 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 			{
 				//Turn monster state to chase mode
 
+				if (MonsterState != EMonsterState::MS_CHASE)
+				{
+					if (Player->IsPlayerDangerAlertBGM == true)
+						Player->IsPlayerDangerAlertBGM = false;
 
-				if (Player->IsPlayerDangerAlertBGM == true)
-					Player->IsPlayerDangerAlertBGM = false;
-
-				if (Player->IsPlayerDangerChaseBGM == false)
-					Player->IsPlayerDangerChaseBGM = true;
+					if (Player->IsPlayerDangerChaseBGM == false)
+						Player->IsPlayerDangerChaseBGM = true;
+				}
+				
 
 				bIsPlayerDetected = true;
 				MonsterState = EMonsterState::MS_CHASE;
@@ -443,11 +447,11 @@ void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Locati
 			{
 				//Turn monster state to alert mode
 
-				if (Player->IsPlayerDangerChaseBGM == true)
-					Player->IsPlayerDangerChaseBGM = false;
 
-				if (Player->IsPlayerDangerAlertBGM == false)
+				if (Player->IsPlayerDangerChaseBGM != true)
 					Player->IsPlayerDangerAlertBGM = true;
+
+				ChaseDuration = 8.0f;
 			}
 			
 		}
