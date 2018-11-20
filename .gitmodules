@@ -4,7 +4,7 @@
     branch = master
 [submodule "FMODProject"]
 	path = FMODProject
-	url = https://gitlab.com/TeamACube/FMODProject.git
+	url = ../FMODProject.git # Using relative path for GitLab CI
 [submodule "Lightmaps"]
 	path = Content/ProjectX/Lightmaps
-	url = https://gitlab.com/TeamACube/HouseOfIgnotus-Lightmaps.git
+	url = ../HouseOfIgnotus-Lightmaps.git # Using relative path for GitLab CI
