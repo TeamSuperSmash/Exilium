@@ -6,7 +6,7 @@ variables:
 
 cache:
   key: ${CI_PIPELINE_ID}
-  untracked: true
+  untracked: false
   paths:
     - Binaries/
     - Intermediate/
