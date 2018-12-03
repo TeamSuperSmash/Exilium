@@ -13,6 +13,8 @@ cache:
     - Saved/
     - .vs/
     - HouseOfIgnotus.sln
+    - Build/
+    - Release/
 
 stages:
   - preperations
