@@ -91,6 +91,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		bool DebugMode = false;
 
+		bool playBeatSound = false;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		TArray<AActor*> OpenedDoorsArray;
 
