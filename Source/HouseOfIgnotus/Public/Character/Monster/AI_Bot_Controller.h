@@ -92,6 +92,7 @@ public:
 		bool DebugMode = false;
 
 		bool playBeatSound = false;
+		int count;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
 		TArray<AActor*> OpenedDoorsArray;

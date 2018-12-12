@@ -53,6 +53,7 @@ void AAI_Bot_Controller::BeginPlay()
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	playBeatSound = false;
+	count = 0;
 
 	AICanMove = true;
 	QTEStarted = false;
@@ -159,19 +160,32 @@ void AAI_Bot_Controller::FindPrey()
 		if (heartCountDown || roomCountDown)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "CountDownstart");
-			if (SeenDuration / 1.0f >= 0.0f && SeenDuration / 1.0 <= 0.2f)
+
+			if (SeenDuration >= 0.0f && SeenDuration <= 0.2f)
 			{
-				if (!playBeatSound)
+				if (count == 0)
 				{
-					playBeatSound = true;
+					count++;
 					PlayHearbeatBuild();
 				}
 			}
-			else
+			else if (SeenDuration >= 1.0f && SeenDuration <= 1.2f)
 			{
-				playBeatSound = false;
+				if (count == 1)
+				{
+					count++;
+					PlayHearbeatBuild();
+				}
 			}
-				
+			else if (SeenDuration >= 2.0f && SeenDuration <= 2.2f)
+			{
+				if (count == 2)
+				{
+					count++;
+					PlayHearbeatBuild();
+				}
+			}
+
 			SeenDuration += GetWorld()->DeltaTimeSeconds;
 
 			if (SeenDuration >= 3.0f)
@@ -186,6 +200,7 @@ void AAI_Bot_Controller::FindPrey()
 		else
 		{
 			SeenDuration = 0.0f;
+			count = 0;
 		}
 
 	}
