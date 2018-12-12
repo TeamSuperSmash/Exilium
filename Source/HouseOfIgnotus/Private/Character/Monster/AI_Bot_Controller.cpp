@@ -128,17 +128,30 @@ void AAI_Bot_Controller::FindPrey()
 
 	if (QTEStarted != true)
 	{
-
-		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= HeartbeatDetectionRadius * 1.5f)
+		if (FVector::Dist(MyCharacter->GetActorLocation(), Player->GetActorLocation()) <= HeartbeatDetectionRadius * 1.5f && MonsterState != EMonsterState::MS_ROAM)
 		{
-			heartCountDown = true;
+			FHitResult hit;
+			FVector startVector = MyCharacter->GetActorLocation();
+			FVector endVector = Player->GetActorLocation();
+			FCollisionQueryParams CollisionParams;
+
+			CollisionParams.AddIgnoredActor(MyCharacter);
+
+
+			GetWorld()->LineTraceSingleByChannel(hit, startVector, endVector, ECC_WorldStatic, CollisionParams);
+
+			if (hit.bBlockingHit)
+			{
+				if (hit.Actor == Player)
+					heartCountDown = true;
+
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, hit.Actor->GetName());
+			}
 		}
 		else
 		{
 			heartCountDown = false;
-
-			//if (SeenDuration >= 0.0f)
-			//	SeenDuration -= GetWorld()->DeltaTimeSeconds;
+			
 		}
 
 		if (heartCountDown || roomCountDown)
