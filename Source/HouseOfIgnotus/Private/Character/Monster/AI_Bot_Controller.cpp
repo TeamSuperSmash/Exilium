@@ -53,7 +53,6 @@ void AAI_Bot_Controller::BeginPlay()
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	playBeatSound = false;
-	count = 0;
 
 	AICanMove = true;
 	QTEStarted = false;
@@ -62,6 +61,7 @@ void AAI_Bot_Controller::BeginPlay()
 	roomCountDown = false;
 	closeChase = 0.0f;
 	ChaseDuration = 5.0f;
+	SeenDuration = 0.0f;
 
 	//Set monster state to roam
 	MonsterState = EMonsterState::MS_ROAM;
@@ -108,10 +108,7 @@ void AAI_Bot_Controller::Tick(float DeltaSeconds)
 	}
 	*/
 
-	if (DebugMode)
-		FindPrey();
-	else
-		return;
+	FindPrey();
 
 	
 }
@@ -159,31 +156,18 @@ void AAI_Bot_Controller::FindPrey()
 
 		if (heartCountDown || roomCountDown)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "CountDownstart");
 
-			if (SeenDuration >= 0.0f && SeenDuration <= 0.2f)
+			if ((SeenDuration >= 0.0f && SeenDuration <= 0.2f) || (SeenDuration >= 1.0f && SeenDuration <= 1.2f) || (SeenDuration >= 2.0f && SeenDuration <= 2.2f))
 			{
-				if (count == 0)
+				if(!playBeatSound)
 				{
-					count++;
+					playBeatSound = true;
 					PlayHearbeatBuild();
 				}
 			}
-			else if (SeenDuration >= 1.0f && SeenDuration <= 1.2f)
+			else
 			{
-				if (count == 1)
-				{
-					count++;
-					PlayHearbeatBuild();
-				}
-			}
-			else if (SeenDuration >= 2.0f && SeenDuration <= 2.2f)
-			{
-				if (count == 2)
-				{
-					count++;
-					PlayHearbeatBuild();
-				}
+				playBeatSound = false;
 			}
 
 			SeenDuration += GetWorld()->DeltaTimeSeconds;
@@ -200,14 +184,17 @@ void AAI_Bot_Controller::FindPrey()
 		else
 		{
 			SeenDuration = 0.0f;
-			count = 0;
+			playBeatSound = false;
 		}
 
 	}
 	else
 		return;
-
-	FindPath();
+	
+	if (isActive)
+		FindPath();
+	else
+		return;
 }
 
 void AAI_Bot_Controller::FindPath()
@@ -426,7 +413,7 @@ void AAI_Bot_Controller::OnPawnDetected(const TArray<AActor*> &DetectedPawns)
 
 void AAI_Bot_Controller::OnNoiseHeard(APawn* DetectedPawn, const FVector& Location, float Volume)
 {
-	if (DebugMode && !QTEStarted)
+	if (isActive && !QTEStarted)
 	{
 		float distance = PawnSensingComponent->HearingThreshold;
 		FHitResult hit;
