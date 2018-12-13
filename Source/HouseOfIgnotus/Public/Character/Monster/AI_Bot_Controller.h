@@ -89,7 +89,7 @@ public:
 		bool roomCountDown = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
-		bool DebugMode = false;
+		bool isActive = false;
 
 		bool playBeatSound = false;
 		int count;
